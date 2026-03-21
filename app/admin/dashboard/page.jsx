@@ -18,26 +18,25 @@ export default function Dashboard() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleSave = async () => {
+    try {
+      const user = auth.currentUser;
 
-const handleSave = async () => {
-  try {
-    const user = auth.currentUser;
+      if (!user) {
+        alert("Not logged in");
+        return;
+      }
 
-    if (!user) {
-      alert("Not logged in");
-      return;
+      const username = user.email.split("@")[0];
+
+      await setDoc(doc(db, "users", username), form);
+
+      alert("Saved to Firebase ✅");
+    } catch (err) {
+      console.log(err);
+      alert("Error saving data");
     }
-
-    const username = user.email.split("@")[0];
-
-    await setDoc(doc(db, "users", username), form);
-
-    alert("Saved to Firebase ✅");
-  } catch (err) {
-    console.log(err);
-    alert("Error saving data");
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">

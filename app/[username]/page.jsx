@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import FlexCard from "../../components/flexCard";
-import { db } from "../../../lib/firebase";
+import FlexCard from "../components/flexCard";
+import { db } from "../../lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
+
+
 
 export default function Page() {
   const [data, setData] = useState(null);

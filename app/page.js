@@ -6,10 +6,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { QrCode, IdCard, ImageIcon, ArrowRight, Sparkles, Share2, Palette } from "lucide-react";
 
 const FEATURES = [
-  "digital smartcards.",
-  "instant qr sharing.",
-  "digital portfolios.",
-  "global connections."
+  "Digital Smartcards.",
+  "Instant Qr Sharing.",
+  "Digital Portfolios.",
+  "Global Connection."
 ];
 
 export default function Home() {
@@ -41,32 +41,36 @@ function BackgroundEffects() {
 
 function Navbar() {
   return (
-    <nav className="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl border-b border-slate-200/60 transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-brand-indigo to-brand-purple">
-          NexCard
-        </h1>
-        <a
-          href="mailto:contact@nexcard.com"
-          className="group relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-brand-indigo transition-all duration-300 bg-brand-indigo/10 rounded-full hover:bg-brand-indigo hover:text-white ring-1 ring-inset ring-brand-indigo/20 focus:outline-none"
-        >
-          Contact Us
-        </a>
-      </div>
-    </nav>
+    <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+      <nav className="w-full max-w-7xl bg-white/70 backdrop-blur-xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 rounded-full pointer-events-auto">
+        <div className="px-4 py-3 sm:px-6 flex justify-between items-center transition-all">
+          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-brand-indigo to-brand-purple">
+            NexCard
+          </h1>
+          <a
+            href="mailto:contact@nexcard.com"
+            className="group relative inline-flex items-center justify-center px-4 py-2 sm:px-6 sm:py-2.5 text-xs sm:text-sm font-medium text-brand-indigo transition-all duration-300 bg-brand-indigo/10 rounded-full hover:bg-brand-indigo hover:text-white ring-1 ring-inset ring-brand-indigo/20 focus:outline-none"
+          >
+            Contact Us
+          </a>
+        </div>
+      </nav>
+    </div>
   );
 }
 
 function HeroSection() {
   return (
-    <section className="text-center mb-40">
+    <section className="text-left sm:text-center mb-24 md:mb-40 pt-4 md:pt-0 relative px-2 sm:px-0">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] md:w-[120%] h-[300px] bg-gradient-to-b from-brand-indigo/5 via-brand-purple/5 to-transparent blur-3xl -z-10 rounded-full"></div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 text-brand-indigo text-sm font-medium mb-8 shadow-sm"
+        className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-white/80 backdrop-blur-md border border-slate-200/60 text-brand-indigo text-[11px] md:text-sm font-bold mb-6 md:mb-8 shadow-[0_2px_10px_rgb(0,0,0,0.02)] uppercase tracking-widest"
       >
-        <Sparkles className="w-4 h-4 text-brand-purple" />
+        <Sparkles className="w-3.5 h-3.5 text-brand-purple" />
         The Future of Networking
       </motion.div>
 
@@ -74,17 +78,19 @@ function HeroSection() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 drop-shadow-sm leading-[1.1] min-h-[160px] md:min-h-0"
+        className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-5 md:mb-6 drop-shadow-sm min-h-[160px] md:min-h-0"
       >
-        The NexCard with the<br className="hidden md:block" /> next level of <br className="block md:hidden" />
-        <PixelatedText />
+        <span className="inline">The NexCard for the next level of </span>
+        <div className="inline-block h-[45px] sm:h-[60px] md:h-auto md:ml-3 text-4xl sm:text-5xl md:text-7xl align-middle">
+          <PixelatedText />
+        </div>
       </motion.h1>
 
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="mt-6 text-lg md:text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed font-light"
+        className="mt-4 md:mt-6 text-base sm:text-lg md:text-xl text-slate-600 max-w-2xl mx-0 sm:mx-auto mb-10 leading-relaxed font-light pr-4 sm:pr-0"
       >
         Create a stunning digital visiting card in minutes. Share your contact info, social links, and portfolio with a simple scan or tap.
       </motion.p>
@@ -93,15 +99,18 @@ function HeroSection() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
-        className="flex justify-center items-center"
+        className="flex justify-start sm:justify-center items-center relative z-20"
       >
-        <Link
-          href="/admin"
-          className="w-full sm:w-[320px] px-8 py-4.5 bg-brand-indigo hover:bg-indigo-700 text-white text-lg font-bold rounded-full shadow-[0_0_40px_-10px_var(--color-brand-indigo)] transform hover:-translate-y-1 transition-all duration-300 active:translate-y-0 flex items-center justify-center gap-2 group"
-        >
-          Create Your Card
-          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-        </Link>
+        <div className="relative group w-full sm:w-auto">
+          <div className="absolute inset-0 bg-brand-indigo/30 blur-2xl rounded-full scale-110 group-hover:bg-brand-purple/40 group-hover:scale-125 transition-all duration-700 -z-10 animate-pulse"></div>
+          <Link
+            href="/demo"
+            className="flex items-center justify-center w-full sm:w-auto px-10 py-4 md:py-4 text-base md:text-lg font-bold text-white transition-all duration-300 bg-slate-900 rounded-full hover:bg-slate-800 hover:scale-[1.02] shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-slate-700/50 focus:outline-none"
+          >
+            Create Your Card
+            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300 text-brand-purple" />
+          </Link>
+        </div>
       </motion.div>
     </section>
   );
@@ -186,9 +195,9 @@ function BentoFeatures() {
         <p className="text-slate-600 text-lg font-light">Powerful features wrapped in a beautiful, immersive interface.</p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6 auto-rows-[300px]">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-auto sm:auto-rows-[300px]">
         {/* Large Feature 1 */}
-        <div className="md:col-span-2 group relative bg-white/70 backdrop-blur-xl p-8 rounded-[2rem] border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-brand-indigo/30 transition-all duration-500 overflow-hidden cursor-default">
+        <div className="md:col-span-2 group relative bg-white/70 backdrop-blur-xl p-6 sm:p-8 rounded-3xl sm:rounded-[2rem] border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-brand-indigo/30 transition-all duration-500 overflow-hidden cursor-default">
           <div className="absolute top-0 right-0 w-64 h-64 bg-brand-indigo/10 rounded-full blur-3xl -mr-20 -mt-20 group-hover:bg-brand-indigo/20 transition-all duration-500"></div>
           <div className="relative z-10 h-full flex flex-col justify-between">
             <div className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-brand-indigo mb-6 group-hover:scale-110 transition-transform duration-500 shadow-sm">
@@ -202,7 +211,7 @@ function BentoFeatures() {
         </div>
 
         {/* Square Feature 2 */}
-        <div className="group relative bg-white/70 backdrop-blur-xl p-8 rounded-[2rem] border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-brand-purple/30 transition-all duration-500 overflow-hidden cursor-default">
+        <div className="group relative bg-white/70 backdrop-blur-xl p-6 sm:p-8 rounded-3xl sm:rounded-[2rem] border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-brand-purple/30 transition-all duration-500 overflow-hidden cursor-default">
           <div className="absolute bottom-0 right-0 w-40 h-40 bg-brand-purple/10 rounded-full blur-3xl -mr-10 -mb-10 group-hover:bg-brand-purple/20 transition-all duration-500"></div>
           <div className="relative z-10 h-full flex flex-col justify-between">
             <div className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-brand-purple mb-6 group-hover:scale-110 transition-transform duration-500 shadow-sm">
@@ -216,7 +225,7 @@ function BentoFeatures() {
         </div>
 
         {/* Square Feature 3 */}
-        <div className="group relative bg-white/70 backdrop-blur-xl p-8 rounded-[2rem] border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden cursor-default">
+        <div className="group relative bg-white/70 backdrop-blur-xl p-6 sm:p-8 rounded-3xl sm:rounded-[2rem] border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden cursor-default">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl group-hover:bg-pink-500/20 transition-all duration-500"></div>
           <div className="relative z-10 h-full flex flex-col justify-between">
             <div className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-pink-500 mb-6 group-hover:scale-110 transition-transform duration-500 shadow-sm">
@@ -230,7 +239,7 @@ function BentoFeatures() {
         </div>
 
         {/* Horizontal Feature 4 */}
-        <div className="md:col-span-2 group relative bg-white/70 backdrop-blur-xl p-8 rounded-[2rem] border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-blue-500/30 transition-all duration-500 overflow-hidden cursor-default flex items-center">
+        <div className="md:col-span-2 group relative bg-white/70 backdrop-blur-xl p-6 sm:p-8 rounded-3xl sm:rounded-[2rem] border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-blue-500/30 transition-all duration-500 overflow-hidden cursor-default flex items-center">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-r from-brand-indigo/5 to-brand-purple/5 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-8 w-full">
             <div className="w-16 h-16 shrink-0 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform duration-500 shadow-sm">

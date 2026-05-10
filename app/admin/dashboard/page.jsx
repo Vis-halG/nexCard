@@ -168,7 +168,8 @@ export default function Dashboard() {
     { id: "business", label: "Business & Contacts" },
     { id: "social", label: "Social Links" },
     { id: "media", label: "Media & Arrays" },
-    { id: "design", label: "Design Settings" }
+    { id: "design", label: "Design Settings" },
+    { id: "themes", label: "Theme Presets" }
   ];
 
   return (
@@ -529,6 +530,41 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* ========================================================= */}
+          {/* THEMES TAB */}
+          {/* ========================================================= */}
+          {activeTab === "themes" && (
+            <div className="p-6 md:p-8 space-y-6">
+              <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Select a Theme Preset</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {[
+                  { name: "Midnight Onyx", primary: "#0F172A", background: "#F8FAFC" },
+                  { name: "Sunset Glow", primary: "#F97316", background: "#FFF7ED" },
+                  { name: "Ocean Breeze", primary: "#0EA5E9", background: "#F0F9FF" },
+                  { name: "Emerald Forest", primary: "#10B981", background: "#ECFDF5" },
+                  { name: "Royal Amethyst", primary: "#8B5CF6", background: "#F5F3FF" }
+                ].map((preset, idx) => (
+                  <div 
+                    key={idx}
+                    onClick={() => setForm({ ...form, theme: { ...form.theme, primary: preset.primary, background: preset.background } })}
+                    className={`cursor-pointer rounded-2xl border-2 transition-all overflow-hidden ${form.theme.primary === preset.primary && form.theme.background === preset.background ? 'border-indigo-600 scale-[1.02] shadow-md' : 'border-slate-200 hover:border-indigo-300'}`}
+                  >
+                    <div className="h-28 w-full flex items-end p-4 relative" style={{ backgroundColor: preset.background }}>
+                      <div className="absolute top-0 left-0 w-full h-[60%]" style={{ background: `linear-gradient(145deg, ${preset.primary} 0%, ${preset.primary}dd 100%)`, clipPath: "ellipse(120% 100% at 50% 0%)" }}></div>
+                      <div className="w-12 h-12 rounded-full border-2 border-white shadow-sm absolute top-4 left-4 bg-white/50 backdrop-blur-sm"></div>
+                      <span className="relative z-10 font-bold text-slate-800 bg-white/90 px-3 py-1.5 rounded-lg text-sm backdrop-blur-md shadow-sm">{preset.name}</span>
+                    </div>
+                    <div className="bg-white p-4 flex justify-between items-center text-xs text-slate-500 font-mono">
+                      <div className="flex items-center gap-1.5"><div className="w-3.5 h-3.5 rounded-full shadow-sm" style={{ backgroundColor: preset.primary }}></div> {preset.primary}</div>
+                      <div className="flex items-center gap-1.5"><div className="w-3.5 h-3.5 rounded-full border border-slate-200 shadow-sm" style={{ backgroundColor: preset.background }}></div> {preset.background}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm text-slate-500 mt-4 text-center bg-slate-50 p-3 rounded-xl border border-slate-200">Clicking a preset will automatically update your Custom Design settings.</p>
             </div>
           )}
 

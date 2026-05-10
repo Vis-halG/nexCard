@@ -6,7 +6,7 @@ import { auth, db, storage } from "../../../lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Camera, Trash2, Plus, GripVertical } from "lucide-react";
+import { Camera, Trash2, Plus, GripVertical, ExternalLink, Copy } from "lucide-react";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -93,36 +93,48 @@ export default function Dashboard() {
     setForm({ ...form, [field]: newArr });
   };
 
-  // 🔥 IMAGE UPLOADING
-  const handleImageUpload = (e, field, index = null) => {
+  // 🔥 IMAGE UPLOADING (via ImgBB)
+  const handleImageUpload = async (e, field, index = null) => {
     const file = e.target.files[0];
-    if (!file || !user) return;
+    if (!file) return;
 
     setUploading(true);
-    const storageRef = ref(storage, `users/${user.uid}/${field}_${Date.now()}_${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    setUploadProgress(30); // Fake progress for UI feedback
 
-    uploadTask.on('state_changed', 
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setUploadProgress(progress);
-      }, 
-      (error) => {
-        console.error("Upload error:", error);
-        setUploading(false);
-        alert("Upload failed. Make sure Firebase Storage rules allow it.");
-      }, 
-      async () => {
-        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+    // 🔴 IMPORTANT: Paste your free ImgBB API key here
+    const IMGBB_API_KEY = "e074813eb2df7563edc1c0637ef77359"; 
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+        method: "POST",
+        body: formData,
+      });
+
+      setUploadProgress(80);
+      const data = await response.json();
+
+      if (data.success) {
+        const downloadURL = data.data.url;
+        
         if (index !== null && field === 'gallery') {
           handleArrayChange('gallery', index, downloadURL);
         } else {
           setForm({ ...form, [field]: downloadURL });
         }
-        setUploading(false);
-        setUploadProgress(0);
+      } else {
+        console.error("ImgBB Error:", data);
+        alert("Upload failed. Make sure you pasted your ImgBB API key in the code!");
       }
-    );
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("Network error during upload.");
+    } finally {
+      setUploading(false);
+      setUploadProgress(0);
+    }
   };
 
   const handleSave = async () => {
@@ -144,6 +156,13 @@ export default function Dashboard() {
     </div>
   );
 
+  const profileUrl = typeof window !== 'undefined' && user ? `${window.location.origin}/${user.email.split("@")[0]}` : '';
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(profileUrl);
+    alert("Link copied to clipboard!");
+  };
+
   const tabs = [
     { id: "profile", label: "Profile Info" },
     { id: "business", label: "Business & Contacts" },
@@ -162,6 +181,26 @@ export default function Dashboard() {
             Save Changes
           </button>
         </div>
+
+        {/* PUBLIC LINK BOX */}
+        {user && (
+          <div className="mb-8 p-4 md:p-6 bg-white border border-slate-200 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4 shadow-sm">
+            <div className="flex flex-col text-center md:text-left w-full md:w-auto">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Your Public NexCard Link</span>
+              <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-600 font-medium hover:underline break-all">
+                {profileUrl}
+              </a>
+            </div>
+            <div className="flex gap-2 w-full md:w-auto">
+              <button onClick={handleCopyLink} className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-5 py-2.5 rounded-xl text-sm font-bold transition-colors">
+                <Copy className="w-4 h-4" /> Copy
+              </button>
+              <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors">
+                <ExternalLink className="w-4 h-4" /> Visit
+              </a>
+            </div>
+          </div>
+        )}
 
         {/* 🔘 TAB NAVIGATION */}
         <div className="flex overflow-x-auto gap-2 mb-6 pb-2 scrollbar-none">

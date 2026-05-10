@@ -50,9 +50,9 @@ import { getAnalytics } from "firebase/analytics";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyAFSqYPS2AG4ljN2YXRyWwEV3-DvpS6q0U",
-  authDomain: "flexcard-ff8ec.firebaseapp.com",
-  projectId: "flexcard-ff8ec",
-  storageBucket: "flexcard-ff8ec.firebasestorage.app",
+  authDomain: "nexcard-ff8ec.firebaseapp.com",
+  projectId: "nexcard-ff8ec",
+  storageBucket: "nexcard-ff8ec.firebasestorage.app",
   messagingSenderId: "447761555985",
   appId: "1:447761555985:web:633893f8ef93a7168507b0",
   measurementId: "G-9Z08JQF600"

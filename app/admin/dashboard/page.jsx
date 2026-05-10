@@ -6,7 +6,8 @@ import { auth, db, storage } from "../../../lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Camera, Trash2, Plus, GripVertical, ExternalLink, Copy } from "lucide-react";
+import { Camera, Trash2, Plus, GripVertical, ExternalLink, Copy, Eye, Check } from "lucide-react";
+import NexCard from "../../components/NexCard";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -22,10 +23,11 @@ export default function Dashboard() {
     social: { instagram: "", linkedin: "", twitter: "", facebook: "", youtube: "" },
     payment: { upi: "", link: "", bankDetails: "" },
     services: [], gallery: [], customLinks: [], videos: [],
-    theme: { primary: "#4f46e5", background: "#f8fafc" }
+    theme: { primary: "#4f46e5", background: "#f8fafc", layout: "modern" }
   });
 
   const [activeTab, setActiveTab] = useState("profile");
+  const [previewTheme, setPreviewTheme] = useState(null);
 
   // 🔐 AUTH & FETCH DATA
   useEffect(() => {
@@ -171,6 +173,41 @@ export default function Dashboard() {
     { id: "design", label: "Design Settings" },
     { id: "themes", label: "Theme Presets" }
   ];
+
+  const dummyData = {
+    name: "Alex Morgan",
+    title: "Creative Director",
+    company: "NexCard Design Studio",
+    phone: "+1234567890",
+    email: "hello@alexmorgan.design",
+    about: "I am a passionate creative director with over 10 years of experience in crafting beautiful digital experiences. I specialize in UI/UX, branding, and pushing the boundaries of web design.",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=256&auto=format&fit=crop",
+    address: "123 Innovation Drive, Tech City, TC 90210",
+    website: "https://nexcard.com",
+    calendarUrl: "https://calendly.com",
+    social: {
+      instagram: "https://instagram.com",
+      linkedin: "https://linkedin.com",
+      twitter: "https://twitter.com",
+      youtube: "https://youtube.com"
+    },
+    services: ["UI/UX Design", "Brand Identity", "Web Development", "Marketing Strategy"],
+    gallery: [
+      "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=500&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=500&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=500&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500&auto=format&fit=crop"
+    ],
+    customLinks: [
+      { title: "View My Portfolio", url: "https://example.com" },
+      { title: "Download Resume", url: "https://example.com" }
+    ],
+    payment: {
+      upi: "alex@upi",
+      gstNumber: "22AAAAA0000A1Z5",
+      bankDetails: "Bank Name: Chase\nAcct No: 123456789\nIFSC: CHASE0001"
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-100 p-4 md:p-8 font-sans pb-24">
@@ -538,31 +575,49 @@ export default function Dashboard() {
           {/* ========================================================= */}
           {activeTab === "themes" && (
             <div className="p-6 md:p-8 space-y-6">
-              <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Select a Theme Preset</h2>
+              <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Select a Layout Theme</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {[
-                  { name: "Midnight Onyx", primary: "#0F172A", background: "#F8FAFC" },
-                  { name: "Sunset Glow", primary: "#F97316", background: "#FFF7ED" },
-                  { name: "Ocean Breeze", primary: "#0EA5E9", background: "#F0F9FF" },
-                  { name: "Emerald Forest", primary: "#10B981", background: "#ECFDF5" },
-                  { name: "Royal Amethyst", primary: "#8B5CF6", background: "#F5F3FF" }
-                ].map((preset, idx) => (
-                  <div 
-                    key={idx}
-                    onClick={() => setForm({ ...form, theme: { ...form.theme, primary: preset.primary, background: preset.background } })}
-                    className={`cursor-pointer rounded-2xl border-2 transition-all overflow-hidden ${form.theme.primary === preset.primary && form.theme.background === preset.background ? 'border-indigo-600 scale-[1.02] shadow-md' : 'border-slate-200 hover:border-indigo-300'}`}
-                  >
-                    <div className="h-28 w-full flex items-end p-4 relative" style={{ backgroundColor: preset.background }}>
-                      <div className="absolute top-0 left-0 w-full h-[60%]" style={{ background: `linear-gradient(145deg, ${preset.primary} 0%, ${preset.primary}dd 100%)`, clipPath: "ellipse(120% 100% at 50% 0%)" }}></div>
-                      <div className="w-12 h-12 rounded-full border-2 border-white shadow-sm absolute top-4 left-4 bg-white/50 backdrop-blur-sm"></div>
-                      <span className="relative z-10 font-bold text-slate-800 bg-white/90 px-3 py-1.5 rounded-lg text-sm backdrop-blur-md shadow-sm">{preset.name}</span>
+                  { name: "Modern (Curved)", layout: "modern", primary: "#0F172A", background: "#F8FAFC" },
+                  { name: "Classic Corporate", layout: "classic", primary: "#1D4ED8", background: "#EFF6FF" },
+                  { name: "Minimalist", layout: "minimal", primary: "#171717", background: "#FFFFFF" },
+                  { name: "Glassmorphism", layout: "glass", primary: "#E879F9", background: "#0F172A" },
+                  { name: "Bold Developer", layout: "bold", primary: "#10B981", background: "#111827" }
+                ].map((preset, idx) => {
+                  const isActive = form.theme?.layout === preset.layout;
+                  return (
+                    <div 
+                      key={idx}
+                      className={`rounded-2xl border-2 transition-all overflow-hidden flex flex-col ${isActive ? 'border-indigo-600 scale-[1.02] shadow-md ring-4 ring-indigo-50' : 'border-slate-200 hover:border-indigo-300'}`}
+                    >
+                      <div className="h-28 w-full flex items-end p-4 relative" style={{ backgroundColor: preset.background }}>
+                        <div className="absolute top-0 left-0 w-full h-[60%]" style={{ background: `linear-gradient(145deg, ${preset.primary} 0%, ${preset.primary}dd 100%)`, clipPath: "ellipse(120% 100% at 50% 0%)" }}></div>
+                        <div className="w-12 h-12 rounded-full border-2 border-white shadow-sm absolute top-4 left-4 bg-white/50 backdrop-blur-sm"></div>
+                        <span className="relative z-10 font-bold text-slate-800 bg-white/90 px-3 py-1.5 rounded-lg text-sm backdrop-blur-md shadow-sm">{preset.name}</span>
+                      </div>
+                      <div className="bg-white p-4 flex flex-col gap-3">
+                        <div className="flex justify-between items-center text-xs text-slate-500 font-mono">
+                          <div className="flex items-center gap-1.5"><div className="w-3.5 h-3.5 rounded-full shadow-sm" style={{ backgroundColor: preset.primary }}></div> {preset.primary}</div>
+                          <div className="flex items-center gap-1.5"><div className="w-3.5 h-3.5 rounded-full border border-slate-200 shadow-sm" style={{ backgroundColor: preset.background }}></div> {preset.background}</div>
+                        </div>
+                        <div className="flex gap-2 mt-1">
+                          <button 
+                            onClick={() => setPreviewTheme(preset)}
+                            className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
+                          >
+                            <Eye className="w-3.5 h-3.5" /> Preview
+                          </button>
+                          <button 
+                            onClick={() => setForm({ ...form, theme: { ...form.theme, primary: preset.primary, background: preset.background, layout: preset.layout } })}
+                            className={`flex-1 py-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 ${isActive ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20' : 'bg-slate-900 text-white hover:bg-black'}`}
+                          >
+                            <Check className="w-3.5 h-3.5" /> {isActive ? "Applied" : "Apply"}
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                    <div className="bg-white p-4 flex justify-between items-center text-xs text-slate-500 font-mono">
-                      <div className="flex items-center gap-1.5"><div className="w-3.5 h-3.5 rounded-full shadow-sm" style={{ backgroundColor: preset.primary }}></div> {preset.primary}</div>
-                      <div className="flex items-center gap-1.5"><div className="w-3.5 h-3.5 rounded-full border border-slate-200 shadow-sm" style={{ backgroundColor: preset.background }}></div> {preset.background}</div>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
               <p className="text-sm text-slate-500 mt-4 text-center bg-slate-50 p-3 rounded-xl border border-slate-200">Clicking a preset will automatically update your Custom Design settings.</p>
             </div>
@@ -570,6 +625,48 @@ export default function Dashboard() {
 
         </div>
       </div>
+
+      {/* PREVIEW MODAL */}
+      {previewTheme && (
+        <div className="fixed inset-0 z-[100] bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8 animate-in fade-in duration-200">
+          <div className="bg-slate-50 w-full max-w-[430px] h-[90vh] sm:h-full max-h-[850px] rounded-[3rem] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.5)] flex flex-col relative border-8 border-white/10">
+            
+            {/* Modal Header */}
+            <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-50">
+              <span className="bg-slate-900/80 backdrop-blur-md text-white text-xs font-bold px-4 py-2 rounded-full border border-white/20 shadow-lg">
+                Preview: {previewTheme.name}
+              </span>
+              <button 
+                onClick={() => setPreviewTheme(null)}
+                className="bg-white/90 backdrop-blur-md hover:bg-white text-slate-900 px-4 py-2 rounded-full text-xs font-bold shadow-lg transition-colors"
+              >
+                Close
+              </button>
+            </div>
+
+            {/* Mobile Frame Simulation Container */}
+            <div className="flex-1 w-full h-full overflow-y-auto overflow-x-hidden scrollbar-none relative">
+              <NexCard data={{ ...dummyData, theme: { layout: previewTheme.layout, primary: previewTheme.primary, background: previewTheme.background } }} />
+            </div>
+
+            {/* Modal Action Footer */}
+            <div className="absolute bottom-6 left-6 right-6 z-50">
+               <button 
+                onClick={() => {
+                  setForm({ ...form, theme: { ...form.theme, primary: previewTheme.primary, background: previewTheme.background, layout: previewTheme.layout } });
+                  setPreviewTheme(null);
+                  setActiveTab("themes"); // keep them on themes tab to see it's applied
+                }}
+                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-4 rounded-2xl font-bold shadow-xl shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 border border-white/20"
+               >
+                 <Check className="w-5 h-5" /> Apply This Layout
+               </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

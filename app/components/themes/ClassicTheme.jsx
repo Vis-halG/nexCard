@@ -33,13 +33,12 @@ export default function ClassicTheme({ data }) {
 
   const primaryColor = data?.theme?.primary || "#1D4ED8";
   
-  // A dark, rich background for the executive look
-  const wrapperBg = "#0F172A"; 
+  const wrapperBg = "#F8FAFC"; 
 
   return (
     <div className="min-h-screen flex justify-center font-sans pb-16 pt-8 selection:bg-slate-900 selection:text-white" style={{ backgroundColor: wrapperBg, scrollBehavior: "smooth" }}>
       
-      <div className="w-full max-w-[480px] min-h-screen bg-white rounded-[2rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden relative border-[8px] border-white/10 bg-clip-padding">
+        <div className="w-full max-w-[480px] min-h-screen bg-white rounded-[2rem] shadow-[0_30px_60px_-15px_rgba(15,23,42,0.18)] overflow-hidden relative border border-white bg-clip-padding">
         
         {/* EXECUTIVE TOP BAR */}
         <div className="flex justify-between items-center px-8 py-5 border-b border-slate-100 bg-white sticky top-0 z-50 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)]">
@@ -323,16 +322,16 @@ export default function ClassicTheme({ data }) {
 
           {/* GOOGLE REVIEWS */}
           {data?.googleReviewsUrl && (
-            <div className="bg-slate-900 text-white p-10 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.2)] rounded-sm relative overflow-hidden text-center">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+            <div className="bg-slate-50 text-slate-900 p-10 shadow-[0_20px_40px_-10px_rgba(15,23,42,0.10)] rounded-sm relative overflow-hidden text-center border border-slate-100">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-2xl"></div>
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-50 rounded-full blur-2xl"></div>
               
               <div className="flex justify-center mb-5 gap-1.5 relative z-10">
                 {[1, 2, 3, 4, 5].map(star => <Star key={star} className="w-6 h-6 text-yellow-500 fill-yellow-500" strokeWidth={1.5} />)}
               </div>
               <h3 className="font-serif text-2xl mb-3 relative z-10">Client Feedback</h3>
-              <p className="text-slate-400 font-light text-[15px] mb-8 relative z-10">Your experience is paramount to us.</p>
-              <a href={data.googleReviewsUrl} target="_blank" rel="noreferrer" className="inline-block w-full py-4 bg-white text-slate-900 font-medium tracking-widest uppercase text-xs hover:bg-slate-100 transition-colors relative z-10 rounded-sm shadow-[0_10px_20px_-5px_rgba(255,255,255,0.15)]">
+              <p className="text-slate-500 font-light text-[15px] mb-8 relative z-10">Your experience is paramount to us.</p>
+              <a href={data.googleReviewsUrl} target="_blank" rel="noreferrer" className="inline-block w-full py-4 text-white font-medium tracking-widest uppercase text-xs transition-colors relative z-10 rounded-sm shadow-[0_10px_20px_-5px_rgba(15,23,42,0.15)]" style={{ backgroundColor: primaryColor }}>
                 Leave a Review
               </a>
             </div>

@@ -41,7 +41,12 @@ export default function AdminPage() {
       if (isLogin) {
         try {
           const userCred = await signInWithEmailAndPassword(auth, email, password);
-          router.push("/admin/dashboard");
+          // Check if user already has a theme → go to dashboard, else setup
+          const snap = await import("firebase/firestore").then(({ doc, getDoc }) =>
+            getDoc(doc(db, "users", userCred.user.uid))
+          );
+          const hasTheme = snap.exists() && snap.data()?.theme?.layout;
+          router.push(hasTheme ? "/admin/dashboard" : "/admin/setup");
         } catch (err) {
           console.log(err);
           if (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential") {
@@ -69,7 +74,7 @@ export default function AdminPage() {
             uid,
           });
 
-          router.push("/admin/dashboard");
+          router.push("/admin/setup"); // New user → pick theme first
         } catch (err) {
           console.log(err);
           if (err.code === 'auth/email-already-in-use') {
@@ -135,7 +140,12 @@ export default function AdminPage() {
 
       console.log("Google Login success:", finalUsername);
 
-      router.push("/admin/dashboard");
+      // Google login → check if theme is already set
+      const gSnap = await import("firebase/firestore").then(({ doc, getDoc }) =>
+        getDoc(doc(db, "users", user.uid))
+      );
+      const gHasTheme = gSnap.exists() && gSnap.data()?.theme?.layout;
+      router.push(gHasTheme ? "/admin/dashboard" : "/admin/setup");
 
     } catch (err) {
       console.log(err);

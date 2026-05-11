@@ -311,8 +311,8 @@ export default function ModernTheme({ data }) {
 
           {/* ✉ ENQUIRY FORM (Ultra Minimalistic) */}
           <div id="contact" className="scroll-mt-6 pt-6">
-            <h2 className="text-[28px] font-extrabold text-slate-900 mb-2 tracking-tight">Let's talk.</h2>
-            <p className="text-[15px] text-slate-500 mb-8 font-normal">Send me a direct message and I'll respond shortly.</p>
+            <h2 className="text-[28px] font-extrabold text-slate-900 mb-2 tracking-tight">Let&apos;s talk.</h2>
+            <p className="text-[15px] text-slate-500 mb-8 font-normal">Send me a direct message and I&apos;ll respond shortly.</p>
 
             <form onSubmit={handleEnquiry} className="space-y-4">
               <div>

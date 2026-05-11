@@ -441,7 +441,7 @@ export default function Dashboard() {
                       )}
                     </div>
                   ))}
-                  {form.gallery.length === 0 && <p className="text-sm text-slate-500 col-span-full">Tap "Add Image Slot" to begin uploading gallery photos directly to Firebase.</p>}
+                  {form.gallery.length === 0 && <p className="text-sm text-slate-500 col-span-full">Tap Add Image Slot to begin uploading gallery photos directly to Firebase.</p>}
                 </div>
               </div>
 
@@ -555,7 +555,7 @@ export default function Dashboard() {
                     <div className="h-20" style={{ background: `linear-gradient(135deg, ${form.theme.primary} 0%, ${form.theme.primary}dd 100%)` }}></div>
                     <div className="flex-1 px-4 text-center">
                       <div className="w-12 h-12 bg-white rounded-full mx-auto -mt-6 border-2 border-white shadow-sm flex items-center justify-center overflow-hidden">
-                         {form.image ? <img src={form.image} /> : null}
+                         {form.image ? <img src={form.image} alt="Preview" /> : null}
                       </div>
                       <div className="h-3 w-16 bg-slate-200/50 rounded-full mx-auto mt-3"></div>
                       <div className="h-2 w-10 bg-slate-200/50 rounded-full mx-auto mt-1.5"></div>
@@ -578,11 +578,11 @@ export default function Dashboard() {
               <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Select a Layout Theme</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {[
-                  { name: "Modern (Curved)", layout: "modern", primary: "#0F172A", background: "#F8FAFC" },
+                  { name: "Modern (Curved)", layout: "modern", primary: "#4F46E5", background: "#F8FAFC" },
                   { name: "Classic Corporate", layout: "classic", primary: "#1D4ED8", background: "#EFF6FF" },
-                  { name: "Minimalist", layout: "minimal", primary: "#171717", background: "#FFFFFF" },
-                  { name: "Glassmorphism", layout: "glass", primary: "#E879F9", background: "#0F172A" },
-                  { name: "Bold Developer", layout: "bold", primary: "#10B981", background: "#111827" }
+                  { name: "Swiss Minimal", layout: "minimal", primary: "#475569", background: "#FFFFFF" },
+                  { name: "Rose Glass", layout: "glass", primary: "#B76E79", background: "#FFF7F3" },
+                  { name: "Bold Luxe", layout: "bold", primary: "#0EA5A4", background: "#F7FBF8" }
                 ].map((preset, idx) => {
                   const isActive = form.theme?.layout === preset.layout;
                   return (

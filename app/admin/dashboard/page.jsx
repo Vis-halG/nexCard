@@ -6,7 +6,8 @@ import { auth, db, storage } from "../../../lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Camera, Trash2, Plus, GripVertical, ExternalLink, Copy, Eye, Check } from "lucide-react";
+import { Camera, Trash2, Plus, GripVertical, ExternalLink, Copy, Eye, Check, QrCode, Upload, X } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 import NexCard from "../../components/NexCard";
 
 export default function Dashboard() {
@@ -21,7 +22,7 @@ export default function Dashboard() {
     name: "", title: "", company: "", phone: "", email: "", about: "", image: "",
     address: "", website: "", calendarUrl: "", googleReviewsUrl: "", gstNumber: "",
     social: { instagram: "", linkedin: "", twitter: "", facebook: "", youtube: "" },
-    payment: { upi: "", link: "", bankDetails: "" },
+    payment: { upi: "", link: "", bankDetails: "", qrCode: "" },
     services: [], gallery: [], customLinks: [], videos: [],
     theme: { primary: "#4f46e5", background: "#f8fafc", layout: "modern" }
   });
@@ -153,8 +154,49 @@ export default function Dashboard() {
   };
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+    <div className="min-h-screen bg-slate-100 p-4 md:p-8 animate-pulse">
+      <div className="max-w-4xl mx-auto">
+        {/* Header Skeleton */}
+        <div className="flex justify-between items-center mb-8">
+          <div className="h-10 w-64 bg-slate-200 rounded-xl" />
+          <div className="h-12 w-32 bg-slate-200 rounded-full" />
+        </div>
+
+        {/* Link Box Skeleton */}
+        <div className="mb-8 p-6 bg-white border border-slate-200 rounded-2xl flex justify-between items-center">
+          <div className="space-y-2">
+            <div className="h-3 w-32 bg-slate-100 rounded" />
+            <div className="h-5 w-64 bg-slate-100 rounded" />
+          </div>
+          <div className="flex gap-2">
+            <div className="h-10 w-24 bg-slate-100 rounded-xl" />
+            <div className="h-10 w-24 bg-slate-100 rounded-xl" />
+          </div>
+        </div>
+
+        {/* Tabs Skeleton */}
+        <div className="flex gap-2 mb-6">
+          {[1, 2, 3, 4, 5, 6].map(i => (
+            <div key={i} className="h-10 w-28 bg-white border border-slate-200 rounded-full" />
+          ))}
+        </div>
+
+        {/* Content Area Skeleton */}
+        <div className="bg-white rounded-2xl border border-slate-200 p-8 space-y-8">
+          <div className="h-8 w-48 bg-slate-100 rounded" />
+          <div className="flex gap-8">
+            <div className="w-32 h-32 rounded-full bg-slate-100" />
+            <div className="flex-1 space-y-4">
+              <div className="h-12 w-full bg-slate-50 rounded-xl" />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="h-12 w-full bg-slate-50 rounded-xl" />
+                <div className="h-12 w-full bg-slate-50 rounded-xl" />
+              </div>
+              <div className="h-32 w-full bg-slate-50 rounded-xl" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 
@@ -378,11 +420,99 @@ export default function Dashboard() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Bank Account Guidelines</label>
-                    <textarea value={form.payment.bankDetails} onChange={(e) => handleNestedChange("payment", "bankDetails", e.target.value)} rows="3" placeholder="Bank Name: &#10;Acct No: &#10;IFSC: " className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none" />
+                    <textarea value={form.payment.bankDetails} onChange={(e) => handleNestedChange("payment", "bankDetails", e.target.value)} rows="3" placeholder={"Bank Name: \nAcct No: \nIFSC: "} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none" />
                   </div>
+
+                  {/* ── QR CODE SECTION ── */}
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <div className="flex items-center gap-2 mb-4">
+                      <QrCode className="w-5 h-5 text-indigo-500" />
+                      <h3 className="font-bold text-slate-800 text-[15px]">Payment QR Code</h3>
+                    </div>
+
+                    <div className="flex flex-col md:flex-row gap-6 items-start">
+                      {/* LEFT — upload or auto-gen */}
+                      <div className="flex-1 space-y-3">
+                        <p className="text-xs text-slate-500 leading-relaxed">
+                          Upload your own QR code image, or leave it blank to auto-generate one from your UPI ID.
+                        </p>
+
+                        {form.payment.qrCode ? (
+                          <div className="relative w-fit">
+                            <img
+                              src={form.payment.qrCode}
+                              alt="Payment QR Code"
+                              className="w-40 h-40 object-contain rounded-xl border border-slate-200 bg-white shadow-sm"
+                            />
+                            <button
+                              onClick={() => handleNestedChange("payment", "qrCode", "")}
+                              className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 shadow-md transition-colors"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                            <p className="text-[11px] text-green-600 font-semibold mt-2 text-center">✓ Custom QR uploaded</p>
+                          </div>
+                        ) : (
+                          <label className={`flex flex-col items-center justify-center gap-2 w-40 h-40 rounded-xl border-2 border-dashed ${uploading ? 'border-indigo-300 bg-indigo-50' : 'border-slate-300 bg-white hover:border-indigo-400 hover:bg-indigo-50'} cursor-pointer transition-all group`}>
+                            <Upload className="w-6 h-6 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                            <span className="text-xs font-semibold text-slate-500 group-hover:text-indigo-600 text-center leading-tight">Upload QR Image</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              disabled={uploading}
+                              onChange={async (e) => {
+                                const file = e.target.files[0];
+                                if (!file) return;
+                                setUploading(true);
+                                setUploadProgress(30);
+                                const IMGBB_API_KEY = "e074813eb2df7563edc1c0637ef77359";
+                                const fd = new FormData();
+                                fd.append("image", file);
+                                try {
+                                  const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: fd });
+                                  setUploadProgress(80);
+                                  const json = await res.json();
+                                  if (json.success) handleNestedChange("payment", "qrCode", json.data.url);
+                                  else alert("Upload failed.");
+                                } catch { alert("Network error."); }
+                                finally { setUploading(false); setUploadProgress(0); }
+                              }}
+                            />
+                          </label>
+                        )}
+                      </div>
+
+                      {/* RIGHT — live preview */}
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Preview</span>
+                        <div className="w-40 h-40 rounded-xl border border-slate-200 bg-white shadow-sm flex items-center justify-center overflow-hidden">
+                          {form.payment.qrCode ? (
+                            <img src={form.payment.qrCode} alt="QR Preview" className="w-full h-full object-contain p-2" />
+                          ) : form.payment.upi ? (
+                            <QRCodeSVG
+                              value={`upi://pay?pa=${encodeURIComponent(form.payment.upi)}&pn=${encodeURIComponent(form.name || 'Payment')}&cu=INR`}
+                              size={136}
+                              level="M"
+                              fgColor="#0F172A"
+                            />
+                          ) : (
+                            <div className="flex flex-col items-center gap-2 text-slate-300">
+                              <QrCode className="w-10 h-10" />
+                              <span className="text-[10px] font-semibold text-center leading-tight">Enter UPI ID to auto-generate</span>
+                            </div>
+                          )}
+                        </div>
+                        {!form.payment.qrCode && form.payment.upi && (
+                          <p className="text-[11px] text-indigo-500 font-semibold text-center">Auto-generated from UPI ID</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  {/* ── END QR CODE SECTION ── */}
+
                 </div>
               </div>
-
             </div>
           )}
 

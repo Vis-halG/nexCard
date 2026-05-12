@@ -65,8 +65,35 @@ export default function Page({ params }) {
   // ⏳ LOADING UI
   if (loading) {
     return (
-      <div className="h-screen flex justify-center items-center">
-        <p>Loading card...</p>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-8">
+        <div className="w-full max-w-[430px] h-[90vh] max-h-[850px] bg-white rounded-[3rem] shadow-2xl overflow-hidden flex flex-col relative border-8 border-white p-6 space-y-8">
+          {/* Header Skeleton */}
+          <div className="flex flex-col items-center space-y-4 pt-8">
+            <div className="w-28 h-28 rounded-full bg-slate-200 animate-pulse" />
+            <div className="w-48 h-8 bg-slate-100 rounded-full animate-pulse" />
+            <div className="w-32 h-4 bg-slate-100 rounded-full animate-pulse" />
+          </div>
+
+          {/* About Skeleton */}
+          <div className="space-y-3">
+            <div className="w-full h-4 bg-slate-100 rounded-full animate-pulse" />
+            <div className="w-5/6 h-4 bg-slate-100 rounded-full animate-pulse" />
+          </div>
+
+          {/* Social Icons Skeleton */}
+          <div className="flex justify-center gap-4 pt-4">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="w-12 h-12 rounded-2xl bg-slate-100 animate-pulse" />
+            ))}
+          </div>
+
+          {/* Action Buttons Skeleton */}
+          <div className="space-y-3 pt-4">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="w-full h-16 bg-slate-50 rounded-2xl animate-pulse" />
+            ))}
+          </div>
+        </div>
       </div>
     );
   }

@@ -152,12 +152,34 @@ export default function SetupPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-5">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-xl shadow-indigo-500/20 animate-pulse">
-            <Sparkles className="w-6 h-6 text-white" />
+      <div className="min-h-screen bg-slate-50 p-4 md:p-8 animate-pulse">
+        <div className="max-w-6xl mx-auto pt-16">
+          <div className="flex flex-col items-center mb-12 space-y-4">
+            <div className="h-6 w-40 bg-indigo-100 rounded-full" />
+            <div className="h-12 w-96 bg-slate-200 rounded-2xl" />
+            <div className="h-4 w-64 bg-slate-100 rounded-full" />
           </div>
-          <p className="text-slate-400 text-sm font-semibold tracking-wide">Preparing your canvas...</p>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map(i => (
+              <div key={i} className="bg-white rounded-3xl p-6 border border-slate-200 space-y-6">
+                <div className="aspect-[4/3] bg-slate-100 rounded-2xl" />
+                <div className="space-y-3">
+                  <div className="h-6 w-3/4 bg-slate-100 rounded-lg" />
+                  <div className="h-4 w-full bg-slate-50 rounded-lg" />
+                </div>
+                <div className="flex gap-3">
+                  <div className="h-4 w-4 rounded-full bg-slate-100" />
+                  <div className="h-4 w-4 rounded-full bg-slate-100" />
+                  <div className="h-4 w-4 rounded-full bg-slate-100" />
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <div className="h-10 flex-1 bg-slate-50 rounded-xl" />
+                  <div className="h-10 flex-1 bg-slate-50 rounded-xl" />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );

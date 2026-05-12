@@ -160,59 +160,39 @@ export default function ModernTheme({ data }) {
             </div>
           )}
 
-          {/* 🌐 SOCIAL MEDIA LINKS (Monochrome to Brand Color Hover) */}
+          {/* 🌐 SOCIAL MEDIA LINKS (Icon-only grid) */}
+          {data?.social && Object.values(data.social).some(Boolean) && (
           <div id="social" className="scroll-mt-6">
             <h2 className="text-[20px] font-bold text-slate-900 mb-4 tracking-tight">Connect</h2>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-wrap gap-3">
               {data?.social?.instagram && (
-                <a href={data.social.instagram} target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-100 hover:border-pink-200 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(236,72,153,0.08)] transition-all duration-300 text-slate-700 group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-pink-50 group-hover:text-pink-500 transition-all">
-                      <InstagramIcon className="w-5 h-5" />
-                    </div>
-                    <span className="font-semibold text-[15px]">Instagram</span>
-                  </div>
-                  <Globe className="w-4 h-4 text-slate-300 group-hover:text-pink-300 transition-colors" />
+                <a href={data.social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="w-14 h-14 rounded-2xl bg-white border border-slate-100 hover:border-pink-200 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(236,72,153,0.12)] transition-all duration-300 flex items-center justify-center text-slate-400 hover:text-pink-500 hover:bg-pink-50 group">
+                  <InstagramIcon className="w-6 h-6" />
                 </a>
               )}
               {data?.social?.linkedin && (
-                <a href={data.social.linkedin} target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-100 hover:border-blue-200 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(59,130,246,0.08)] transition-all duration-300 text-slate-700 group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-blue-50 group-hover:text-blue-600 transition-all">
-                      <LinkedinIcon className="w-5 h-5" />
-                    </div>
-                    <span className="font-semibold text-[15px]">LinkedIn</span>
-                  </div>
-                  <Globe className="w-4 h-4 text-slate-300 group-hover:text-blue-300 transition-colors" />
+                <a href={data.social.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="w-14 h-14 rounded-2xl bg-white border border-slate-100 hover:border-blue-200 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(59,130,246,0.12)] transition-all duration-300 flex items-center justify-center text-slate-400 hover:text-blue-600 hover:bg-blue-50 group">
+                  <LinkedinIcon className="w-6 h-6" />
                 </a>
               )}
               {data?.social?.twitter && (
-                <a href={data.social.twitter} target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-100 hover:border-sky-200 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(14,165,233,0.08)] transition-all duration-300 text-slate-700 group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-sky-50 group-hover:text-sky-500 transition-all">
-                      <TwitterIcon className="w-5 h-5" />
-                    </div>
-                    <span className="font-semibold text-[15px]">X (Twitter)</span>
-                  </div>
-                  <Globe className="w-4 h-4 text-slate-300 group-hover:text-sky-300 transition-colors" />
+                <a href={data.social.twitter} target="_blank" rel="noreferrer" aria-label="X (Twitter)" className="w-14 h-14 rounded-2xl bg-white border border-slate-100 hover:border-sky-200 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(14,165,233,0.12)] transition-all duration-300 flex items-center justify-center text-slate-400 hover:text-sky-500 hover:bg-sky-50 group">
+                  <TwitterIcon className="w-6 h-6" />
                 </a>
               )}
               {data?.social?.youtube && (
-                <a href={data.social.youtube} target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-100 hover:border-red-200 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(239,68,68,0.08)] transition-all duration-300 text-slate-700 group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-red-50 group-hover:text-red-600 transition-all">
-                      <YoutubeIcon className="w-5 h-5" />
-                    </div>
-                    <span className="font-semibold text-[15px]">YouTube</span>
-                  </div>
-                  <Globe className="w-4 h-4 text-slate-300 group-hover:text-red-300 transition-colors" />
+                <a href={data.social.youtube} target="_blank" rel="noreferrer" aria-label="YouTube" className="w-14 h-14 rounded-2xl bg-white border border-slate-100 hover:border-red-200 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(239,68,68,0.12)] transition-all duration-300 flex items-center justify-center text-slate-400 hover:text-red-600 hover:bg-red-50 group">
+                  <YoutubeIcon className="w-6 h-6" />
                 </a>
               )}
-              {!data?.social && (
-                <p className="text-sm text-slate-400">No social profiles added.</p>
+              {data?.social?.facebook && (
+                <a href={data.social.facebook} target="_blank" rel="noreferrer" aria-label="Facebook" className="w-14 h-14 rounded-2xl bg-white border border-slate-100 hover:border-blue-300 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(24,119,242,0.12)] transition-all duration-300 flex items-center justify-center text-slate-400 hover:text-blue-700 hover:bg-blue-50 group">
+                  <FacebookIcon className="w-6 h-6" />
+                </a>
               )}
             </div>
           </div>
+          )}
 
           {/* 🖼 IMAGE GALLERY */}
           {data?.gallery?.length > 0 && (

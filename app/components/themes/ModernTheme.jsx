@@ -31,16 +31,30 @@ export default function ModernTheme({ data }) {
     window.location.href = `mailto:${data?.email || ''}?subject=Enquiry from ${name}&body=${msg}`;
   };
 
-  const primaryColor = data?.theme?.primary || "#111111";
-  const bgColor = data?.theme?.background || "#ffffff";
+  const theme = data?.theme || {};
+  const primaryColor = theme.primary || "#4f46e5";
+  const bgColor = theme.background || "#ffffff";
+  const fontClass = theme.font || "font-sans";
+  const borderRadius = theme.radius || "1rem";
+  const avatarRadius = theme.avatarStyle === 'circle' ? '9999px' : (theme.avatarStyle === 'rounded' ? '1.5rem' : '0px');
+  
+  const cardStyle = theme.cardStyle || 'standard';
+  const cardClasses = cardStyle === 'glass' 
+    ? 'bg-white/70 backdrop-blur-md border border-white/40 shadow-xl' 
+    : (cardStyle === 'outline' ? 'bg-transparent border border-slate-200 shadow-none' : 'bg-white shadow-lg border border-slate-100');
 
   return (
-    <div className="min-h-screen flex justify-center bg-slate-50 font-sans pb-28 selection:bg-black selection:text-white" style={{ scrollBehavior: "smooth" }}>
+    <div className={`min-h-screen flex justify-center bg-slate-50 ${fontClass} pb-28 selection:bg-black selection:text-white overflow-x-hidden`} style={{ scrollBehavior: "smooth" }}>
       <div 
         className="w-full max-w-[430px] min-h-screen relative overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.05)] sm:rounded-b-[2.5rem]"
         style={{ backgroundColor: bgColor }}
       >
-        {/* 🔥 HERO SECTION (Organic & Clean) */}
+        {/* ✨ Background Effects Layer */}
+        {theme.bgEffect === 'mesh' && (
+          <div className="absolute inset-0 opacity-[0.4] pointer-events-none" style={{ background: `radial-gradient(at 0% 0%, ${primaryColor}44 0, transparent 50%), radial-gradient(at 50% 0%, ${primaryColor}22 0, transparent 50%), radial-gradient(at 100% 0%, ${primaryColor}33 0, transparent 50%)` }}></div>
+        )}
+
+        {/* 🔥 HERO SECTION */}
         <div id="home" className="relative pb-10">
           <div 
             className="h-64 w-full relative" 
@@ -49,13 +63,14 @@ export default function ModernTheme({ data }) {
               clipPath: "ellipse(120% 100% at 50% 0%)"
             }}
           >
-            {/* Subtle mesh background effect inside the hero header */}
             <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, white 1.5px, transparent 0)", backgroundSize: "32px 32px" }}></div>
           </div>
 
           <div className="px-6 relative -mt-24 flex flex-col items-center">
-            {/* Subtly Floating Profile Image */}
-            <div className="w-40 h-40 rounded-full border-4 border-white shadow-[0_8px_30px_rgba(0,0,0,0.12)] overflow-hidden bg-white relative z-10 transition-transform hover:scale-105 duration-500">
+            <div 
+              className="w-40 h-40 border-4 border-white shadow-[0_8px_30px_rgba(0,0,0,0.12)] overflow-hidden bg-white relative z-10 transition-transform hover:scale-105 duration-500"
+              style={{ borderRadius: avatarRadius }}
+            >
               <img 
                 src={data?.image || "https://i.pravatar.cc/150"} 
                 alt={data?.name || "profile"} 
@@ -78,30 +93,30 @@ export default function ModernTheme({ data }) {
             </div>
           </div>
 
-          {/* ⚡ CLEAN QUICK ACTIONS (Glass/Soft Shadows) */}
+          {/* ⚡ CLEAN QUICK ACTIONS */}
           <div className="flex justify-center flex-wrap gap-4 mt-8 px-6">
             {data?.phone && (
-              <a href={`tel:${data.phone}`} className="w-[52px] h-[52px] rounded-2xl bg-white text-slate-700 hover:text-white shadow-[0_8px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center justify-center hover:-translate-y-1 group" style={{ hoverBackgroundColor: primaryColor }}>
+              <a href={`tel:${data.phone}`} className="w-[52px] h-[52px] bg-white text-slate-700 hover:text-white shadow-[0_8px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center justify-center hover:-translate-y-1 group" style={{ borderRadius: borderRadius }}>
                 <Phone className="w-5 h-5 group-hover:stroke-current" />
               </a>
             )}
             {data?.phone && (
-              <a href={`sms:${data.phone}`} className="w-[52px] h-[52px] rounded-2xl bg-white text-slate-700 hover:text-white shadow-[0_8px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center justify-center hover:-translate-y-1 group hover:bg-[#8B5CF6]">
+              <a href={`sms:${data.phone}`} className="w-[52px] h-[52px] bg-white text-slate-700 hover:text-white shadow-[0_8px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center justify-center hover:-translate-y-1 group hover:bg-[#8B5CF6]" style={{ borderRadius: borderRadius }}>
                 <MessageSquare className="w-5 h-5 group-hover:stroke-white" />
               </a>
             )}
             {data?.phone && (
-              <a href={`https://wa.me/${data.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="w-[52px] h-[52px] rounded-2xl bg-white text-slate-700 hover:text-white shadow-[0_8px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center justify-center hover:-translate-y-1 group hover:bg-[#25D366]">
+              <a href={`https://wa.me/${data.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="w-[52px] h-[52px] bg-white text-slate-700 hover:text-white shadow-[0_8px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center justify-center hover:-translate-y-1 group hover:bg-[#25D366]" style={{ borderRadius: borderRadius }}>
                 <MessageCircle className="w-5 h-5 group-hover:stroke-white" />
               </a>
             )}
             {data?.email && (
-              <a href={`mailto:${data.email}`} className="w-[52px] h-[52px] rounded-2xl bg-white text-slate-700 hover:text-white shadow-[0_8px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center justify-center hover:-translate-y-1 group hover:bg-[#EA4335]">
+              <a href={`mailto:${data.email}`} className="w-[52px] h-[52px] bg-white text-slate-700 hover:text-white shadow-[0_8px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center justify-center hover:-translate-y-1 group hover:bg-[#EA4335]" style={{ borderRadius: borderRadius }}>
                 <Mail className="w-5 h-5 group-hover:stroke-white" />
               </a>
             )}
             {data?.address && (
-              <a href="#map" className="w-[52px] h-[52px] rounded-2xl bg-white text-slate-700 hover:text-white shadow-[0_8px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center justify-center hover:-translate-y-1 group hover:bg-[#F59E0B]">
+              <a href="#map" className="w-[52px] h-[52px] bg-white text-slate-700 hover:text-white shadow-[0_8px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center justify-center hover:-translate-y-1 group hover:bg-[#F59E0B]" style={{ borderRadius: borderRadius }}>
                 <MapPin className="w-5 h-5 group-hover:stroke-white" />
               </a>
             )}
@@ -111,8 +126,8 @@ export default function ModernTheme({ data }) {
           <div className="px-8 mt-10">
             <button 
               onClick={generateVcard}
-              className="w-full py-[18px] rounded-[1.25rem] text-white font-bold flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-all duration-400 relative overflow-hidden group"
-              style={{ background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}ee)` }}
+              className="w-full py-[18px] text-white font-bold flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-all duration-400 relative overflow-hidden group"
+              style={{ background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}ee)`, borderRadius: borderRadius }}
             >
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <Download className="w-[18px] h-[18px] relative z-10" />
@@ -124,7 +139,8 @@ export default function ModernTheme({ data }) {
                 href={data.calendarUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full mt-4 py-[16px] rounded-[1.25rem] text-slate-700 bg-white border border-slate-100 font-semibold flex items-center justify-center gap-2 shadow-[0_4px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.06)] hover:bg-slate-50 transition-all duration-300"
+                className="w-full mt-4 py-[16px] text-slate-700 bg-white border border-slate-100 font-semibold flex items-center justify-center gap-2 shadow-[0_4px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.06)] hover:bg-slate-50 transition-all duration-300"
+                style={{ borderRadius: borderRadius }}
               >
                 <Calendar className="w-4 h-4 text-slate-400" />
                 <span>Book a Meeting</span>
@@ -160,36 +176,26 @@ export default function ModernTheme({ data }) {
             </div>
           )}
 
-          {/* 🌐 SOCIAL MEDIA LINKS (Icon-only grid) */}
+          {/* 🌐 SOCIAL MEDIA LINKS */}
           {data?.social && Object.values(data.social).some(Boolean) && (
           <div id="social" className="scroll-mt-6">
             <h2 className="text-[20px] font-bold text-slate-900 mb-4 tracking-tight">Connect</h2>
             <div className="flex flex-wrap gap-3">
-              {data?.social?.instagram && (
-                <a href={data.social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="w-14 h-14 rounded-2xl bg-white border border-slate-100 hover:border-pink-200 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(236,72,153,0.12)] transition-all duration-300 flex items-center justify-center text-slate-400 hover:text-pink-500 hover:bg-pink-50 group">
-                  <InstagramIcon className="w-6 h-6" />
-                </a>
-              )}
-              {data?.social?.linkedin && (
-                <a href={data.social.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="w-14 h-14 rounded-2xl bg-white border border-slate-100 hover:border-blue-200 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(59,130,246,0.12)] transition-all duration-300 flex items-center justify-center text-slate-400 hover:text-blue-600 hover:bg-blue-50 group">
-                  <LinkedinIcon className="w-6 h-6" />
-                </a>
-              )}
-              {data?.social?.twitter && (
-                <a href={data.social.twitter} target="_blank" rel="noreferrer" aria-label="X (Twitter)" className="w-14 h-14 rounded-2xl bg-white border border-slate-100 hover:border-sky-200 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(14,165,233,0.12)] transition-all duration-300 flex items-center justify-center text-slate-400 hover:text-sky-500 hover:bg-sky-50 group">
-                  <TwitterIcon className="w-6 h-6" />
-                </a>
-              )}
-              {data?.social?.youtube && (
-                <a href={data.social.youtube} target="_blank" rel="noreferrer" aria-label="YouTube" className="w-14 h-14 rounded-2xl bg-white border border-slate-100 hover:border-red-200 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(239,68,68,0.12)] transition-all duration-300 flex items-center justify-center text-slate-400 hover:text-red-600 hover:bg-red-50 group">
-                  <YoutubeIcon className="w-6 h-6" />
-                </a>
-              )}
-              {data?.social?.facebook && (
-                <a href={data.social.facebook} target="_blank" rel="noreferrer" aria-label="Facebook" className="w-14 h-14 rounded-2xl bg-white border border-slate-100 hover:border-blue-300 shadow-[0_4px_15px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(24,119,242,0.12)] transition-all duration-300 flex items-center justify-center text-slate-400 hover:text-blue-700 hover:bg-blue-50 group">
-                  <FacebookIcon className="w-6 h-6" />
-                </a>
-              )}
+              {Object.entries(data.social).map(([key, val]) => {
+                if (!val) return null;
+                const Icon = {
+                  instagram: InstagramIcon,
+                  linkedin: LinkedinIcon,
+                  twitter: TwitterIcon,
+                  youtube: YoutubeIcon,
+                  facebook: FacebookIcon
+                }[key];
+                return (
+                  <a key={key} href={val} target="_blank" rel="noreferrer" className="w-14 h-14 bg-white border border-slate-100 transition-all duration-300 flex items-center justify-center text-slate-400 hover:text-white group" style={{ borderRadius: borderRadius, hoverBackgroundColor: primaryColor }}>
+                    <Icon className="w-6 h-6 group-hover:stroke-current" />
+                  </a>
+                );
+              })}
             </div>
           </div>
           )}
@@ -200,7 +206,7 @@ export default function ModernTheme({ data }) {
               <h2 className="text-[20px] font-bold text-slate-900 mb-4 tracking-tight">Gallery</h2>
               <div className="grid grid-cols-2 gap-4">
                 {data.gallery.map((img, i) => img ? (
-                  <div key={i} className="aspect-square rounded-3xl overflow-hidden shadow-[0_8px_20px_rgba(0,0,0,0.06)] relative group cursor-pointer focus-within:ring-2">
+                  <div key={i} className="aspect-square overflow-hidden shadow-[0_8px_20px_rgba(0,0,0,0.06)] relative group cursor-pointer focus-within:ring-2" style={{ borderRadius: borderRadius }}>
                     <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 duration-300"></div>
                     <img src={img} alt={`Gallery image ${i + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
                   </div>
@@ -215,7 +221,7 @@ export default function ModernTheme({ data }) {
               <h2 className="text-[20px] font-bold text-slate-900 mb-4 tracking-tight">Videos</h2>
               <div className="flex flex-col gap-6">
                 {data.videos.map((vid, i) => (
-                  <div key={i} className="w-full overflow-hidden rounded-[1.5rem] shadow-[0_10px_30px_rgba(0,0,0,0.08)] bg-slate-100 relative pt-[56.25%]">
+                  <div key={i} className="w-full overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.08)] bg-slate-100 relative pt-[56.25%]" style={{ borderRadius: borderRadius }}>
                     <iframe className="absolute top-0 left-0 w-full h-full" src={vid.includes('youtube.com/watch?v=') ? vid.replace('watch?v=', 'embed/') : vid} title={`Video ${i + 1}`} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                   </div>
                 ))}
@@ -223,15 +229,15 @@ export default function ModernTheme({ data }) {
             </div>
           )}
 
-          {/* 🔗 MODERN CUSTOM LINKS (Soft Cards) */}
+          {/* 🔗 MODERN CUSTOM LINKS */}
           {data?.customLinks?.length > 0 && (
             <div className="scroll-mt-6">
               <h2 className="text-[20px] font-bold text-slate-900 mb-4 tracking-tight">Important Links</h2>
               <div className="flex flex-col gap-3">
                 {data.customLinks.map((link, i) => (
-                  <a key={i} href={link.url} target="_blank" rel="noreferrer" className="w-full flex items-center justify-between p-5 rounded-3xl bg-slate-50 hover:bg-white border border-transparent hover:border-slate-100 shadow-[0_4px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 transition-all duration-300 text-slate-800 group">
+                  <a key={i} href={link.url} target="_blank" rel="noreferrer" className={`w-full flex items-center justify-between p-5 transition-all duration-300 text-slate-800 group ${cardClasses}`} style={{ borderRadius: borderRadius }}>
                     <span className="font-bold text-[15px]">{link.title}</span>
-                    <div className="w-10 h-10 rounded-full bg-white text-slate-400 group-hover:text-slate-800 flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-colors">
+                    <div className="w-10 h-10 rounded-full bg-slate-50 text-slate-400 group-hover:text-slate-800 flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-colors">
                       <Globe className="w-4 h-4" />
                     </div>
                   </a>

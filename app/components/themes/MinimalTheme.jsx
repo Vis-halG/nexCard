@@ -47,19 +47,37 @@ export default function MinimalTheme({ data }) {
     window.location.href = `mailto:${data?.email || ''}?subject=Enquiry from ${name}&body=${msg}`;
   };
 
-  const primaryColor = data?.theme?.primary || "#111111";
+  const theme = data?.theme || {};
+  const primaryColor = theme.primary || "#111111";
+  const bgColor = theme.background || "#ffffff";
+  const fontClass = theme.font || "font-sans";
+  const borderRadius = theme.radius || "1rem";
+  const avatarRadius = theme.avatarStyle === 'circle' ? '9999px' : (theme.avatarStyle === 'rounded' ? '1.5rem' : '0px');
   
+  const cardStyle = theme.cardStyle || 'standard';
+  const cardClasses = cardStyle === 'glass' 
+    ? 'bg-white/70 backdrop-blur-md border border-white/40' 
+    : (cardStyle === 'outline' ? 'bg-transparent border border-slate-200' : 'bg-white border border-slate-100');
+
   return (
-    <div className="min-h-screen bg-[#fafafa] font-sans flex justify-center text-slate-800 selection:bg-slate-200" style={{ scrollBehavior: "smooth" }}>
-      <div className="w-full max-w-[500px] min-h-screen bg-white shadow-[0_0_80px_rgba(0,0,0,0.03)] relative overflow-hidden flex flex-col">
+    <div className={`min-h-screen ${fontClass} flex justify-center text-slate-800 selection:bg-slate-200 overflow-x-hidden`} style={{ scrollBehavior: "smooth", backgroundColor: bgColor }}>
+      <div className="w-full max-w-[500px] min-h-screen relative overflow-hidden flex flex-col shadow-[0_0_80px_rgba(0,0,0,0.03)]" style={{ backgroundColor: bgColor }}>
         
+        {/* ✨ Background Effects Layer */}
+        {theme.bgEffect === 'mesh' && (
+          <div className="absolute inset-0 opacity-[0.2] pointer-events-none" style={{ background: `radial-gradient(at 0% 0%, ${primaryColor}44 0, transparent 50%), radial-gradient(at 100% 100%, ${primaryColor}33 0, transparent 50%)` }}></div>
+        )}
+
         {/* AVANT-GARDE HEADER */}
         <div className="w-full pt-20 pb-16 px-10 flex flex-col items-center relative">
           
           {data?.image && (
-            <div className="w-48 h-48 rounded-full overflow-hidden mb-12 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] relative group">
+            <div 
+              className="w-48 h-48 overflow-hidden mb-12 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] relative group"
+              style={{ borderRadius: avatarRadius }}
+            >
               <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700 z-10"></div>
-              <img src={data.image} alt={data.name} className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out" />
+              <img src={data.image} alt={data.name} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000 ease-out" />
             </div>
           )}
           
@@ -83,10 +101,10 @@ export default function MinimalTheme({ data }) {
         <div className="flex justify-center gap-10 px-10 mb-20 relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-[1px] bg-slate-100 -z-10"></div>
           
-          {data?.phone && <a href={`tel:${data.phone}`} className="w-14 h-14 bg-white border border-slate-100 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-300 hover:scale-110 transition-all duration-500 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)]"><Phone className="w-5 h-5" strokeWidth={1} /></a>}
-          {data?.phone && <a href={`https://wa.me/${data.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="w-14 h-14 bg-white border border-slate-100 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-300 hover:scale-110 transition-all duration-500 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)]"><MessageCircle className="w-5 h-5" strokeWidth={1} /></a>}
-          {data?.email && <a href={`mailto:${data.email}`} className="w-14 h-14 bg-white border border-slate-100 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-300 hover:scale-110 transition-all duration-500 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)]"><Mail className="w-5 h-5" strokeWidth={1} /></a>}
-          {data?.address && <a href="#map" className="w-14 h-14 bg-white border border-slate-100 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-300 hover:scale-110 transition-all duration-500 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)]"><MapPin className="w-5 h-5" strokeWidth={1} /></a>}
+          {data?.phone && <a href={`tel:${data.phone}`} className="w-14 h-14 bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-300 hover:scale-110 transition-all duration-500 shadow-sm" style={{ borderRadius: borderRadius }}><Phone className="w-5 h-5" strokeWidth={1} /></a>}
+          {data?.phone && <a href={`https://wa.me/${data.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="w-14 h-14 bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-300 hover:scale-110 transition-all duration-500 shadow-sm" style={{ borderRadius: borderRadius }}><MessageCircle className="w-5 h-5" strokeWidth={1} /></a>}
+          {data?.email && <a href={`mailto:${data.email}`} className="w-14 h-14 bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-300 hover:scale-110 transition-all duration-500 shadow-sm" style={{ borderRadius: borderRadius }}><Mail className="w-5 h-5" strokeWidth={1} /></a>}
+          {data?.address && <a href="#map" className="w-14 h-14 bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-300 hover:scale-110 transition-all duration-500 shadow-sm" style={{ borderRadius: borderRadius }}><MapPin className="w-5 h-5" strokeWidth={1} /></a>}
         </div>
 
         <div className="flex-1 flex flex-col gap-28 pb-32">

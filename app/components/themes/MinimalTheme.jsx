@@ -61,7 +61,7 @@ export default function MinimalTheme({ data }) {
 
   return (
     <div className={`min-h-screen ${fontClass} flex justify-center text-slate-800 selection:bg-slate-200 overflow-x-hidden`} style={{ scrollBehavior: "smooth", backgroundColor: bgColor }}>
-      <div className="w-full max-w-[500px] min-h-screen relative overflow-hidden flex flex-col shadow-[0_0_80px_rgba(0,0,0,0.03)]" style={{ backgroundColor: bgColor }}>
+      <div className="w-full min-h-screen relative overflow-hidden flex flex-col shadow-[0_0_80px_rgba(0,0,0,0.03)]" style={{ backgroundColor: bgColor }}>
         
         {/* ✨ Background Effects Layer */}
         {theme.bgEffect === 'mesh' && (
@@ -98,7 +98,7 @@ export default function MinimalTheme({ data }) {
         </div>
 
         {/* ULTRA MINIMAL ACTIONS */}
-        <div className="flex justify-center gap-10 px-10 mb-20 relative">
+        <div className="flex justify-center gap-8 px-10 mb-8 relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-[1px] bg-slate-100 -z-10"></div>
           
           {data?.phone && <a href={`tel:${data.phone}`} className="w-14 h-14 bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-300 hover:scale-110 transition-all duration-500 shadow-sm" style={{ borderRadius: borderRadius }}><Phone className="w-5 h-5" strokeWidth={1} /></a>}
@@ -107,7 +107,7 @@ export default function MinimalTheme({ data }) {
           {data?.address && <a href="#map" className="w-14 h-14 bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-300 hover:scale-110 transition-all duration-500 shadow-sm" style={{ borderRadius: borderRadius }}><MapPin className="w-5 h-5" strokeWidth={1} /></a>}
         </div>
 
-        <div className="flex-1 flex flex-col gap-28 pb-32">
+        <div className="flex-1 flex flex-col gap-8 pb-32">
           
           {/* ABOUT */}
           {data?.about && (
@@ -120,7 +120,7 @@ export default function MinimalTheme({ data }) {
           )}
 
           {/* CTA SECTIONS */}
-          <div className="px-10 flex flex-col gap-4">
+          <div className="px-10 flex flex-col gap-8">
              <button onClick={generateVcard} className="w-full py-5 border border-slate-900 bg-slate-900 text-white text-[11px] font-medium tracking-[0.3em] uppercase hover:bg-white hover:text-slate-900 transition-colors duration-500">
                Save to Contacts
              </button>
@@ -135,7 +135,7 @@ export default function MinimalTheme({ data }) {
           {data?.services?.length > 0 && (
             <div className="px-10 text-center">
               <span className="text-[9px] font-bold uppercase tracking-[0.4em] text-slate-300 block mb-10">Expertise</span>
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-8">
                 {data.services.map((s, i) => (
                   <div key={i} className="text-xl md:text-2xl font-extralight tracking-tight text-slate-800">
                     {s}
@@ -149,7 +149,7 @@ export default function MinimalTheme({ data }) {
           {data?.social && Object.keys(data.social).some(k => data.social[k]) && (
             <div className="px-10 text-center">
               <span className="text-[9px] font-bold uppercase tracking-[0.4em] text-slate-300 block mb-10">Connect</span>
-              <div className="flex flex-wrap justify-center gap-5">
+              <div className="flex flex-wrap justify-center gap-8">
                 {['instagram', 'linkedin', 'twitter', 'youtube', 'facebook'].map(network =>
                   data.social[network] && (
                     <a key={network} href={data.social[network]} target="_blank" rel="noreferrer" aria-label={network}
@@ -251,7 +251,7 @@ export default function MinimalTheme({ data }) {
           {/* CONTACT FORM */}
           <div id="contact" className="px-10">
             <span className="text-[9px] font-bold uppercase tracking-[0.4em] text-slate-300 block mb-12 text-center">Inquiries</span>
-            <form onSubmit={handleEnquiry} className="flex flex-col gap-10">
+            <form onSubmit={handleEnquiry} className="flex flex-col gap-8">
               <div className="relative group">
                 <input type="text" name="name" required placeholder=" " className="peer w-full bg-transparent border-b border-slate-200 text-sm py-2 focus:outline-none focus:border-slate-900 transition-colors font-light text-slate-900" />
                 <label className="absolute left-0 top-2 text-slate-400 text-xs uppercase tracking-widest peer-focus:-translate-y-6 peer-focus:text-[9px] peer-focus:text-slate-900 peer-valid:-translate-y-6 peer-valid:text-[9px] transition-all duration-300 pointer-events-none">Name</label>

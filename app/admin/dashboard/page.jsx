@@ -72,37 +72,40 @@ export default function Dashboard() {
     return () => unsubscribe();
   }, [router]);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
 
-  const handleNestedChange = (category, field, value) => {
-    setForm({
-      ...form,
-      [category]: {
-        ...form[category],
-        [field]: value
-      }
-    });
+  const handleNestedChange = (parent, field, value) => {
+    setForm(prev => ({
+      ...prev,
+      [parent]: { ...prev[parent], [field]: value }
+    }));
   };
 
   const handleArrayChange = (field, index, value) => {
-    const newArr = [...form[field]];
-    newArr[index] = value;
-    setForm({ ...form, [field]: newArr });
+    setForm(prev => {
+      const newArr = [...prev[field]];
+      newArr[index] = value;
+      return { ...prev, [field]: newArr };
+    });
   };
   
   const handleCustomLinkChange = (index, key, value) => {
-    const newLinks = [...form.customLinks];
-    newLinks[index] = { ...newLinks[index], [key]: value };
-    setForm({ ...form, customLinks: newLinks });
+    setForm(prev => {
+      const newLinks = [...prev.customLinks];
+      newLinks[index] = { ...newLinks[index], [key]: value };
+      return { ...prev, customLinks: newLinks };
+    });
   };
 
   const addArrayItem = (field, initialValue = "") => {
-    setForm({ ...form, [field]: [...form[field], initialValue] });
+    setForm(prev => ({ ...prev, [field]: [...prev[field], initialValue] }));
   };
 
   const removeArrayItem = (field, index) => {
-    const newArr = form[field].filter((_, i) => i !== index);
-    setForm({ ...form, [field]: newArr });
+    setForm(prev => ({ ...prev, [field]: prev[field].filter((_, i) => i !== index) }));
   };
 
   // 🔥 IMAGE UPLOADING (via ImgBB)
@@ -111,9 +114,8 @@ export default function Dashboard() {
     if (!file) return;
 
     setUploading(true);
-    setUploadProgress(30); // Fake progress for UI feedback
+    setUploadProgress(30);
 
-    // 🔴 IMPORTANT: Paste your free ImgBB API key here
     const IMGBB_API_KEY = "e074813eb2df7563edc1c0637ef77359"; 
 
     const formData = new FormData();
@@ -133,8 +135,10 @@ export default function Dashboard() {
         
         if (index !== null && field === 'gallery') {
           handleArrayChange('gallery', index, downloadURL);
+        } else if (field === 'image') {
+          setForm(prev => ({ ...prev, image: downloadURL }));
         } else {
-          setForm({ ...form, [field]: downloadURL });
+            handleNestedChange("payment", "qrCode", downloadURL);
         }
       } else {
         console.error("ImgBB Error:", data);
@@ -156,7 +160,6 @@ export default function Dashboard() {
   const handleSave = async () => {
     if (!user) return;
     try {
-      // Use the username from the form state instead of forcing email prefix
       await setDoc(doc(db, "users", user.uid), { ...form, uid: user.uid });
       alert("Profile Saved Successfully ✅");
     } catch (err) {
@@ -166,15 +169,13 @@ export default function Dashboard() {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-slate-100 p-4 md:p-8 animate-pulse">
+    <div className="min-h-screen bg-slate-100 p-8 animate-pulse">
       <div className="max-w-4xl mx-auto">
-        {/* Header Skeleton */}
         <div className="flex justify-between items-center mb-8">
           <div className="h-10 w-64 bg-slate-200 rounded-xl" />
           <div className="h-12 w-32 bg-slate-200 rounded-full" />
         </div>
 
-        {/* Link Box Skeleton */}
         <div className="mb-8 p-6 bg-white border border-slate-200 rounded-2xl flex justify-between items-center">
           <div className="space-y-2">
             <div className="h-3 w-32 bg-slate-100 rounded" />
@@ -186,14 +187,12 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Tabs Skeleton */}
         <div className="flex gap-2 mb-6">
           {[1, 2, 3, 4, 5, 6].map(i => (
             <div key={i} className="h-10 w-28 bg-white border border-slate-200 rounded-full" />
           ))}
         </div>
 
-        {/* Content Area Skeleton */}
         <div className="bg-white rounded-2xl border border-slate-200 p-8 space-y-8">
           <div className="h-8 w-48 bg-slate-100 rounded" />
           <div className="flex gap-8">
@@ -242,20 +241,16 @@ export default function Dashboard() {
         return;
       }
 
-      // 1. Delete old username mapping
       if (form.username) {
         await import("firebase/firestore").then(({ deleteDoc, doc }) => 
           deleteDoc(doc(db, "usernames", form.username))
         );
       }
 
-      // 2. Create new username mapping
       await setDoc(doc(db, "usernames", clean), { uid: user.uid });
-
-      // 3. Update user document
       await setDoc(doc(db, "users", user.uid), { ...form, username: clean }, { merge: true });
 
-      setForm({ ...form, username: clean });
+      setForm(prev => ({ ...prev, username: clean }));
       setIsEditingUsername(false);
       alert("Username updated successfully! 🚀");
     } catch (err) {
@@ -275,54 +270,18 @@ export default function Dashboard() {
     { id: "themes", label: "Theme Presets" }
   ];
 
-  const dummyData = {
-    name: "Alex Morgan",
-    title: "Creative Director",
-    company: "NexCard Design Studio",
-    phone: "+1234567890",
-    email: "hello@alexmorgan.design",
-    about: "I am a passionate creative director with over 10 years of experience in crafting beautiful digital experiences. I specialize in UI/UX, branding, and pushing the boundaries of web design.",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=256&auto=format&fit=crop",
-    address: "123 Innovation Drive, Tech City, TC 90210",
-    website: "https://nexcard.com",
-    calendarUrl: "https://calendly.com",
-    social: {
-      instagram: "https://instagram.com",
-      linkedin: "https://linkedin.com",
-      twitter: "https://twitter.com",
-      youtube: "https://youtube.com"
-    },
-    services: ["UI/UX Design", "Brand Identity", "Web Development", "Marketing Strategy"],
-    gallery: [
-      "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=500&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=500&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=500&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500&auto=format&fit=crop"
-    ],
-    customLinks: [
-      { title: "View My Portfolio", url: "https://example.com" },
-      { title: "Download Resume", url: "https://example.com" }
-    ],
-    payment: {
-      upi: "alex@upi",
-      gstNumber: "22AAAAA0000A1Z5",
-      bankDetails: "Bank Name: Chase\nAcct No: 123456789\nIFSC: CHASE0001"
-    }
-  };
-
   return (
     <div className="min-h-screen bg-slate-100 font-sans pb-24">
-      {/* 🚀 DASHBOARD HEADER */}
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-[60] px-4 md:px-8 py-4">
-        <div className="max-w-[1400px] mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-3">
+      <div className="bg-white border-b border-slate-200 sticky top-0 z-[60] py-4 px-8">
+        <div className="max-w-[1400px] mx-auto flex justify-between items-center gap-8 flex-wrap">
+          <div className="flex items-center gap-8">
             <div className="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-200">
               <Layout className="w-6 h-6" />
             </div>
-            <h1 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">NexCard Studio</h1>
+            <h1 className="text-xl font-bold text-slate-900 tracking-tight">NexCard Studio</h1>
           </div>
-          <div className="flex items-center gap-3">
-             <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="hidden sm:flex items-center gap-2 text-slate-600 hover:text-indigo-600 font-bold text-sm px-4 py-2 rounded-xl transition-all">
+          <div className="flex items-center gap-8">
+             <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-slate-600 hover:text-indigo-600 font-bold text-sm px-4 py-2 rounded-xl transition-all">
                 <Eye className="w-4 h-4" /> View Live
              </a>
              <button onClick={handleSave} className="bg-slate-900 hover:bg-black text-white px-8 py-2.5 rounded-xl font-bold shadow-md transition-all">
@@ -332,19 +291,18 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="max-w-[1400px] mx-auto p-4 md:p-8">
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
+      <div className="px-8 py-8">
+        <div className="max-w-[1400px] mx-auto">
+          <div className="flex flex-wrap gap-8 items-start">
           
-          {/* 📝 LEFT COLUMN: FORM & EDITING */}
-          <div className="flex-1 w-full space-y-8">
+          <div className="flex-[999] min-w-[min(100%,600px)] space-y-8">
             
-            {/* PUBLIC LINK BOX */}
             {user && (
-              <div className="p-4 md:p-6 bg-white border border-slate-200 rounded-2xl shadow-sm relative overflow-hidden">
+              <div className="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm relative overflow-hidden">
                 <div className="flex-1 w-full">
                   <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-2 block">Public Link</span>
                   {isEditingUsername ? (
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mt-1">
+                    <div className="flex flex-wrap items-center gap-2 mt-1">
                       <div className="flex-1 flex items-center bg-slate-50 border border-indigo-200 rounded-xl px-3 py-2 group focus-within:ring-2 focus-within:ring-indigo-500 transition-all">
                         <span className="text-slate-400 font-medium text-sm">/</span>
                         <input 
@@ -374,8 +332,7 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* 🔘 TAB NAVIGATION */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-2 flex overflow-x-auto gap-1 scrollbar-none sticky top-24 z-50 shadow-sm">
+            <div className="bg-white border border-slate-200 rounded-2xl p-2 flex overflow-x-auto gap-8 scrollbar-none sticky top-24 z-50 shadow-sm">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -398,15 +355,12 @@ export default function Dashboard() {
 
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
           
-          {/* ========================================================= */}
-          {/* PROFILE INFO TAB */}
-          {/* ========================================================= */}
           {activeTab === "profile" && (
-            <div className="p-6 md:p-8 space-y-6">
+            <div className="p-8 space-y-8">
               <h2 className="font-bold text-xl text-slate-800 border-b pb-4">Personal Details</h2>
               
-              <div className="flex flex-col md:flex-row gap-6 items-start">
-                <div className="w-full md:w-1/3 flex flex-col items-center gap-3">
+              <div className="flex flex-wrap gap-8 items-start">
+                <div className="w-72 shrink-0 flex flex-col items-center gap-3">
                   <div className="w-32 h-32 rounded-full border-4 border-slate-100 bg-slate-50 overflow-hidden relative group shadow-sm flex items-center justify-center">
                     {form.image ? (
                       <img src={form.image} alt="Profile" className="w-full h-full object-cover" />
@@ -427,7 +381,7 @@ export default function Dashboard() {
                     <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
                     <input name="name" value={form.name} onChange={handleChange} placeholder="John Doe" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1">Job Title</label>
                       <input name="title" value={form.title} onChange={handleChange} placeholder="CEO" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
@@ -446,15 +400,12 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* ========================================================= */}
-          {/* BUSINESS / CONTACT TAB */}
-          {/* ========================================================= */}
           {activeTab === "business" && (
-            <div className="p-6 md:p-8 space-y-8">
+            <div className="p-8 space-y-8">
               
               <div>
                 <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Contact Utilities</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Phone Number (Call/SMS/WhatsApp)</label>
                     <input name="phone" value={form.phone} onChange={handleChange} placeholder="+1234567890" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
@@ -463,7 +414,7 @@ export default function Dashboard() {
                     <label className="block text-sm font-medium text-slate-700 mb-1">Email Address</label>
                     <input name="email" value={form.email} onChange={handleChange} placeholder="contact@example.com" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                   </div>
-                  <div className="md:col-span-2">
+                  <div className="col-span-full">
                     <label className="block text-sm font-medium text-slate-700 mb-1">Office Address (Google Maps Embed)</label>
                     <input name="address" value={form.address} onChange={handleChange} placeholder="123 Main St, City, Country" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                   </div>
@@ -472,7 +423,7 @@ export default function Dashboard() {
 
               <div>
                 <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Operations & Engagement</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Website URL</label>
                     <input name="website" value={form.website} onChange={handleChange} placeholder="https://example.com" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
@@ -481,7 +432,7 @@ export default function Dashboard() {
                     <label className="block text-sm font-medium text-slate-700 mb-1">Booking Link (Calendly)</label>
                     <input name="calendarUrl" value={form.calendarUrl} onChange={handleChange} placeholder="https://calendly.com/your-url" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                   </div>
-                  <div className="md:col-span-2">
+                  <div className="col-span-full">
                     <label className="block text-sm font-medium text-slate-700 mb-1">Google Reviews URL</label>
                     <input name="googleReviewsUrl" value={form.googleReviewsUrl} onChange={handleChange} placeholder="https://g.page/r/..." className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                   </div>
@@ -490,8 +441,8 @@ export default function Dashboard() {
 
               <div>
                 <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Payments & Billing</h2>
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-8">
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1">UPI ID</label>
                       <input value={form.payment.upi} onChange={(e) => handleNestedChange("payment", "upi", e.target.value)} placeholder="name@upi" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
@@ -510,15 +461,13 @@ export default function Dashboard() {
                     <textarea value={form.payment.bankDetails} onChange={(e) => handleNestedChange("payment", "bankDetails", e.target.value)} rows="3" placeholder={"Bank Name: \nAcct No: \nIFSC: "} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none" />
                   </div>
 
-                  {/* ── QR CODE SECTION ── */}
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
                     <div className="flex items-center gap-2 mb-4">
                       <QrCode className="w-5 h-5 text-indigo-500" />
                       <h3 className="font-bold text-slate-800 text-[15px]">Payment QR Code</h3>
                     </div>
 
-                    <div className="flex flex-col md:flex-row gap-6 items-start">
-                      {/* LEFT — upload or auto-gen */}
+                    <div className="flex flex-wrap gap-8 items-start">
                       <div className="flex-1 space-y-3">
                         <p className="text-xs text-slate-500 leading-relaxed">
                           Upload your own QR code image, or leave it blank to auto-generate one from your UPI ID.
@@ -548,29 +497,12 @@ export default function Dashboard() {
                               accept="image/*"
                               className="hidden"
                               disabled={uploading}
-                              onChange={async (e) => {
-                                const file = e.target.files[0];
-                                if (!file) return;
-                                setUploading(true);
-                                setUploadProgress(30);
-                                const IMGBB_API_KEY = "e074813eb2df7563edc1c0637ef77359";
-                                const fd = new FormData();
-                                fd.append("image", file);
-                                try {
-                                  const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: fd });
-                                  setUploadProgress(80);
-                                  const json = await res.json();
-                                  if (json.success) handleNestedChange("payment", "qrCode", json.data.url);
-                                  else alert("Upload failed.");
-                                } catch { alert("Network error."); }
-                                finally { setUploading(false); setUploadProgress(0); }
-                              }}
+                              onChange={(e) => handleImageUpload(e, 'payment')}
                             />
                           </label>
                         )}
                       </div>
 
-                      {/* RIGHT — live preview */}
                       <div className="flex flex-col items-center gap-2">
                         <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Preview</span>
                         <div className="w-40 h-40 rounded-xl border border-slate-200 bg-white shadow-sm flex items-center justify-center overflow-hidden">
@@ -596,22 +528,17 @@ export default function Dashboard() {
                       </div>
                     </div>
                   </div>
-                  {/* ── END QR CODE SECTION ── */}
-
                 </div>
               </div>
             </div>
           )}
 
-          {/* ========================================================= */}
-          {/* SOCIALS TAB */}
-          {/* ========================================================= */}
           {activeTab === "social" && (
-            <div className="p-6 md:p-8 space-y-6">
+            <div className="p-8 space-y-8">
               <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Social Media Placements</h2>
-              <div className="space-y-4">
+              <div className="space-y-8">
                 {['instagram', 'linkedin', 'twitter', 'facebook', 'youtube'].map((network) => (
-                  <div key={network} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <div key={network} className="flex flex-wrap items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
                     <span className="w-32 text-sm font-bold text-slate-600 capitalize pl-2">{network}</span>
                     <input 
                       value={form.social[network]} 
@@ -625,13 +552,9 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* ========================================================= */}
-          {/* MEDIA & ARRAYS TAB */}
-          {/* ========================================================= */}
           {activeTab === "media" && (
-            <div className="p-6 md:p-8 space-y-10">
+            <div className="p-8 space-y-8">
               
-              {/* IMAGE GALLERY */}
               <div>
                 <div className="flex justify-between items-center border-b pb-4 mb-4">
                   <h2 className="font-bold text-xl text-slate-800">Media Gallery</h2>
@@ -639,7 +562,7 @@ export default function Dashboard() {
                     <Plus className="w-4 h-4" /> Add Image Slot
                   </button>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-8">
                   {form.gallery.map((img, i) => (
                     <div key={i} className="aspect-square bg-slate-100 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center relative overflow-hidden group">
                       {img ? (
@@ -652,7 +575,7 @@ export default function Dashboard() {
                       ) : (
                         <label className="cursor-pointer flex flex-col items-center text-slate-400 hover:text-indigo-500 w-full h-full justify-center transition-colors">
                           <Camera className="w-6 h-6 mb-2" />
-                          <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider">Storage Upload</span>
+                          <span className="text-xs font-semibold uppercase tracking-wider">Storage Upload</span>
                           <input type="file" accept="image/*" className="hidden" disabled={uploading} onChange={(e) => handleImageUpload(e, 'gallery', i)} />
                         </label>
                       )}
@@ -662,7 +585,6 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              {/* YOUTUBE VIDEOS */}
               <div>
                 <div className="flex justify-between items-center border-b pb-4 mb-4">
                   <h2 className="font-bold text-xl text-slate-800">YouTube Embeds</h2>
@@ -670,7 +592,7 @@ export default function Dashboard() {
                     <Plus className="w-4 h-4" /> Add Video
                   </button>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-8">
                   {form.videos.map((vid, i) => (
                     <div key={i} className="flex gap-2 items-center">
                       <input 
@@ -686,7 +608,6 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              {/* SERVICES / SPECIALTIES */}
               <div>
                 <div className="flex justify-between items-center border-b pb-4 mb-4">
                   <h2 className="font-bold text-xl text-slate-800">Specialty Badges</h2>
@@ -710,7 +631,6 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              {/* CUSTOM LINKS */}
               <div>
                 <div className="flex justify-between items-center border-b pb-4 mb-4">
                   <h2 className="font-bold text-xl text-slate-800">Important Custom Links</h2>
@@ -721,7 +641,7 @@ export default function Dashboard() {
                 <div className="space-y-3">
                   {form.customLinks.map((link, i) => (
                     <div key={i} className="flex gap-2 p-3 bg-slate-50 rounded-xl border border-slate-200 items-center">
-                      <GripVertical className="w-5 h-5 text-slate-400 hidden sm:block" />
+                      <GripVertical className="w-5 h-5 text-slate-400" />
                       <div className="flex-1 space-y-2">
                         <input value={link.title} onChange={(e) => handleCustomLinkChange(i, "title", e.target.value)} placeholder="Link Title (e.g., View Portfolio)" className="w-full p-2.5 border border-slate-200 rounded-lg text-sm bg-white" />
                         <input value={link.url} onChange={(e) => handleCustomLinkChange(i, "url", e.target.value)} placeholder="https://..." className="w-full p-2.5 border border-slate-200 rounded-lg text-sm bg-white" />
@@ -736,70 +656,15 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* ========================================================= */}
-          {/* DESIGN TAB */}
-          {/* ========================================================= */}
           {activeTab === "design" && (
-            <div className="p-6 md:p-8 space-y-6">
-              <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Aesthetics & Palette</h2>
+            <div className="p-8 space-y-10">
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-6">
-                  <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-3">Primary Theme Color</label>
-                    <div className="flex gap-4 items-center">
-                      <div className="relative w-14 h-14 rounded-xl overflow-hidden shadow-sm border border-slate-200">
-                        <input type="color" value={form.theme.primary} onChange={(e) => handleNestedChange("theme", "primary", e.target.value)} className="absolute -top-2 -left-2 w-20 h-20 cursor-pointer" />
-                      </div>
-                      <span className="font-mono font-medium text-slate-600 text-sm uppercase bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">{form.theme.primary}</span>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-3">App Background Color</label>
-                    <div className="flex gap-4 items-center">
-                      <div className="relative w-14 h-14 rounded-xl overflow-hidden shadow-sm border border-slate-200">
-                        <input type="color" value={form.theme.background} onChange={(e) => handleNestedChange("theme", "background", e.target.value)} className="absolute -top-2 -left-2 w-20 h-20 cursor-pointer" />
-                      </div>
-                      <span className="font-mono font-medium text-slate-600 text-sm uppercase bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">{form.theme.background}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col items-center justify-center">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Preview Swatch</span>
-                  <div className="w-full max-w-[200px] h-64 rounded-2xl shadow-xl overflow-hidden flex flex-col border border-black/5" style={{ backgroundColor: form.theme.background }}>
-                    <div className="h-20" style={{ background: `linear-gradient(135deg, ${form.theme.primary} 0%, ${form.theme.primary}dd 100%)` }}></div>
-                    <div className="flex-1 px-4 text-center">
-                      <div className="w-12 h-12 bg-white rounded-full mx-auto -mt-6 border-2 border-white shadow-sm flex items-center justify-center overflow-hidden">
-                         {form.image ? <img src={form.image} alt="Preview" /> : null}
-                      </div>
-                      <div className="h-3 w-16 bg-slate-200/50 rounded-full mx-auto mt-3"></div>
-                      <div className="h-2 w-10 bg-slate-200/50 rounded-full mx-auto mt-1.5"></div>
-                      <div className="mt-5 space-y-2">
-                        <div className="h-7 w-full rounded-lg opacity-20" style={{ backgroundColor: form.theme.primary }}></div>
-                        <div className="h-7 w-full rounded-lg opacity-20" style={{ backgroundColor: form.theme.primary }}></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ========================================================= */}
-          {/* DESIGN SETTINGS TAB */}
-          {/* ========================================================= */}
-          {activeTab === "design" && (
-            <div className="p-6 md:p-8 space-y-10">
-              
-              {/* 🎨 Colors Section */}
               <section>
                 <div className="flex items-center gap-2 mb-6">
                   <Palette className="w-5 h-5 text-indigo-600" />
                   <h2 className="font-bold text-xl text-slate-800">Brand Colors</h2>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
                   <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
                     <label className="block text-sm font-bold text-slate-700 mb-3">Primary Theme Color</label>
                     <div className="flex items-center gap-4">
@@ -844,10 +709,8 @@ export default function Dashboard() {
                 </div>
               </section>
 
-              {/* 🔤 Typography & Shape Section */}
-              <section className="grid grid-cols-1 md:grid-cols-2 gap-10 border-t pt-10">
+              <section className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8 border-t pt-10">
                 
-                {/* Font Selection */}
                 <div>
                   <div className="flex items-center gap-2 mb-6">
                     <Type className="w-5 h-5 text-indigo-600" />
@@ -872,7 +735,6 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                {/* Corner Radius */}
                 <div>
                   <div className="flex items-center gap-2 mb-6">
                     <Box className="w-5 h-5 text-indigo-600" />
@@ -900,15 +762,13 @@ export default function Dashboard() {
                 </div>
               </section>
 
-              {/* 🎭 Visual Identity Section */}
               <section className="border-t pt-10">
                 <div className="flex items-center gap-2 mb-6">
                   <Layout className="w-5 h-5 text-indigo-600" />
                   <h2 className="font-bold text-xl text-slate-800">Visual Identity</h2>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
                   
-                  {/* Card Style */}
                   <div className="space-y-4">
                     <label className="block text-xs font-extrabold text-slate-400 uppercase tracking-widest ml-1">Card Styling</label>
                     <div className="grid grid-cols-3 gap-3">
@@ -928,7 +788,6 @@ export default function Dashboard() {
                     </div>
                   </div>
 
-                  {/* Avatar Shape */}
                   <div className="space-y-4">
                     <label className="block text-xs font-extrabold text-slate-400 uppercase tracking-widest ml-1">Profile Photo Shape</label>
                     <div className="grid grid-cols-3 gap-3">
@@ -951,7 +810,6 @@ export default function Dashboard() {
                 </div>
               </section>
 
-              {/* 🌈 Background Effects */}
               <section className="border-t pt-10">
                 <div className="flex items-center gap-2 mb-6">
                   <Sparkles className="w-5 h-5 text-indigo-600" />
@@ -979,13 +837,10 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* ========================================================= */}
-          {/* THEMES TAB */}
-          {/* ========================================================= */}
           {activeTab === "themes" && (
-            <div className="p-6 md:p-8 space-y-6">
+            <div className="p-8 space-y-6">
               <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Select a Layout Theme</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-8">
                 {[
                   { name: "Modern (Curved)", layout: "modern", primary: "#4F46E5", background: "#F8FAFC" },
                   { name: "Classic Corporate", layout: "classic", primary: "#1D4ED8", background: "#EFF6FF" },
@@ -1017,7 +872,7 @@ export default function Dashboard() {
                             <Eye className="w-3.5 h-3.5" /> Preview
                           </button>
                           <button 
-                            onClick={() => setForm({ ...form, theme: { ...form.theme, primary: preset.primary, background: preset.background, layout: preset.layout } })}
+                            onClick={() => setForm(prev => ({ ...prev, theme: { ...prev.theme, primary: preset.primary, background: preset.background, layout: preset.layout } }))}
                             className={`flex-1 py-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 ${isActive ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20' : 'bg-slate-900 text-white hover:bg-black'}`}
                           >
                             <Check className="w-3.5 h-3.5" /> {isActive ? "Applied" : "Apply"}
@@ -1031,27 +886,26 @@ export default function Dashboard() {
               <p className="text-sm text-slate-500 mt-4 text-center bg-slate-50 p-3 rounded-xl border border-slate-200">Clicking a preset will automatically update your Custom Design settings.</p>
             </div>
           )}
-
-          </div>
-        </div>
-
-          {/* 📱 RIGHT COLUMN: LIVE PREVIEW */}
-          <div className="hidden lg:block w-[400px] sticky top-24 shrink-0">
-            <div className="bg-slate-900 rounded-[3.5rem] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.2)] border-8 border-slate-800 relative">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-8 bg-slate-800 rounded-b-3xl z-[70]"></div>
-              
-              <div className="bg-white w-full h-[750px] rounded-[2.5rem] overflow-hidden overflow-y-auto scrollbar-none relative group">
-                <NexCard data={form} />
-              </div>
-
-              {/* Home Indicator */}
-              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-slate-800 rounded-full"></div>
-            </div>
-            <p className="text-center mt-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Live Preview (Real-Time)</p>
-          </div>
-
         </div>
       </div>
+
+      <div className="flex-1 min-w-[min(100%,400px)] max-w-[500px]">
+        <div className="relative group bg-white border border-slate-200 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] overflow-hidden sticky top-32">
+            <div className="w-full h-[700px] overflow-y-auto scrollbar-none">
+              <NexCard key={form.theme.layout} data={form} />
+            </div>
+          
+          <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+        </div>
+        <div className="mt-6 flex items-center justify-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Live Preview (Real-Time)</p>
+        </div>
+      </div>
+
+      </div>
     </div>
+  </div>
+</div>
   );
 }

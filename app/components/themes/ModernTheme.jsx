@@ -46,7 +46,7 @@ export default function ModernTheme({ data }) {
   return (
     <div className={`min-h-screen flex justify-center bg-slate-50 ${fontClass} pb-28 selection:bg-black selection:text-white overflow-x-hidden`} style={{ scrollBehavior: "smooth" }}>
       <div 
-        className="w-full max-w-[430px] min-h-screen relative overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.05)] sm:rounded-b-[2.5rem]"
+        className="w-full min-h-screen relative overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.05)] sm:rounded-b-[2.5rem]"
         style={{ backgroundColor: bgColor }}
       >
         {/* ✨ Background Effects Layer */}
@@ -94,7 +94,7 @@ export default function ModernTheme({ data }) {
           </div>
 
           {/* ⚡ CLEAN QUICK ACTIONS */}
-          <div className="flex justify-center flex-wrap gap-4 mt-8 px-6">
+          <div className="flex justify-center flex-wrap gap-8 mt-8 px-6">
             {data?.phone && (
               <a href={`tel:${data.phone}`} className="w-[52px] h-[52px] bg-white text-slate-700 hover:text-white shadow-[0_8px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] transition-all duration-300 flex items-center justify-center hover:-translate-y-1 group" style={{ borderRadius: borderRadius }}>
                 <Phone className="w-5 h-5 group-hover:stroke-current" />
@@ -152,7 +152,7 @@ export default function ModernTheme({ data }) {
         {/* --------------------------------------------------------- */}
         {/* CLEAN CONTENT SECTIONS (Whitespace > Borders) */}
         {/* --------------------------------------------------------- */}
-        <div className="space-y-14 px-8 pt-6">
+        <div className="space-y-8 px-8 pt-6">
 
           {/* 🌟 ABOUT SECTION */}
           {data?.about && (
@@ -180,7 +180,7 @@ export default function ModernTheme({ data }) {
           {data?.social && Object.values(data.social).some(Boolean) && (
           <div id="social" className="scroll-mt-6">
             <h2 className="text-[20px] font-bold text-slate-900 mb-4 tracking-tight">Connect</h2>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-8">
               {Object.entries(data.social).map(([key, val]) => {
                 if (!val) return null;
                 const Icon = {
@@ -204,7 +204,7 @@ export default function ModernTheme({ data }) {
           {data?.gallery?.length > 0 && (
             <div className="scroll-mt-6">
               <h2 className="text-[20px] font-bold text-slate-900 mb-4 tracking-tight">Gallery</h2>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-8">
                 {data.gallery.map((img, i) => img ? (
                   <div key={i} className="aspect-square overflow-hidden shadow-[0_8px_20px_rgba(0,0,0,0.06)] relative group cursor-pointer focus-within:ring-2" style={{ borderRadius: borderRadius }}>
                     <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 duration-300"></div>
@@ -219,7 +219,7 @@ export default function ModernTheme({ data }) {
           {data?.videos?.length > 0 && (
             <div className="scroll-mt-6">
               <h2 className="text-[20px] font-bold text-slate-900 mb-4 tracking-tight">Videos</h2>
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-8">
                 {data.videos.map((vid, i) => (
                   <div key={i} className="w-full overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.08)] bg-slate-100 relative pt-[56.25%]" style={{ borderRadius: borderRadius }}>
                     <iframe className="absolute top-0 left-0 w-full h-full" src={vid.includes('youtube.com/watch?v=') ? vid.replace('watch?v=', 'embed/') : vid} title={`Video ${i + 1}`} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
@@ -233,7 +233,7 @@ export default function ModernTheme({ data }) {
           {data?.customLinks?.length > 0 && (
             <div className="scroll-mt-6">
               <h2 className="text-[20px] font-bold text-slate-900 mb-4 tracking-tight">Important Links</h2>
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-8">
                 {data.customLinks.map((link, i) => (
                   <a key={i} href={link.url} target="_blank" rel="noreferrer" className={`w-full flex items-center justify-between p-5 transition-all duration-300 text-slate-800 group ${cardClasses}`} style={{ borderRadius: borderRadius }}>
                     <span className="font-bold text-[15px]">{link.title}</span>
@@ -250,7 +250,7 @@ export default function ModernTheme({ data }) {
           {data?.payment && (
             <div className="scroll-mt-6">
               <h2 className="text-[20px] font-bold text-slate-900 mb-4 tracking-tight">Payments</h2>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-8">
                 {data.payment.upi && (
                   <div className="px-5 py-4 rounded-3xl bg-white border border-slate-100 shadow-[0_8px_20px_rgba(0,0,0,0.03)] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <span className="font-semibold text-[14px] text-slate-500">UPI ID</span>
@@ -300,7 +300,7 @@ export default function ModernTheme({ data }) {
             <h2 className="text-[28px] font-extrabold text-slate-900 mb-2 tracking-tight">Let&apos;s talk.</h2>
             <p className="text-[15px] text-slate-500 mb-8 font-normal">Send me a direct message and I&apos;ll respond shortly.</p>
 
-            <form onSubmit={handleEnquiry} className="space-y-4">
+            <form onSubmit={handleEnquiry} className="space-y-8">
               <div>
                 <input type="text" name="name" required placeholder="Full Name" className="w-full px-5 py-4 rounded-2xl border-0 bg-slate-50 text-[15px] focus:outline-none focus:ring-2 focus:bg-white transition-all placeholder:text-slate-400 font-medium text-slate-800" style={{ focusRingColor: primaryColor }} />
               </div>

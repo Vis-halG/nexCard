@@ -26,21 +26,37 @@ export default function Page({ params }) {
 
     const fetchData = async () => {
       try {
-        console.log("Fetching username:", username);
+        const cleanUsername = username.toLowerCase().trim();
+        console.log("Fetching clean username:", cleanUsername);
 
-        // 🔥 step 1: get UID from usernames collection
-        const usernameRef = doc(db, "usernames", username);
+        // 🔥 step 1: try the fast index (usernames collection)
+        const usernameRef = doc(db, "usernames", cleanUsername);
         const usernameSnap = await getDoc(usernameRef);
 
-        if (!usernameSnap.exists()) {
-          console.log("Username not found");
+        let uid = null;
+
+        if (usernameSnap.exists()) {
+          uid = usernameSnap.data().uid;
+          console.log("UID found via index:", uid);
+        } else {
+          // ⚠️ Fallback: Query the users collection directly
+          // This helps if the index is missing or for legacy accounts
+          console.log("Index not found, trying direct query...");
+          const { collection, query, where, getDocs } = await import("firebase/firestore");
+          const q = query(collection(db, "users"), where("username", "==", cleanUsername));
+          const querySnap = await getDocs(q);
+          
+          if (!querySnap.empty) {
+            uid = querySnap.docs[0].id;
+            console.log("UID found via fallback query:", uid);
+          }
+        }
+
+        if (!uid) {
+          console.log("Username not found anywhere");
           setLoading(false);
           return;
         }
-
-        const uid = usernameSnap.data().uid;
-
-        console.log("UID:", uid);
 
         // 🔥 step 2: get user data from users collection
         const userRef = doc(db, "users", uid);
@@ -49,11 +65,11 @@ export default function Page({ params }) {
         if (userSnap.exists()) {
           setData(userSnap.data());
         } else {
-          console.log("User data not found");
+          console.log("User data not found for UID:", uid);
         }
 
       } catch (err) {
-        console.log("Error:", err);
+        console.log("Error fetching user:", err);
       } finally {
         setLoading(false);
       }

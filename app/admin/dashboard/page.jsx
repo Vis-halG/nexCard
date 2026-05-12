@@ -140,12 +140,15 @@ export default function Dashboard() {
     }
   };
 
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [newUsername, setNewUsername] = useState("");
+  const [isUpdatingUsername, setIsUpdatingUsername] = useState(false);
+
   const handleSave = async () => {
     if (!user) return;
     try {
-      const username = user.email.split("@")[0];
-      await setDoc(doc(db, "users", user.uid), { ...form, username, uid: user.uid });
-      await setDoc(doc(db, "usernames", username), { uid: user.uid });
+      // Use the username from the form state instead of forcing email prefix
+      await setDoc(doc(db, "users", user.uid), { ...form, uid: user.uid });
       alert("Profile Saved Successfully ✅");
     } catch (err) {
       console.log(err);
@@ -200,11 +203,58 @@ export default function Dashboard() {
     </div>
   );
 
-  const profileUrl = typeof window !== 'undefined' && user ? `${window.location.origin}/${user.email.split("@")[0]}` : '';
+  const profileUrl = typeof window !== 'undefined' && form.username ? `${window.location.origin}/${form.username}` : '';
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(profileUrl);
     alert("Link copied to clipboard!");
+  };
+
+  const handleUpdateUsername = async () => {
+    if (!newUsername || newUsername === form.username) {
+      setIsEditingUsername(false);
+      return;
+    }
+
+    const clean = newUsername.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (clean.length < 3) {
+      alert("Username must be at least 3 characters.");
+      return;
+    }
+
+    setIsUpdatingUsername(true);
+    try {
+      const usernameRef = doc(db, "usernames", clean);
+      const usernameSnap = await getDoc(usernameRef);
+
+      if (usernameSnap.exists() && usernameSnap.data().uid !== user.uid) {
+        alert("This username is already taken. Please try another one.");
+        setIsUpdatingUsername(false);
+        return;
+      }
+
+      // 1. Delete old username mapping
+      if (form.username) {
+        await import("firebase/firestore").then(({ deleteDoc, doc }) => 
+          deleteDoc(doc(db, "usernames", form.username))
+        );
+      }
+
+      // 2. Create new username mapping
+      await setDoc(doc(db, "usernames", clean), { uid: user.uid });
+
+      // 3. Update user document
+      await setDoc(doc(db, "users", user.uid), { ...form, username: clean }, { merge: true });
+
+      setForm({ ...form, username: clean });
+      setIsEditingUsername(false);
+      alert("Username updated successfully! 🚀");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update username.");
+    } finally {
+      setIsUpdatingUsername(false);
+    }
   };
 
   const tabs = [
@@ -264,21 +314,76 @@ export default function Dashboard() {
 
         {/* PUBLIC LINK BOX */}
         {user && (
-          <div className="mb-8 p-4 md:p-6 bg-white border border-slate-200 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4 shadow-sm">
-            <div className="flex flex-col text-center md:text-left w-full md:w-auto">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Your Public NexCard Link</span>
-              <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-600 font-medium hover:underline break-all">
-                {profileUrl}
-              </a>
+          <div className="mb-8 p-4 md:p-6 bg-white border border-slate-200 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4 shadow-sm relative overflow-hidden">
+            
+            {isUpdatingUsername && (
+              <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] z-10 flex items-center justify-center">
+                <div className="flex items-center gap-2 text-indigo-600 font-bold animate-pulse">
+                  <div className="w-4 h-4 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+                  Updating URL...
+                </div>
+              </div>
+            )}
+
+            <div className="flex-1 w-full">
+              <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-2 block">Your Public NexCard Link</span>
+              
+              {isEditingUsername ? (
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mt-1">
+                  <div className="flex-1 flex items-center bg-slate-50 border border-indigo-200 rounded-xl px-3 py-2 group focus-within:ring-2 focus-within:ring-indigo-500 transition-all">
+                    <span className="text-slate-400 font-medium text-sm">nexcard.com/</span>
+                    <input 
+                      value={newUsername} 
+                      onChange={(e) => setNewUsername(e.target.value.toLowerCase().replace(/[^a-z0-9]/g, ""))}
+                      placeholder="username"
+                      className="flex-1 bg-transparent border-none outline-none text-slate-900 font-bold text-sm ml-0.5"
+                      autoFocus
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={handleUpdateUsername}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1"
+                    >
+                      <Check className="w-3.5 h-3.5" /> Save
+                    </button>
+                    <button 
+                      onClick={() => setIsEditingUsername(false)}
+                      className="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2.5 rounded-xl text-xs font-bold transition-all"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 mt-1 group">
+                  <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-600 font-bold text-lg hover:underline break-all">
+                    {profileUrl || 'Loading URL...'}
+                  </a>
+                  <button 
+                    onClick={() => {
+                      setNewUsername(form.username || "");
+                      setIsEditingUsername(true);
+                    }}
+                    className="p-1.5 rounded-lg bg-slate-100 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-all shadow-sm flex items-center justify-center"
+                    title="Edit Username"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                  </button>
+                </div>
+              )}
             </div>
-            <div className="flex gap-2 w-full md:w-auto">
-              <button onClick={handleCopyLink} className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-5 py-2.5 rounded-xl text-sm font-bold transition-colors">
-                <Copy className="w-4 h-4" /> Copy
-              </button>
-              <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors">
-                <ExternalLink className="w-4 h-4" /> Visit
-              </a>
-            </div>
+
+            {!isEditingUsername && (
+              <div className="flex gap-2 w-full md:w-auto shrink-0">
+                <button onClick={handleCopyLink} className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-5 py-2.5 rounded-xl text-sm font-bold transition-colors">
+                  <Copy className="w-4 h-4" /> Copy
+                </button>
+                <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors shadow-sm">
+                  <ExternalLink className="w-4 h-4" /> Visit
+                </a>
+              </div>
+            )}
           </div>
         )}
 

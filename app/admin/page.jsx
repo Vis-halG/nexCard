@@ -6,20 +6,40 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithPopup,
-  GoogleAuthProvider
+  GoogleAuthProvider,
+  sendPasswordResetEmail
 } from "firebase/auth";
 import { auth, db } from "../../lib/firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { motion } from "framer-motion";
-import { User, Lock, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
+import { User, Lock, ArrowRight, ShieldCheck, Sparkles, KeyRound } from "lucide-react";
 
 export default function AdminPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const router = useRouter();
+
+  const handleResetPassword = async () => {
+    if (!email) {
+      alert("Please enter your email address first.");
+      return;
+    }
+    
+    setResetLoading(true);
+    try {
+      await sendPasswordResetEmail(auth, email);
+      alert("Password reset link sent to your email! Check your inbox.");
+    } catch (err) {
+      console.error(err);
+      alert("Error: " + err.message);
+    } finally {
+      setResetLoading(false);
+    }
+  };
 
   const handleAuth = async () => {
     try {
@@ -179,7 +199,18 @@ export default function AdminPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5 ml-1">Password</label>
+              <div className="flex justify-between items-center mb-1.5 ml-1">
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider">Password</label>
+                {isLogin && (
+                  <button 
+                    onClick={handleResetPassword}
+                    disabled={resetLoading}
+                    className="text-[10px] font-bold text-indigo-500 hover:text-indigo-600 uppercase tracking-wider transition-colors disabled:opacity-50"
+                  >
+                    {resetLoading ? "Sending..." : "Forgot Password?"}
+                  </button>
+                )}
+              </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input

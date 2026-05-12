@@ -1,75 +1,59 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { db } from "../../lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import NexCard from "../components/NexCard";
 
 export default function Page({ params }) {
+  // ✅ Standard Next.js 16 way to unwrap params
+  const resolvedParams = use(params);
+  const username = resolvedParams.username;
+
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState(null);
+  const [error, setError] = useState(null);
 
-  // ✅ STEP 1: unwrap params (Next.js 16 fix)
-  useEffect(() => {
-    const getParams = async () => {
-      const p = await params;
-      setUsername(p.username);
-    };
-
-    getParams();
-  }, [params]);
-
-  // ✅ STEP 2: fetch data using username → UID
   useEffect(() => {
     if (!username) return;
 
     const fetchData = async () => {
+      setLoading(true);
       try {
-        const cleanUsername = username.toLowerCase().trim();
-        console.log("Fetching clean username:", cleanUsername);
-
-        // 🔥 step 1: try the fast index (usernames collection)
+        // ⚡ Standardize username (must match signup/dashboard logic)
+        const cleanUsername = username.toLowerCase().trim().replace(/[^a-z0-9]/g, "");
+        
+        // 1. Try Fast Index
         const usernameRef = doc(db, "usernames", cleanUsername);
         const usernameSnap = await getDoc(usernameRef);
 
         let uid = null;
-
         if (usernameSnap.exists()) {
           uid = usernameSnap.data().uid;
-          console.log("UID found via index:", uid);
         } else {
-          // ⚠️ Fallback: Query the users collection directly
-          // This helps if the index is missing or for legacy accounts
-          console.log("Index not found, trying direct query...");
-          const { collection, query, where, getDocs } = await import("firebase/firestore");
+          // 2. Try Fallback Query
           const q = query(collection(db, "users"), where("username", "==", cleanUsername));
           const querySnap = await getDocs(q);
-          
           if (!querySnap.empty) {
             uid = querySnap.docs[0].id;
-            console.log("UID found via fallback query:", uid);
           }
         }
 
         if (!uid) {
-          console.log("Username not found anywhere");
           setLoading(false);
           return;
         }
 
-        // 🔥 step 2: get user data from users collection
+        // 3. Get Full User Data
         const userRef = doc(db, "users", uid);
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
           setData(userSnap.data());
-        } else {
-          console.log("User data not found for UID:", uid);
         }
-
       } catch (err) {
-        console.log("Error fetching user:", err);
+        console.error("Profile Fetch Error:", err);
+        setError("Failed to connect to database");
       } finally {
         setLoading(false);
       }
@@ -78,47 +62,45 @@ export default function Page({ params }) {
     fetchData();
   }, [username]);
 
-  // ⏳ LOADING UI
+  // 🦴 SKELETON LOADING UI
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-8">
-        <div className="w-full max-w-[430px] h-[90vh] max-h-[850px] bg-white rounded-[3rem] shadow-2xl overflow-hidden flex flex-col relative border-8 border-white p-6 space-y-8">
-          {/* Header Skeleton */}
+        <div className="w-full max-w-[430px] h-[90vh] max-h-[850px] bg-white rounded-[3rem] shadow-2xl overflow-hidden flex flex-col relative border-8 border-white p-6 space-y-8 animate-pulse">
           <div className="flex flex-col items-center space-y-4 pt-8">
-            <div className="w-28 h-28 rounded-full bg-slate-200 animate-pulse" />
-            <div className="w-48 h-8 bg-slate-100 rounded-full animate-pulse" />
-            <div className="w-32 h-4 bg-slate-100 rounded-full animate-pulse" />
+            <div className="w-28 h-28 rounded-full bg-slate-100" />
+            <div className="w-48 h-8 bg-slate-100 rounded-full" />
+            <div className="w-32 h-4 bg-slate-50 rounded-full" />
           </div>
-
-          {/* About Skeleton */}
           <div className="space-y-3">
-            <div className="w-full h-4 bg-slate-100 rounded-full animate-pulse" />
-            <div className="w-5/6 h-4 bg-slate-100 rounded-full animate-pulse" />
+            <div className="w-full h-4 bg-slate-50 rounded-full" />
+            <div className="w-5/6 h-4 bg-slate-50 rounded-full" />
           </div>
-
-          {/* Social Icons Skeleton */}
           <div className="flex justify-center gap-4 pt-4">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="w-12 h-12 rounded-2xl bg-slate-100 animate-pulse" />
-            ))}
+            {[1, 2, 3, 4].map(i => <div key={i} className="w-12 h-12 rounded-2xl bg-slate-50" />)}
           </div>
-
-          {/* Action Buttons Skeleton */}
           <div className="space-y-3 pt-4">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="w-full h-16 bg-slate-50 rounded-2xl animate-pulse" />
-            ))}
+            {[1, 2, 3].map(i => <div key={i} className="w-full h-16 bg-slate-50 rounded-2xl" />)}
           </div>
         </div>
       </div>
     );
   }
 
-  // ❌ USER NOT FOUND
+  // ❌ ERROR / NOT FOUND
   if (!data) {
     return (
-      <div className="h-screen flex justify-center items-center">
-        <p>User not found ❌</p>
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-20 h-20 bg-white rounded-3xl shadow-sm border border-slate-200 flex items-center justify-center mb-6">
+          <span className="text-4xl">🔍</span>
+        </div>
+        <h1 className="text-2xl font-bold text-slate-900 mb-2">NexCard Not Found</h1>
+        <p className="text-slate-500 max-w-xs mb-8">
+          The username <span className="font-bold text-slate-900">"{username}"</span> doesn&apos;t seem to exist yet.
+        </p>
+        <a href="/" className="bg-indigo-600 text-white px-8 py-3 rounded-2xl font-bold shadow-lg shadow-indigo-200 hover:scale-105 transition-transform">
+          Back to Home
+        </a>
       </div>
     );
   }

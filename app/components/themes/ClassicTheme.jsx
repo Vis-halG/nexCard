@@ -2,7 +2,7 @@
 
 import { Phone, Mail, Globe, MapPin, Download, MessageCircle, MessageSquare, User, Briefcase, Send, QrCode, Eye, Calendar, CreditCard, Share2, Star, Check, ExternalLink } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
-import FloatingNav from "../FloatingNav";
+import BottomNav from "../BottomNav";
 
 const FacebookIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>);
 const InstagramIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>);
@@ -54,9 +54,17 @@ export default function ClassicTheme({ data }) {
         </div>
 
         {/* HERO SECTION */}
-        <div id="home" className="px-8 pt-12 pb-10 flex flex-col items-center text-center bg-gradient-to-b from-slate-50/50 to-white relative">
+        <div id="home" className="flex flex-col items-center text-center relative bg-gradient-to-b from-slate-50/50 to-white">
+          {data?.coverImage && (
+            <div className="w-full h-40 relative">
+               <img src={data.coverImage} className="w-full h-full object-cover" alt="Cover" />
+               <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40"></div>
+            </div>
+          )}
           
-          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+          {!data?.coverImage && <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>}
+
+          <div className={`px-8 ${data?.coverImage ? '-mt-20' : 'pt-12'} pb-10 flex flex-col items-center w-full relative z-10`}>
 
           <div className="relative group">
             <div className="absolute inset-0 rounded-full blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500" style={{ backgroundColor: primaryColor }}></div>
@@ -108,6 +116,7 @@ export default function ClassicTheme({ data }) {
                 <MapPin className="w-5 h-5" strokeWidth={1.5} />
               </a>
             )}
+          </div>
           </div>
         </div>
 
@@ -369,8 +378,8 @@ export default function ClassicTheme({ data }) {
       <style dangerouslySetInnerHTML={{__html: `
         [style*="hoverBackgroundColor"]:hover { background-color: ${primaryColor} !important; border-color: ${primaryColor} !important; }
       `}} />
-      {/* 📱 NEW FLOATING NAVIGATION */}
-      <FloatingNav primaryColor={primaryColor} />
+      {/* 📱 MOBILE APP BOTTOM NAVIGATION */}
+      <BottomNav data={data} primaryColor={primaryColor} />
     </div>
   );
 }

@@ -19,7 +19,7 @@ export default function Dashboard() {
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const [form, setForm] = useState({
-    name: "", title: "", company: "", phone: "", email: "", about: "", image: "",
+    name: "", title: "", company: "", phone: "", email: "", about: "", image: "", coverImage: "",
     address: "", website: "", calendarUrl: "", googleReviewsUrl: "", gstNumber: "",
     social: { instagram: "", linkedin: "", twitter: "", facebook: "", youtube: "" },
     payment: { upi: "", link: "", bankDetails: "", qrCode: "" },
@@ -31,7 +31,6 @@ export default function Dashboard() {
       font: "font-sans", 
       radius: "1rem", 
       cardStyle: "standard", 
-      avatarStyle: "circle",
       avatarStyle: "circle",
       bgEffect: "none",
       defaultQr: "share"
@@ -139,6 +138,8 @@ export default function Dashboard() {
           handleArrayChange('gallery', index, downloadURL);
         } else if (field === 'image') {
           setForm(prev => ({ ...prev, image: downloadURL }));
+        } else if (field === 'coverImage') {
+          setForm(prev => ({ ...prev, coverImage: downloadURL }));
         } else {
             handleNestedChange("payment", "qrCode", downloadURL);
         }
@@ -360,8 +361,30 @@ export default function Dashboard() {
             <div className="p-6 space-y-5">
               <h2 className="font-bold text-xl text-slate-800 border-b pb-4">Personal Details</h2>
               
-              <div className="flex flex-wrap gap-6 items-start">
-                <div className="w-72 shrink-0 flex flex-col items-center gap-3">
+              <div className="flex flex-col md:flex-row gap-6 items-start">
+                {/* Cover Image Upload */}
+                <div className="flex-1 w-full flex flex-col items-start gap-3">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Banner / Cover Image</label>
+                  <div className="w-full h-32 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 overflow-hidden relative group hover:border-indigo-400 transition-colors flex items-center justify-center">
+                    {form.coverImage ? (
+                      <img src={form.coverImage} alt="Cover" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="flex flex-col items-center text-slate-400">
+                        <Layout className="w-6 h-6 mb-1 opacity-50" />
+                        <span className="text-[10px] font-bold uppercase">Upload Banner</span>
+                      </div>
+                    )}
+                    <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center cursor-pointer text-white text-xs font-semibold">
+                      <Camera className="w-6 h-6 mb-1" />
+                      Change Cover
+                      <input type="file" accept="image/*" className="hidden" disabled={uploading} onChange={(e) => handleImageUpload(e, 'coverImage')} />
+                    </label>
+                  </div>
+                </div>
+
+                {/* Profile Avatar Upload */}
+                <div className="w-32 shrink-0 flex flex-col items-center gap-3">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-widest text-center">Profile</label>
                   <div className="w-32 h-32 rounded-full border-4 border-slate-100 bg-slate-50 overflow-hidden relative group shadow-sm flex items-center justify-center">
                     {form.image ? (
                       <img src={form.image} alt="Profile" className="w-full h-full object-cover" />
@@ -370,11 +393,10 @@ export default function Dashboard() {
                     )}
                     <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center cursor-pointer text-white text-xs font-semibold">
                       <Camera className="w-6 h-6 mb-1" />
-                      Upload Photo
+                      Upload
                       <input type="file" accept="image/*" className="hidden" disabled={uploading} onChange={(e) => handleImageUpload(e, 'image')} />
                     </label>
                   </div>
-                  <p className="text-xs text-slate-500 text-center">Tap image to upload to Firebase Storage.</p>
                 </div>
 
                 <div className="flex-1 w-full space-y-4">
@@ -917,11 +939,15 @@ export default function Dashboard() {
       </div>
 
             <div className="w-full lg:w-[400px] shrink-0 h-[600px] lg:h-full flex flex-col pb-2 mt-8 lg:mt-0">
-              <div className="relative group bg-white border border-slate-200 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] overflow-hidden flex-1 min-h-0">
-                  <div className="w-full h-full overflow-y-auto scrollbar-none">
+              <div 
+                className="relative group bg-white border border-slate-200 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] overflow-hidden flex-1 min-h-0"
+                style={{ transform: 'translateZ(0)' }}
+              >
+                  <div className="w-full h-full overflow-y-auto scrollbar-none relative">
                     <NexCard 
                       key={previewTheme ? `preview-${previewTheme.layout}` : `live-${form.theme.layout}`} 
                       data={previewTheme ? { ...form, theme: { ...form.theme, ...previewTheme } } : form} 
+                      inPreview={true}
                     />
                   </div>
                 

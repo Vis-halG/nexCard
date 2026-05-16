@@ -2,7 +2,7 @@
 
 import { Phone, Mail, Globe, MapPin, Download, MessageCircle, MessageSquare, User, Briefcase, Send, QrCode, Eye, Calendar, CreditCard, Share2, Star } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
-import FloatingNav from "../FloatingNav";
+import BottomNav from "../BottomNav";
 
 const FacebookIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>);
 const InstagramIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>);
@@ -59,12 +59,18 @@ export default function ModernTheme({ data }) {
         <div id="home" className="relative pb-10">
           <div 
             className="h-64 w-full relative" 
-            style={{ 
+            style={data?.coverImage ? {
+              backgroundImage: `url(${data.coverImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              clipPath: "ellipse(120% 100% at 50% 0%)"
+            } : { 
               background: `linear-gradient(145deg, ${primaryColor} 0%, ${primaryColor}dd 100%)`,
               clipPath: "ellipse(120% 100% at 50% 0%)"
             }}
           >
-            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, white 1.5px, transparent 0)", backgroundSize: "32px 32px" }}></div>
+            {data?.coverImage && <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>}
+            {!data?.coverImage && <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, white 1.5px, transparent 0)", backgroundSize: "32px 32px" }}></div>}
           </div>
 
           <div className="px-6 relative -mt-24 flex flex-col items-center">
@@ -361,8 +367,8 @@ export default function ModernTheme({ data }) {
         </div>
       </div>
 
-      {/* 📱 NEW FLOATING NAVIGATION */}
-      <FloatingNav primaryColor={primaryColor} />
+      {/* 📱 MOBILE APP BOTTOM NAVIGATION */}
+      <BottomNav data={data} primaryColor={primaryColor} />
 
       {/* Injecting some custom style mapping for hover utilities */}
       <style dangerouslySetInnerHTML={{__html: `

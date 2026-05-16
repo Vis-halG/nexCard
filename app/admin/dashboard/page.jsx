@@ -32,11 +32,13 @@ export default function Dashboard() {
       radius: "1rem", 
       cardStyle: "standard", 
       avatarStyle: "circle",
-      bgEffect: "none"
+      avatarStyle: "circle",
+      bgEffect: "none",
+      defaultQr: "share"
     }
   });
 
-  const [activeTab, setActiveTab] = useState("profile");
+  const [activeTab, setActiveTab] = useState("themes");
   const [previewTheme, setPreviewTheme] = useState(null);
 
   // 🔐 AUTH & FETCH DATA
@@ -262,40 +264,39 @@ export default function Dashboard() {
   };
 
   const tabs = [
+    { id: "themes", label: "Theme Presets" },
     { id: "profile", label: "Profile Info" },
     { id: "business", label: "Business & Contacts" },
     { id: "social", label: "Social Links" },
     { id: "media", label: "Media & Arrays" },
-    { id: "design", label: "Design Settings" },
-    { id: "themes", label: "Theme Presets" }
+    { id: "design", label: "Design Settings" }
   ];
 
   return (
-    <div className="min-h-screen bg-slate-100 font-sans pb-24">
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-[60] py-4 px-8">
-        <div className="max-w-[1400px] mx-auto flex justify-between items-center gap-8 flex-wrap">
+    <div className="min-h-screen lg:h-screen bg-slate-100 font-sans flex flex-col lg:overflow-hidden">
+      <div className="bg-white border-b border-slate-200 sticky top-0 z-[60] py-2 px-4 lg:px-8">
+        <div className="max-w-[1400px] mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 lg:gap-8 flex-wrap">
           <div className="flex items-center gap-8">
             <div className="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-200">
               <Layout className="w-6 h-6" />
             </div>
             <h1 className="text-xl font-bold text-slate-900 tracking-tight">NexCard Studio</h1>
           </div>
-          <div className="flex items-center gap-8">
+          <div className="flex w-full sm:w-auto justify-between sm:justify-start items-center gap-4 lg:gap-8">
              <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-slate-600 hover:text-indigo-600 font-bold text-sm px-4 py-2 rounded-xl transition-all">
                 <Eye className="w-4 h-4" /> View Live
              </a>
-             <button onClick={handleSave} className="bg-slate-900 hover:bg-black text-white px-8 py-2.5 rounded-xl font-bold shadow-md transition-all">
+             <button onClick={handleSave} className="bg-slate-900 hover:bg-black text-white px-6 lg:px-8 py-2 lg:py-2.5 rounded-xl font-bold shadow-md transition-all text-sm lg:text-base">
                Save Changes
              </button>
           </div>
         </div>
       </div>
 
-      <div className="px-8 py-8">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="flex flex-wrap gap-8 items-start">
+      <main className="flex-1 lg:overflow-hidden">
+        <div className="max-w-[1500px] mx-auto h-full flex flex-col lg:flex-row gap-5 px-4 py-4 lg:px-6 lg:py-3">
           
-          <div className="flex-[999] min-w-[min(100%,600px)] space-y-8">
+            <div className="flex-1 lg:h-full lg:overflow-y-auto pr-0 lg:pr-4 space-y-5 pb-8 lg:pb-24 scroll-smooth custom-scrollbar">
             
             {user && (
               <div className="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm relative overflow-hidden">
@@ -332,7 +333,7 @@ export default function Dashboard() {
               </div>
             )}
 
-            <div className="bg-white border border-slate-200 rounded-2xl p-2 flex overflow-x-auto gap-8 scrollbar-none sticky top-24 z-50 shadow-sm">
+            <div className="bg-white/80 backdrop-blur-md border border-slate-200 rounded-2xl p-2 flex overflow-x-auto gap-3 lg:gap-8 scrollbar-none sticky top-[130px] sm:top-[70px] lg:top-0 z-50 shadow-sm">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -356,10 +357,10 @@ export default function Dashboard() {
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
           
           {activeTab === "profile" && (
-            <div className="p-8 space-y-8">
+            <div className="p-6 space-y-5">
               <h2 className="font-bold text-xl text-slate-800 border-b pb-4">Personal Details</h2>
               
-              <div className="flex flex-wrap gap-8 items-start">
+              <div className="flex flex-wrap gap-6 items-start">
                 <div className="w-72 shrink-0 flex flex-col items-center gap-3">
                   <div className="w-32 h-32 rounded-full border-4 border-slate-100 bg-slate-50 overflow-hidden relative group shadow-sm flex items-center justify-center">
                     {form.image ? (
@@ -381,7 +382,7 @@ export default function Dashboard() {
                     <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
                     <input name="name" value={form.name} onChange={handleChange} placeholder="John Doe" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                   </div>
-                  <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1">Job Title</label>
                       <input name="title" value={form.title} onChange={handleChange} placeholder="CEO" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
@@ -401,11 +402,11 @@ export default function Dashboard() {
           )}
 
           {activeTab === "business" && (
-            <div className="p-8 space-y-8">
+            <div className="p-6 space-y-6">
               
               <div>
                 <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Contact Utilities</h2>
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Phone Number (Call/SMS/WhatsApp)</label>
                     <input name="phone" value={form.phone} onChange={handleChange} placeholder="+1234567890" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
@@ -423,7 +424,7 @@ export default function Dashboard() {
 
               <div>
                 <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Operations & Engagement</h2>
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Website URL</label>
                     <input name="website" value={form.website} onChange={handleChange} placeholder="https://example.com" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
@@ -441,8 +442,8 @@ export default function Dashboard() {
 
               <div>
                 <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Payments & Billing</h2>
-                <div className="space-y-8">
-                  <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
+                <div className="space-y-6">
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1">UPI ID</label>
                       <input value={form.payment.upi} onChange={(e) => handleNestedChange("payment", "upi", e.target.value)} placeholder="name@upi" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
@@ -467,7 +468,7 @@ export default function Dashboard() {
                       <h3 className="font-bold text-slate-800 text-[15px]">Payment QR Code</h3>
                     </div>
 
-                    <div className="flex flex-wrap gap-8 items-start">
+                    <div className="flex flex-wrap gap-6 items-start">
                       <div className="flex-1 space-y-3">
                         <p className="text-xs text-slate-500 leading-relaxed">
                           Upload your own QR code image, or leave it blank to auto-generate one from your UPI ID.
@@ -534,9 +535,9 @@ export default function Dashboard() {
           )}
 
           {activeTab === "social" && (
-            <div className="p-8 space-y-8">
+            <div className="p-6 space-y-6">
               <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Social Media Placements</h2>
-              <div className="space-y-8">
+              <div className="space-y-4">
                 {['instagram', 'linkedin', 'twitter', 'facebook', 'youtube'].map((network) => (
                   <div key={network} className="flex flex-wrap items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
                     <span className="w-32 text-sm font-bold text-slate-600 capitalize pl-2">{network}</span>
@@ -553,7 +554,7 @@ export default function Dashboard() {
           )}
 
           {activeTab === "media" && (
-            <div className="p-8 space-y-8">
+            <div className="p-6 space-y-6">
               
               <div>
                 <div className="flex justify-between items-center border-b pb-4 mb-4">
@@ -562,7 +563,7 @@ export default function Dashboard() {
                     <Plus className="w-4 h-4" /> Add Image Slot
                   </button>
                 </div>
-                <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-8">
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-5">
                   {form.gallery.map((img, i) => (
                     <div key={i} className="aspect-square bg-slate-100 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center relative overflow-hidden group">
                       {img ? (
@@ -657,14 +658,14 @@ export default function Dashboard() {
           )}
 
           {activeTab === "design" && (
-            <div className="p-8 space-y-10">
+            <div className="p-6 space-y-8">
               
               <section>
                 <div className="flex items-center gap-2 mb-6">
                   <Palette className="w-5 h-5 text-indigo-600" />
                   <h2 className="font-bold text-xl text-slate-800">Brand Colors</h2>
                 </div>
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
                   <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
                     <label className="block text-sm font-bold text-slate-700 mb-3">Primary Theme Color</label>
                     <div className="flex items-center gap-4">
@@ -709,7 +710,7 @@ export default function Dashboard() {
                 </div>
               </section>
 
-              <section className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8 border-t pt-10">
+              <section className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 border-t pt-8">
                 
                 <div>
                   <div className="flex items-center gap-2 mb-6">
@@ -762,12 +763,12 @@ export default function Dashboard() {
                 </div>
               </section>
 
-              <section className="border-t pt-10">
+              <section className="border-t pt-8">
                 <div className="flex items-center gap-2 mb-6">
                   <Layout className="w-5 h-5 text-indigo-600" />
                   <h2 className="font-bold text-xl text-slate-800">Visual Identity</h2>
                 </div>
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
                   
                   <div className="space-y-4">
                     <label className="block text-xs font-extrabold text-slate-400 uppercase tracking-widest ml-1">Card Styling</label>
@@ -810,7 +811,7 @@ export default function Dashboard() {
                 </div>
               </section>
 
-              <section className="border-t pt-10">
+              <section className="border-t pt-8">
                 <div className="flex items-center gap-2 mb-6">
                   <Sparkles className="w-5 h-5 text-indigo-600" />
                   <h2 className="font-bold text-xl text-slate-800">Background Effects</h2>
@@ -834,19 +835,42 @@ export default function Dashboard() {
                 </div>
               </section>
 
+              <section className="border-t pt-8">
+                <div className="flex items-center gap-2 mb-6">
+                  <QrCode className="w-5 h-5 text-indigo-600" />
+                  <h2 className="font-bold text-xl text-slate-800">Default QR View</h2>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { id: 'share', label: 'Share NexCard', desc: 'Default link to your profile' },
+                    { id: 'payment', label: 'Receive Payment', desc: 'Direct UPI/Bank QR' }
+                  ].map((qr) => (
+                    <button
+                      key={qr.id}
+                      onClick={() => handleNestedChange("theme", "defaultQr", qr.id)}
+                      className={`p-5 rounded-2xl border-2 transition-all text-left flex flex-col gap-1 ${form.theme.defaultQr === qr.id ? 'border-indigo-600 bg-indigo-50/50' : 'border-slate-100 bg-white hover:border-slate-200'}`}
+                    >
+                      <span className={`font-bold text-sm ${form.theme.defaultQr === qr.id ? 'text-indigo-700' : 'text-slate-700'}`}>{qr.label}</span>
+                      <span className="text-[10px] text-slate-400 font-medium">{qr.desc}</span>
+                    </button>
+                  ))}
+                </div>
+              </section>
+
             </div>
           )}
 
           {activeTab === "themes" && (
-            <div className="p-8 space-y-6">
+            <div className="p-6 space-y-5">
               <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Select a Layout Theme</h2>
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-8">
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
                 {[
                   { name: "Modern (Curved)", layout: "modern", primary: "#4F46E5", background: "#F8FAFC" },
                   { name: "Classic Corporate", layout: "classic", primary: "#1D4ED8", background: "#EFF6FF" },
                   { name: "Swiss Minimal", layout: "minimal", primary: "#475569", background: "#FFFFFF" },
                   { name: "Rose Glass", layout: "glass", primary: "#B76E79", background: "#FFF7F3" },
-                  { name: "Bold Luxe", layout: "bold", primary: "#0EA5A4", background: "#F7FBF8" }
+                  { name: "Bold Luxe", layout: "bold", primary: "#0EA5A4", background: "#F7FBF8" },
+                  { name: "Cyber Neon", layout: "neo", primary: "#00FFCC", background: "#0A0A0A" }
                 ].map((preset, idx) => {
                   const isActive = form.theme?.layout === preset.layout;
                   return (
@@ -867,12 +891,15 @@ export default function Dashboard() {
                         <div className="flex gap-2 mt-1">
                           <button 
                             onClick={() => setPreviewTheme(preset)}
-                            className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
+                            className={`flex-1 py-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 ${previewTheme?.layout === preset.layout ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
                           >
-                            <Eye className="w-3.5 h-3.5" /> Preview
+                            <Eye className="w-3.5 h-3.5" /> {previewTheme?.layout === preset.layout ? "Previewing" : "Preview"}
                           </button>
                           <button 
-                            onClick={() => setForm(prev => ({ ...prev, theme: { ...prev.theme, primary: preset.primary, background: preset.background, layout: preset.layout } }))}
+                            onClick={() => {
+                              setForm(prev => ({ ...prev, theme: { ...prev.theme, primary: preset.primary, background: preset.background, layout: preset.layout } }));
+                              setPreviewTheme(null);
+                            }}
                             className={`flex-1 py-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 ${isActive ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20' : 'bg-slate-900 text-white hover:bg-black'}`}
                           >
                             <Check className="w-3.5 h-3.5" /> {isActive ? "Applied" : "Apply"}
@@ -889,23 +916,27 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="flex-1 min-w-[min(100%,400px)] max-w-[500px]">
-        <div className="relative group bg-white border border-slate-200 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] overflow-hidden sticky top-32">
-            <div className="w-full h-[700px] overflow-y-auto scrollbar-none">
-              <NexCard key={form.theme.layout} data={form} />
+            <div className="w-full lg:w-[400px] shrink-0 h-[600px] lg:h-full flex flex-col pb-2 mt-8 lg:mt-0">
+              <div className="relative group bg-white border border-slate-200 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] overflow-hidden flex-1 min-h-0">
+                  <div className="w-full h-full overflow-y-auto scrollbar-none">
+                    <NexCard 
+                      key={previewTheme ? `preview-${previewTheme.layout}` : `live-${form.theme.layout}`} 
+                      data={previewTheme ? { ...form, theme: { ...form.theme, ...previewTheme } } : form} 
+                    />
+                  </div>
+                
+                <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+              </div>
+              <div className="mt-2 flex items-center justify-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${previewTheme ? 'bg-indigo-500 animate-pulse' : 'bg-green-500'}`}></div>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  {previewTheme ? 'Theme Preview Active' : 'Live Preview (Real-Time)'}
+                </p>
+              </div>
             </div>
-          
-          <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
-        </div>
-        <div className="mt-6 flex items-center justify-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Live Preview (Real-Time)</p>
-        </div>
-      </div>
 
-      </div>
+          </div>
+      </main>
     </div>
-  </div>
-</div>
   );
 }

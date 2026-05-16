@@ -2,6 +2,7 @@
 
 import { Phone, Mail, Globe, MapPin, Download, MessageCircle, MessageSquare, User, Briefcase, Send, QrCode, Eye, Calendar, CreditCard, Share2, Star } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
+import FloatingNav from "../FloatingNav";
 
 const FacebookIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>);
 const InstagramIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>);
@@ -360,26 +361,8 @@ export default function ModernTheme({ data }) {
         </div>
       </div>
 
-      {/* 📱 ULTRA-PREMIUM STICKY BOTTOM NAVIGATION */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-6 md:pb-8 pointer-events-none px-4">
-        <div className="pointer-events-auto bg-white/80 backdrop-blur-2xl border border-white/50 shadow-[0_8px_32px_rgba(0,0,0,0.08)] rounded-[2rem] px-6 py-3.5 flex items-center gap-7 sm:gap-9 justify-between">
-          <a href="#home" className="text-slate-400 hover:text-slate-900 transition-colors flex flex-col items-center gap-1 group">
-            <User size={22} className="group-hover:-translate-y-1 transition-transform duration-300" style={{ hoverColor: primaryColor }} />
-          </a>
-          <a href="#about" className="text-slate-400 hover:text-slate-900 transition-colors flex flex-col items-center gap-1 group">
-            <Briefcase size={22} className="group-hover:-translate-y-1 transition-transform duration-300" style={{ hoverColor: primaryColor }} />
-          </a>
-          <a href="#social" className="text-slate-400 hover:text-slate-900 transition-colors flex flex-col items-center gap-1 group">
-            <Globe size={22} className="group-hover:-translate-y-1 transition-transform duration-300" style={{ hoverColor: primaryColor }} />
-          </a>
-          <a href="#contact" className="text-slate-400 hover:text-slate-900 transition-colors flex flex-col items-center gap-1 group">
-            <MessageCircle size={22} className="group-hover:-translate-y-1 transition-transform duration-300" style={{ hoverColor: primaryColor }} />
-          </a>
-          <a href="#share" className="text-slate-400 hover:text-slate-900 transition-colors flex flex-col items-center gap-1 group">
-            <QrCode size={22} className="group-hover:-translate-y-1 transition-transform duration-300" style={{ hoverColor: primaryColor }} />
-          </a>
-        </div>
-      </div>
+      {/* 📱 NEW FLOATING NAVIGATION */}
+      <FloatingNav primaryColor={primaryColor} />
 
       {/* Injecting some custom style mapping for hover utilities */}
       <style dangerouslySetInnerHTML={{__html: `

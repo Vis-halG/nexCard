@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   ArrowUpRight,
   Calendar,
@@ -10,11 +11,14 @@ import {
   Mail,
   MapPin,
   MessageCircle,
+  MessageSquare,
   Phone,
   Send,
   Share2,
   Star,
+  MoreHorizontal,
 } from "lucide-react";
+
 import { QRCodeSVG } from "qrcode.react";
 import BottomNav from "../BottomNav";
 
@@ -23,6 +27,13 @@ const LinkedinIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg"
 const TwitterIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>);
 const YoutubeIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>);
 const FacebookIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>);
+
+const WhatsAppIcon = ({ className }) => (
+  <svg viewBox="0 0 16 16" fill="currentColor" className={className}>
+    <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
+  </svg>
+);
+
 
 const SOCIAL_ICONS = {
   instagram: (cls) => <InstagramIcon className={cls} />,
@@ -41,6 +52,54 @@ const SOCIAL_COLORS = {
 };
 
 export default function BoldTheme({ data }) {
+  const [showMore, setShowMore] = useState(false);
+
+  const actions = [];
+  if (data?.phone) {
+    actions.push({
+      id: "call",
+      href: `tel:${data.phone}`,
+      icon: (cls) => <Phone className={cls} />,
+      label: "Call"
+    });
+    actions.push({
+      id: "whatsapp",
+      href: `https://wa.me/${data.phone.replace(/[^0-9]/g, "")}`,
+      icon: (cls) => <WhatsAppIcon className={cls} />,
+      label: "WhatsApp",
+      target: "_blank",
+      rel: "noreferrer"
+    });
+  }
+  if (data?.address) {
+    actions.push({
+      id: "location",
+      href: "#map",
+      icon: (cls) => <MapPin className={cls} />,
+      label: "Location"
+    });
+  }
+  if (data?.email) {
+    actions.push({
+      id: "mail",
+      href: `mailto:${data.email}`,
+      icon: (cls) => <Mail className={cls} />,
+      label: "Mail"
+    });
+  }
+  if (data?.phone) {
+    actions.push({
+      id: "sms",
+      href: `sms:${data.phone}`,
+      icon: (cls) => <MessageSquare className={cls} />,
+      label: "SMS"
+    });
+  }
+
+  const hasMore = actions.length > 4;
+  const visibleActions = hasMore ? actions.slice(0, 3) : actions;
+  const remainingActions = hasMore ? actions.slice(3) : [];
+
   const primaryColor = data?.theme?.primary || "#0EA5A4";
   const savedBg = data?.theme?.background || "#F7FBF8";
   const bgColor = isDarkHex(savedBg) ? "#F7FBF8" : savedBg;
@@ -101,11 +160,85 @@ export default function BoldTheme({ data }) {
             </div>
 
             <div className="mt-7 grid grid-cols-4 gap-2">
-              {data?.phone && <IconLink href={`tel:${data.phone}`} icon={<Phone />} label="Call" />}
-              {data?.phone && <IconLink href={`https://wa.me/${data.phone.replace(/[^0-9]/g, "")}`} icon={<MessageCircle />} label="WhatsApp" />}
-              {data?.email && <IconLink href={`mailto:${data.email}`} icon={<Mail />} label="Email" />}
-              {data?.address && <IconLink href="#map" icon={<MapPin />} label="Location" />}
+              {visibleActions.map((act) => (
+                <a
+                  key={act.id}
+                  href={act.href}
+                  target={act.target}
+                  rel={act.rel}
+                  className="group flex flex-col items-center justify-center rounded-2xl bg-slate-50 py-3 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+                >
+                  <span className="mb-1 text-slate-500 group-hover:scale-110 transition-transform">
+                    {act.id === 'whatsapp'
+                      ? act.icon("w-5 h-5 fill-current")
+                      : act.icon("w-5 h-5 stroke-current")
+                    }
+                  </span>
+                  <span className="text-[10px] font-black uppercase tracking-wider">{act.label}</span>
+                </a>
+              ))}
+
+              {hasMore ? (
+                <button
+                  onClick={() => setShowMore(!showMore)}
+                  className={`group flex flex-col items-center justify-center rounded-2xl py-3 transition ${
+                    showMore ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                  }`}
+                >
+                  <span className={`mb-1 transition-transform group-hover:scale-110 ${showMore ? 'text-white' : 'text-slate-500 group-hover:text-slate-900'}`}>
+                    <MoreHorizontal className="w-5 h-5" />
+                  </span>
+                  <span className="text-[10px] font-black uppercase tracking-wider">More</span>
+                </button>
+              ) : (
+                actions.slice(3, 4).map((act) => (
+                  <a
+                    key={act.id}
+                    href={act.href}
+                    target={act.target}
+                    rel={act.rel}
+                    className="group flex flex-col items-center justify-center rounded-2xl bg-slate-50 py-3 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+                  >
+                    <span className="mb-1 text-slate-500 group-hover:scale-110 transition-transform">
+                      {act.id === 'whatsapp'
+                        ? act.icon("w-5 h-5 fill-current")
+                        : act.icon("w-5 h-5 stroke-current")
+                      }
+                    </span>
+                    <span className="text-[10px] font-black uppercase tracking-wider">{act.label}</span>
+                  </a>
+                ))
+              )}
+
+              {!hasMore && actions.length < 4 && Array.from({ length: 4 - actions.length }).map((_, i) => (
+                <div key={i} className="rounded-2xl bg-slate-50/40"></div>
+              ))}
             </div>
+
+            {hasMore && showMore && (
+              <div className="mt-2 grid grid-cols-4 gap-2 animate-in slide-in-from-top duration-300">
+                {remainingActions.map((act) => (
+                  <a
+                    key={act.id}
+                    href={act.href}
+                    target={act.target}
+                    rel={act.rel}
+                    className="group flex flex-col items-center justify-center rounded-2xl bg-slate-50 py-3 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+                  >
+                    <span className="mb-1 text-slate-500 group-hover:scale-110 transition-transform">
+                      {act.id === 'whatsapp'
+                        ? act.icon("w-5 h-5 fill-current")
+                        : act.icon("w-5 h-5 stroke-current")
+                      }
+                    </span>
+                    <span className="text-[10px] font-black uppercase tracking-wider">{act.label}</span>
+                  </a>
+                ))}
+                {Array.from({ length: 4 - remainingActions.length }).map((_, i) => (
+                  <div key={i} className="rounded-2xl bg-slate-50/40"></div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="relative mt-4 grid gap-3">

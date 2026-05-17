@@ -33,7 +33,28 @@ export default function Dashboard() {
       cardStyle: "standard", 
       avatarStyle: "circle",
       bgEffect: "none",
-      defaultQr: "share"
+      defaultQr: "share",
+      bgGradient: "none",
+      textAlign: "center",
+      shadowDepth: "subtle",
+      bannerSize: "standard",
+      avatarBorder: "thick",
+      socialStyle: "colored",
+      qrLogo: "none",
+      actionAnimation: "float",
+      bioFontSize: "standard",
+      cardBorderPattern: "none",
+      formAesthetic: "flat",
+      cardBg: "#ffffff",
+      textPrimary: "#0f172a",
+      textSecondary: "#64748b",
+      cardText: "#1e293b",
+      btnBg: "#4f46e5",
+      btnText: "#ffffff",
+      inputBg: "#f1f5f9",
+      inputText: "#0f172a",
+      gradientStart: "#4f46e5",
+      gradientEnd: "#ec4899"
     }
   });
 
@@ -680,91 +701,443 @@ export default function Dashboard() {
           )}
 
           {activeTab === "design" && (
-            <div className="p-6 space-y-8">
+            <div className="p-6 space-y-12">
               
-              <section>
-                <div className="flex items-center gap-2 mb-6">
-                  <Palette className="w-5 h-5 text-indigo-600" />
-                  <h2 className="font-bold text-xl text-slate-800">Brand Colors</h2>
+              {/* ======================================================== */}
+              {/* 🌟 CATEGORY 1: GLOBAL IDENTITY & CANVAS PRESETS */}
+              {/* ======================================================== */}
+              <section className="bg-slate-50/50 p-6 rounded-3xl border border-slate-100/80 space-y-8">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Sparkles className="w-5 h-5 text-indigo-600 animate-pulse" />
+                    <h2 className="font-extrabold text-xl text-slate-800">1. Global Identity & Canvas</h2>
+                  </div>
+                  <p className="text-xs text-slate-500 font-medium leading-relaxed">Configure your digital card's structural canvas, preset color styles, banner heights, text alignment, and typography.</p>
                 </div>
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
-                  <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
-                    <label className="block text-sm font-bold text-slate-700 mb-3">Primary Theme Color</label>
-                    <div className="flex items-center gap-4">
-                      <input 
-                        type="color" 
-                        value={form.theme.primary} 
-                        onChange={(e) => handleNestedChange("theme", "primary", e.target.value)} 
-                        className="w-14 h-14 rounded-xl cursor-pointer border-none p-0 bg-transparent"
-                      />
-                      <div className="flex-1">
-                        <input 
-                          type="text" 
-                          value={form.theme.primary} 
-                          onChange={(e) => handleNestedChange("theme", "primary", e.target.value)}
-                          className="w-full p-2.5 bg-white border border-slate-200 rounded-lg font-mono text-sm uppercase"
-                        />
-                        <p className="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-tight">Main Buttons & Accents</p>
+
+                {/* Grid 1: Layout presets & Effects */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Background Presets */}
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Background Theme Preset</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { id: 'none', label: 'Solid Base Color', preview: 'bg-slate-100' },
+                        { id: 'sunset', label: 'Sunset Coral', preview: 'bg-gradient-to-br from-[#FF6B6B] to-[#FF8E53]' },
+                        { id: 'cyberpunk', label: 'Cyber Purple', preview: 'bg-gradient-to-br from-[#FF007F] to-[#7F00FF]' },
+                        { id: 'ocean', label: 'Ocean Cyan', preview: 'bg-gradient-to-br from-[#00C9FF] to-[#92FE9D]' },
+                        { id: 'forest', label: 'Emerald Mint', preview: 'bg-gradient-to-br from-[#11998e] to-[#38ef7d]' },
+                        { id: 'mystic', label: 'Orchid Dream', preview: 'bg-gradient-to-br from-[#7F00FF] to-[#E100FF]' },
+                        { id: 'custom', label: 'Custom Gradient', preview: 'custom-grad-class' }
+                      ].map((grad) => {
+                        const isCustom = grad.id === 'custom';
+                        const previewStyle = isCustom 
+                          ? { background: `linear-gradient(135deg, ${form.theme.gradientStart || '#4F46E5'} 0%, ${form.theme.gradientEnd || '#EC4899'} 100%)` }
+                          : {};
+                        return (
+                          <button
+                            key={grad.id}
+                            onClick={() => handleNestedChange("theme", "bgGradient", grad.id)}
+                            className={`p-3 rounded-2xl border-2 text-left transition-all flex flex-col gap-2 ${form.theme.bgGradient === grad.id ? 'border-indigo-600 bg-indigo-50/50 shadow-sm' : 'border-slate-100 bg-white hover:border-slate-200'}`}
+                          >
+                            <div className={`w-full h-6 rounded-lg ${isCustom ? '' : grad.preview}`} style={previewStyle} />
+                            <span className="font-bold text-[10px] text-slate-700 block leading-tight">{grad.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {form.theme.bgGradient === 'custom' && (
+                      <div className="mt-4 p-4 bg-white rounded-2xl border border-slate-100 shadow-inner grid grid-cols-2 gap-4 animate-fadeIn">
+                        <div>
+                          <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Gradient Start</label>
+                          <div className="flex items-center gap-2">
+                            <input 
+                              type="color" 
+                              value={form.theme.gradientStart || "#4F46E5"} 
+                              onChange={(e) => handleNestedChange("theme", "gradientStart", e.target.value)} 
+                              className="w-8 h-8 rounded-lg cursor-pointer border-none p-0 bg-transparent animate-pulse"
+                            />
+                            <input 
+                              type="text" 
+                              value={form.theme.gradientStart || "#4F46E5"} 
+                              onChange={(e) => handleNestedChange("theme", "gradientStart", e.target.value)}
+                              className="w-full p-1.5 bg-slate-50 border border-slate-100 rounded-md font-mono text-[10px] uppercase text-slate-600 focus:outline-none"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Gradient End</label>
+                          <div className="flex items-center gap-2">
+                            <input 
+                              type="color" 
+                              value={form.theme.gradientEnd || "#EC4899"} 
+                              onChange={(e) => handleNestedChange("theme", "gradientEnd", e.target.value)} 
+                              className="w-8 h-8 rounded-lg cursor-pointer border-none p-0 bg-transparent animate-pulse"
+                            />
+                            <input 
+                              type="text" 
+                              value={form.theme.gradientEnd || "#EC4899"} 
+                              onChange={(e) => handleNestedChange("theme", "gradientEnd", e.target.value)}
+                              className="w-full p-1.5 bg-slate-50 border border-slate-100 rounded-md font-mono text-[10px] uppercase text-slate-600 focus:outline-none"
+                            />
+                          </div>
+                        </div>
                       </div>
+                    )}
+                  </div>
+
+                  {/* Background Effects */}
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Canvas Backdrop Effect</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { id: 'none', label: 'No Canvas Effect' },
+                        { id: 'mesh', label: 'Animated Mesh' },
+                        { id: 'bubbles', label: 'Floating Bubbles' },
+                        { id: 'aurora', label: 'Aurora Flow' }
+                      ].map((eff) => (
+                        <button
+                          key={eff.id}
+                          onClick={() => handleNestedChange("theme", "bgEffect", eff.id)}
+                          className={`p-4 rounded-2xl border-2 text-center transition-all flex flex-col items-center justify-center gap-2 ${form.theme.bgEffect === eff.id ? 'border-indigo-600 bg-indigo-600 text-white shadow-md' : 'border-slate-100 bg-white text-slate-600 hover:border-slate-200'}`}
+                        >
+                          <div className={`w-2.5 h-2.5 rounded-full ${form.theme.bgEffect === eff.id ? 'bg-white animate-ping' : 'bg-slate-200'}`} />
+                          <span className="font-bold text-[10px]">{eff.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Grid 2: Fonts & Sizes */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-slate-100 pt-6">
+                  {/* Font Type */}
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Typography Font</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { id: 'font-sans', label: 'Standard Sans', preview: 'Aa', class: 'font-sans' },
+                        { id: 'font-serif', label: 'Elegant Serif', preview: 'Aa', class: 'font-serif' },
+                        { id: 'font-mono', label: 'Modern Mono', preview: 'Aa', class: 'font-mono' },
+                        { id: 'font-display', label: 'Playful Display', preview: 'Aa', class: 'font-display' }
+                      ].map((font) => (
+                        <button
+                          key={font.id}
+                          onClick={() => handleNestedChange("theme", "font", font.id)}
+                          className={`p-3 rounded-xl border-2 text-left transition-all ${form.theme.font === font.id ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 shadow-sm' : 'border-slate-100 bg-white hover:border-slate-200 text-slate-500'}`}
+                        >
+                          <span className={`text-xl block mb-0.5 ${font.class}`}>{font.preview}</span>
+                          <span className="text-[10px] font-bold block">{font.label}</span>
+                        </button>
+                      ))}
                     </div>
                   </div>
 
-                  <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
-                    <label className="block text-sm font-bold text-slate-700 mb-3">Background Color</label>
-                    <div className="flex items-center gap-4">
-                      <input 
-                        type="color" 
-                        value={form.theme.background} 
-                        onChange={(e) => handleNestedChange("theme", "background", e.target.value)} 
-                        className="w-14 h-14 rounded-xl cursor-pointer border-none p-0 bg-transparent"
-                      />
-                      <div className="flex-1">
-                        <input 
-                          type="text" 
-                          value={form.theme.background} 
-                          onChange={(e) => handleNestedChange("theme", "background", e.target.value)}
-                          className="w-full p-2.5 bg-white border border-slate-200 rounded-lg font-mono text-sm uppercase"
-                        />
-                        <p className="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-tight">Page Base Color</p>
+                  {/* Alignment */}
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Text Alignment</label>
+                    <div className="flex flex-col gap-2">
+                      {[
+                        { id: 'left', label: 'Left Aligned (Offset)' },
+                        { id: 'center', label: 'Centered (Balanced)' },
+                        { id: 'right', label: 'Right Aligned (Classic)' }
+                      ].map((align) => (
+                        <button
+                          key={align.id}
+                          onClick={() => handleNestedChange("theme", "textAlign", align.id)}
+                          className={`w-full py-2 px-4 rounded-xl border-2 font-bold text-xs text-left transition-all ${form.theme.textAlign === align.id ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 shadow-sm' : 'border-slate-100 bg-white hover:border-slate-200 text-slate-500'}`}
+                        >
+                          {align.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Banner size & Bio Sizing */}
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1 mb-2">Banner Height</label>
+                      <div className="flex bg-slate-100 p-1 rounded-xl gap-1">
+                        {[
+                          { id: 'compact', label: 'Slim' },
+                          { id: 'standard', label: 'Medium' },
+                          { id: 'tall', label: 'Tall' }
+                        ].map((banner) => (
+                          <button
+                            key={banner.id}
+                            onClick={() => handleNestedChange("theme", "bannerSize", banner.id)}
+                            className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold transition-all ${form.theme.bannerSize === banner.id ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                          >
+                            {banner.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1 mb-2">Bio Description Sizing</label>
+                      <div className="flex bg-slate-100 p-1 rounded-xl gap-1">
+                        {[
+                          { id: 'compact', label: 'Compact' },
+                          { id: 'standard', label: 'Default' },
+                          { id: 'editorial', label: 'Large' }
+                        ].map((size) => (
+                          <button
+                            key={size.id}
+                            onClick={() => handleNestedChange("theme", "bioFontSize", size.id)}
+                            className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold transition-all ${form.theme.bioFontSize === size.id ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                          >
+                            {size.label}
+                          </button>
+                        ))}
                       </div>
                     </div>
                   </div>
                 </div>
               </section>
 
-              <section className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 border-t pt-8">
-                
+              {/* ======================================================== */}
+              {/* 🎨 CATEGORY 2: GRANULAR BRAND COLORS */}
+              {/* ======================================================== */}
+              <section className="bg-slate-50/50 p-6 rounded-3xl border border-slate-100/80 space-y-6">
                 <div>
-                  <div className="flex items-center gap-2 mb-6">
-                    <Type className="w-5 h-5 text-indigo-600" />
-                    <h2 className="font-bold text-lg text-slate-800">Typography</h2>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Palette className="w-5 h-5 text-indigo-600" />
+                    <h2 className="font-extrabold text-xl text-slate-800">2. Custom Theme Palette</h2>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { id: 'font-sans', label: 'Standard Sans', preview: 'Aa', class: 'font-sans' },
-                      { id: 'font-serif', label: 'Elegant Serif', preview: 'Aa', class: 'font-serif' },
-                      { id: 'font-mono', label: 'Modern Mono', preview: 'Aa', class: 'font-mono' },
-                      { id: 'font-display', label: 'Playful Display', preview: 'Aa', class: 'font-display' }
-                    ].map((font) => (
-                      <button
-                        key={font.id}
-                        onClick={() => handleNestedChange("theme", "font", font.id)}
-                        className={`p-4 rounded-2xl border-2 text-left transition-all ${form.theme.font === font.id ? 'border-indigo-600 bg-indigo-50/50' : 'border-slate-100 hover:border-slate-200 bg-white'}`}
-                      >
-                        <span className={`text-2xl block mb-1 ${font.class}`}>{font.preview}</span>
-                        <span className="text-xs font-bold text-slate-600">{font.label}</span>
-                      </button>
-                    ))}
-                  </div>
+                  <p className="text-xs text-slate-500 font-medium leading-relaxed">Establish comprehensive visual branding by mapping individual colors to specific elements, card backgrounds, buttons, and titles.</p>
                 </div>
 
-                <div>
-                  <div className="flex items-center gap-2 mb-6">
-                    <Box className="w-5 h-5 text-indigo-600" />
-                    <h2 className="font-bold text-lg text-slate-800">Card Geometry</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {/* Primary Color */}
+                  <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                    <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Brand Accent Theme</label>
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="color" 
+                        value={form.theme.primary} 
+                        onChange={(e) => handleNestedChange("theme", "primary", e.target.value)} 
+                        className="w-10 h-10 rounded-xl cursor-pointer border-none p-0 bg-transparent"
+                      />
+                      <input 
+                        type="text" 
+                        value={form.theme.primary} 
+                        onChange={(e) => handleNestedChange("theme", "primary", e.target.value)}
+                        className="flex-1 p-2 bg-slate-50 border border-slate-100 rounded-lg font-mono text-xs uppercase text-slate-700 focus:outline-none"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-4">
-                    <label className="block text-xs font-extrabold text-slate-400 uppercase tracking-widest">Border Radius</label>
+
+                  {/* Background Color */}
+                  <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                    <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Page Background</label>
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="color" 
+                        value={form.theme.background} 
+                        onChange={(e) => handleNestedChange("theme", "background", e.target.value)} 
+                        className="w-10 h-10 rounded-xl cursor-pointer border-none p-0 bg-transparent"
+                      />
+                      <input 
+                        type="text" 
+                        value={form.theme.background} 
+                        onChange={(e) => handleNestedChange("theme", "background", e.target.value)}
+                        className="flex-1 p-2 bg-slate-50 border border-slate-100 rounded-lg font-mono text-xs uppercase text-slate-700 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Primary Text Color */}
+                  <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                    <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Primary Text (Headings)</label>
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="color" 
+                        value={form.theme.textPrimary || "#0f172a"} 
+                        onChange={(e) => handleNestedChange("theme", "textPrimary", e.target.value)} 
+                        className="w-10 h-10 rounded-xl cursor-pointer border-none p-0 bg-transparent"
+                      />
+                      <input 
+                        type="text" 
+                        value={form.theme.textPrimary || "#0f172a"} 
+                        onChange={(e) => handleNestedChange("theme", "textPrimary", e.target.value)}
+                        className="flex-1 p-2 bg-slate-50 border border-slate-100 rounded-lg font-mono text-xs uppercase text-slate-700 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Secondary Text Color */}
+                  <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                    <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Secondary Text (Bio)</label>
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="color" 
+                        value={form.theme.textSecondary || "#64748b"} 
+                        onChange={(e) => handleNestedChange("theme", "textSecondary", e.target.value)} 
+                        className="w-10 h-10 rounded-xl cursor-pointer border-none p-0 bg-transparent"
+                      />
+                      <input 
+                        type="text" 
+                        value={form.theme.textSecondary || "#64748b"} 
+                        onChange={(e) => handleNestedChange("theme", "textSecondary", e.target.value)}
+                        className="flex-1 p-2 bg-slate-50 border border-slate-100 rounded-lg font-mono text-xs uppercase text-slate-700 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Card Background Color */}
+                  <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                    <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Card Container Surface</label>
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="color" 
+                        value={form.theme.cardBg || "#ffffff"} 
+                        onChange={(e) => handleNestedChange("theme", "cardBg", e.target.value)} 
+                        className="w-10 h-10 rounded-xl cursor-pointer border-none p-0 bg-transparent"
+                      />
+                      <input 
+                        type="text" 
+                        value={form.theme.cardBg || "#ffffff"} 
+                        onChange={(e) => handleNestedChange("theme", "cardBg", e.target.value)}
+                        className="flex-1 p-2 bg-slate-50 border border-slate-100 rounded-lg font-mono text-xs uppercase text-slate-700 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Card Text Color */}
+                  <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                    <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Card Text (Important Links)</label>
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="color" 
+                        value={form.theme.cardText || "#1e293b"} 
+                        onChange={(e) => handleNestedChange("theme", "cardText", e.target.value)} 
+                        className="w-10 h-10 rounded-xl cursor-pointer border-none p-0 bg-transparent"
+                      />
+                      <input 
+                        type="text" 
+                        value={form.theme.cardText || "#1e293b"} 
+                        onChange={(e) => handleNestedChange("theme", "cardText", e.target.value)}
+                        className="flex-1 p-2 bg-slate-50 border border-slate-100 rounded-lg font-mono text-xs uppercase text-slate-700 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Button Background Color */}
+                  <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                    <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Save CTA Button Fill</label>
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="color" 
+                        value={form.theme.btnBg || "#4f46e5"} 
+                        onChange={(e) => handleNestedChange("theme", "btnBg", e.target.value)} 
+                        className="w-10 h-10 rounded-xl cursor-pointer border-none p-0 bg-transparent"
+                      />
+                      <input 
+                        type="text" 
+                        value={form.theme.btnBg || "#4f46e5"} 
+                        onChange={(e) => handleNestedChange("theme", "btnBg", e.target.value)}
+                        className="flex-1 p-2 bg-slate-50 border border-slate-100 rounded-lg font-mono text-xs uppercase text-slate-700 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Button Text Color */}
+                  <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                    <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Save CTA Label Text</label>
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="color" 
+                        value={form.theme.btnText || "#ffffff"} 
+                        onChange={(e) => handleNestedChange("theme", "btnText", e.target.value)} 
+                        className="w-10 h-10 rounded-xl cursor-pointer border-none p-0 bg-transparent"
+                      />
+                      <input 
+                        type="text" 
+                        value={form.theme.btnText || "#ffffff"} 
+                        onChange={(e) => handleNestedChange("theme", "btnText", e.target.value)}
+                        className="flex-1 p-2 bg-slate-50 border border-slate-100 rounded-lg font-mono text-xs uppercase text-slate-700 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Input Background Color */}
+                  <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                    <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Form Input Field Box</label>
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="color" 
+                        value={form.theme.inputBg || "#f1f5f9"} 
+                        onChange={(e) => handleNestedChange("theme", "inputBg", e.target.value)} 
+                        className="w-10 h-10 rounded-xl cursor-pointer border-none p-0 bg-transparent"
+                      />
+                      <input 
+                        type="text" 
+                        value={form.theme.inputBg || "#f1f5f9"} 
+                        onChange={(e) => handleNestedChange("theme", "inputBg", e.target.value)}
+                        className="flex-1 p-2 bg-slate-50 border border-slate-100 rounded-lg font-mono text-xs uppercase text-slate-700 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Input Text Color */}
+                  <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                    <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Form Input Field Font</label>
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="color" 
+                        value={form.theme.inputText || "#0f172a"} 
+                        onChange={(e) => handleNestedChange("theme", "inputText", e.target.value)} 
+                        className="w-10 h-10 rounded-xl cursor-pointer border-none p-0 bg-transparent"
+                      />
+                      <input 
+                        type="text" 
+                        value={form.theme.inputText || "#0f172a"} 
+                        onChange={(e) => handleNestedChange("theme", "inputText", e.target.value)}
+                        className="flex-1 p-2 bg-slate-50 border border-slate-100 rounded-lg font-mono text-xs uppercase text-slate-700 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* ======================================================== */}
+              {/* 📐 CATEGORY 3: SURFACES, BORDERS & SHADOW GEOMETRY */}
+              {/* ======================================================== */}
+              <section className="bg-slate-50/50 p-6 rounded-3xl border border-slate-100/80 space-y-8">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Box className="w-5 h-5 text-indigo-600" />
+                    <h2 className="font-extrabold text-xl text-slate-800">3. Surfaces, Geometry & Outlines</h2>
+                  </div>
+                  <p className="text-xs text-slate-500 font-medium leading-relaxed">Sculpt the visual depth, card layouts, edge outline patterns, and border radius properties of your content containers.</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Card Styling */}
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Card Layout Backdrop</label>
+                    <div className="grid grid-cols-3 gap-3">
+                      {[
+                        { id: 'standard', label: 'Solid White' },
+                        { id: 'glass', label: 'Frosted Glass' },
+                        { id: 'outline', label: 'Minimal Border' }
+                      ].map((style) => (
+                        <button
+                          key={style.id}
+                          onClick={() => handleNestedChange("theme", "cardStyle", style.id)}
+                          className={`p-3 rounded-2xl border-2 text-center transition-all ${form.theme.cardStyle === style.id ? 'border-indigo-600 bg-indigo-50/50 text-indigo-600 font-bold shadow-sm' : 'border-slate-100 bg-white text-slate-500 hover:border-slate-200'}`}
+                        >
+                          <span className="text-[11px] font-bold leading-tight block">{style.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Border Radius */}
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Container Corner Radius</label>
                     <div className="flex bg-slate-100 p-1.5 rounded-2xl gap-1">
                       {[
                         { id: '0rem', label: 'Sharp' },
@@ -783,36 +1156,69 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-              </section>
 
-              <section className="border-t pt-8">
-                <div className="flex items-center gap-2 mb-6">
-                  <Layout className="w-5 h-5 text-indigo-600" />
-                  <h2 className="font-bold text-xl text-slate-800">Visual Identity</h2>
-                </div>
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
-                  
-                  <div className="space-y-4">
-                    <label className="block text-xs font-extrabold text-slate-400 uppercase tracking-widest ml-1">Card Styling</label>
-                    <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-100 pt-6">
+                  {/* Card Depth & Shadow */}
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Card Shadows & Depth</label>
+                    <div className="grid grid-cols-2 gap-3">
                       {[
-                        { id: 'standard', label: 'Solid White' },
-                        { id: 'glass', label: 'Frosted Glass' },
-                        { id: 'outline', label: 'Minimal Border' }
-                      ].map((style) => (
+                        { id: 'none', label: 'Flat Layer', desc: 'No shadows/strokes' },
+                        { id: 'subtle', label: 'Sleek Shadow', desc: 'Elegant viewport lift' },
+                        { id: 'bold', label: 'Neobrutalist', desc: 'Thick black bounds' },
+                        { id: 'glow', label: 'Brand Neon Glow', desc: 'Primary color aura' }
+                      ].map((shadow) => (
                         <button
-                          key={style.id}
-                          onClick={() => handleNestedChange("theme", "cardStyle", style.id)}
-                          className={`p-3 rounded-xl border-2 text-center transition-all ${form.theme.cardStyle === style.id ? 'border-indigo-600 bg-indigo-50/50 text-indigo-600' : 'border-slate-100 bg-white text-slate-500'}`}
+                          key={shadow.id}
+                          onClick={() => handleNestedChange("theme", "shadowDepth", shadow.id)}
+                          className={`p-3 rounded-2xl border-2 text-center transition-all flex flex-col gap-1 justify-center ${form.theme.shadowDepth === shadow.id ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 font-bold shadow-sm' : 'border-slate-100 bg-white hover:border-slate-200 text-slate-500'}`}
                         >
-                          <span className="text-[11px] font-bold leading-tight block">{style.label}</span>
+                          <span className="text-xs font-bold block">{shadow.label}</span>
+                          <span className="text-[9px] text-slate-400 block leading-tight">{shadow.desc}</span>
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <label className="block text-xs font-extrabold text-slate-400 uppercase tracking-widest ml-1">Profile Photo Shape</label>
+                  {/* Card Outer Border Patterns */}
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Card Outlines & Glow Edges</label>
+                    <div className="grid grid-cols-3 gap-3">
+                      {[
+                        { id: 'none', label: 'Seamless Edge', desc: 'Borderless style' },
+                        { id: 'dashed', label: 'Creative Dashed', desc: 'Vector-stitch dash' },
+                        { id: 'neon-glow', label: 'Primary Edge Glow', desc: 'Glowing brand borders' }
+                      ].map((pat) => (
+                        <button
+                          key={pat.id}
+                          onClick={() => handleNestedChange("theme", "cardBorderPattern", pat.id)}
+                          className={`p-3 rounded-2xl border-2 text-center transition-all flex flex-col gap-1 justify-center ${form.theme.cardBorderPattern === pat.id ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 font-bold shadow-sm' : 'border-slate-100 bg-white hover:border-slate-200 text-slate-500'}`}
+                        >
+                          <span className="text-xs font-bold block">{pat.label}</span>
+                          <span className="text-[9px] text-slate-400 block leading-tight">{pat.desc}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* ======================================================== */}
+              {/* 👤 CATEGORY 4: PERSONAL PORTRAIT & SOCIAL BUTTONS */}
+              {/* ======================================================== */}
+              <section className="bg-slate-50/50 p-6 rounded-3xl border border-slate-100/80 space-y-8">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Camera className="w-5 h-5 text-indigo-600" />
+                    <h2 className="font-extrabold text-xl text-slate-800">4. Profile Frame & Social Badges</h2>
+                  </div>
+                  <p className="text-xs text-slate-500 font-medium leading-relaxed">Customize your primary avatar portrait shape, outer bordering frame, social icon style mappings, and hovering triggers.</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Photo Shape */}
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Profile Photo Geometry</label>
                     <div className="grid grid-cols-3 gap-3">
                       {[
                         { id: 'circle', label: 'Circle', icon: '○' },
@@ -822,10 +1228,78 @@ export default function Dashboard() {
                         <button
                           key={shape.id}
                           onClick={() => handleNestedChange("theme", "avatarStyle", shape.id)}
-                          className={`p-3 rounded-xl border-2 text-center transition-all flex flex-col items-center gap-1 ${form.theme.avatarStyle === shape.id ? 'border-indigo-600 bg-indigo-50/50 text-indigo-600' : 'border-slate-100 bg-white text-slate-500'}`}
+                          className={`p-3 rounded-2xl border-2 text-center transition-all flex flex-col items-center gap-1 ${form.theme.avatarStyle === shape.id ? 'border-indigo-600 bg-indigo-50/50 text-indigo-600 font-bold shadow-sm' : 'border-slate-100 bg-white hover:border-slate-200 text-slate-500'}`}
                         >
-                          <span className="text-xl font-medium">{shape.icon}</span>
-                          <span className="text-[11px] font-bold leading-tight">{shape.label}</span>
+                          <span className="text-lg font-medium">{shape.icon}</span>
+                          <span className="text-[10px] font-bold leading-tight">{shape.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Avatar Border Frame */}
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Photo Border Frame</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { id: 'none', label: 'No Outer Frame', desc: 'Borderless portrait' },
+                        { id: 'thin', label: 'Sleek Line Frame', desc: 'Subtle 2px stroke border' },
+                        { id: 'thick', label: 'Heavy Frame', desc: 'Bold 4px solid border' },
+                        { id: 'glow', label: 'Glowing Accent Aura', desc: 'Interactive color halos' }
+                      ].map((border) => (
+                        <button
+                          key={border.id}
+                          onClick={() => handleNestedChange("theme", "avatarBorder", border.id)}
+                          className={`p-3 rounded-2xl border-2 text-center transition-all flex flex-col gap-1 justify-center ${form.theme.avatarBorder === border.id ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 font-bold shadow-sm' : 'border-slate-100 bg-white hover:border-slate-200 text-slate-500'}`}
+                        >
+                          <span className="text-xs font-bold block">{border.label}</span>
+                          <span className="text-[9px] text-slate-400 block leading-tight">{border.desc}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-100 pt-6">
+                  {/* Social Icons Styling */}
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Social Badges Style</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { id: 'colored', label: 'Vibrant Native', desc: 'Authentic brand hues' },
+                        { id: 'monochrome', label: 'Charcoal Minimal', desc: 'Sleek dark monochrome' },
+                        { id: 'outline', label: 'Sleek Outlines', desc: 'Crisp transparent thin borders' },
+                        { id: 'glow', label: 'Neon Glow Badges', desc: 'Glowing matrix halos' }
+                      ].map((soc) => (
+                        <button
+                          key={soc.id}
+                          onClick={() => handleNestedChange("theme", "socialStyle", soc.id)}
+                          className={`p-3 rounded-2xl border-2 text-center transition-all flex flex-col gap-1 justify-center ${form.theme.socialStyle === soc.id ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 font-bold shadow-sm' : 'border-slate-100 bg-white hover:border-slate-200 text-slate-500'}`}
+                        >
+                          <span className="text-xs font-bold block">{soc.label}</span>
+                          <span className="text-[9px] text-slate-400 block leading-tight">{soc.desc}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Actions Animation FX */}
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Quick Action Hover Animations</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { id: 'none', label: 'Static Fades', desc: 'Instant color switches' },
+                        { id: 'float', label: 'Smooth Floating Lift', desc: 'Lifts up by -6px offset' },
+                        { id: 'pulse', label: 'Heartbeat Scale', desc: 'Pulsing scale trigger' },
+                        { id: 'glow', label: 'Accent Halo Glow', desc: 'Vibrant color bloom glows' }
+                      ].map((anim) => (
+                        <button
+                          key={anim.id}
+                          onClick={() => handleNestedChange("theme", "actionAnimation", anim.id)}
+                          className={`p-3 rounded-2xl border-2 text-center transition-all flex flex-col gap-1 justify-center ${form.theme.actionAnimation === anim.id ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 font-bold shadow-sm' : 'border-slate-100 bg-white hover:border-slate-200 text-slate-500'}`}
+                        >
+                          <span className="text-xs font-bold block">{anim.label}</span>
+                          <span className="text-[9px] text-slate-400 block leading-tight">{anim.desc}</span>
                         </button>
                       ))}
                     </div>
@@ -833,49 +1307,79 @@ export default function Dashboard() {
                 </div>
               </section>
 
-              <section className="border-t pt-8">
-                <div className="flex items-center gap-2 mb-6">
-                  <Sparkles className="w-5 h-5 text-indigo-600" />
-                  <h2 className="font-bold text-xl text-slate-800">Background Effects</h2>
+              {/* ======================================================== */}
+              {/* ✉️ CATEGORY 5: ENGAGEMENT, UTILITIES & SCANNING */}
+              {/* ======================================================== */}
+              <section className="bg-slate-50/50 p-6 rounded-3xl border border-slate-100/80 space-y-8">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <QrCode className="w-5 h-5 text-indigo-600" />
+                    <h2 className="font-extrabold text-xl text-slate-800">5. Engagement, QR & Lead Capture</h2>
+                  </div>
+                  <p className="text-xs text-slate-500 font-medium leading-relaxed">Wired custom center branding elements, direct scan behaviors, and enquiry lead input form boxes.</p>
                 </div>
-                <div className="flex flex-wrap gap-4">
-                  {[
-                    { id: 'none', label: 'No Effect' },
-                    { id: 'mesh', label: 'Animated Mesh' },
-                    { id: 'bubbles', label: 'Floating Bubbles' },
-                    { id: 'aurora', label: 'Aurora Flow' }
-                  ].map((eff) => (
-                    <button
-                      key={eff.id}
-                      onClick={() => handleNestedChange("theme", "bgEffect", eff.id)}
-                      className={`px-6 py-4 rounded-2xl border-2 transition-all flex items-center gap-3 ${form.theme.bgEffect === eff.id ? 'border-indigo-600 bg-indigo-600 text-white shadow-lg' : 'border-slate-100 bg-white text-slate-600 hover:border-slate-200'}`}
-                    >
-                      <div className={`w-3 h-3 rounded-full ${form.theme.bgEffect === eff.id ? 'bg-white animate-ping' : 'bg-slate-200'}`} />
-                      <span className="font-bold text-sm">{eff.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </section>
 
-              <section className="border-t pt-8">
-                <div className="flex items-center gap-2 mb-6">
-                  <QrCode className="w-5 h-5 text-indigo-600" />
-                  <h2 className="font-bold text-xl text-slate-800">Default QR View</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Default QR View */}
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Default QR Profile View</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { id: 'share', label: 'Share NexCard Profile', desc: 'Default link' },
+                        { id: 'payment', label: 'Receive UPI Payment', desc: 'Direct transactions' }
+                      ].map((qr) => (
+                        <button
+                          key={qr.id}
+                          onClick={() => handleNestedChange("theme", "defaultQr", qr.id)}
+                          className={`p-4 rounded-2xl border-2 transition-all text-left flex flex-col gap-1 ${form.theme.defaultQr === qr.id ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 font-bold shadow-sm' : 'border-slate-100 bg-white hover:border-slate-200 text-slate-500'}`}
+                        >
+                          <span className="font-bold text-[11px] block">{qr.label}</span>
+                          <span className="text-[9px] text-slate-400 block leading-tight">{qr.desc}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* QR Logo Center Branding */}
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">QR Scan Center Branding</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { id: 'none', label: 'Standard Block QR', desc: 'Standard scans' },
+                        { id: 'avatar', label: 'Integrated Profile Logo', desc: 'Excavates central avatar image' }
+                      ].map((logo) => (
+                        <button
+                          key={logo.id}
+                          onClick={() => handleNestedChange("theme", "qrLogo", logo.id)}
+                          className={`p-4 rounded-2xl border-2 transition-all text-left flex flex-col gap-1 ${form.theme.qrLogo === logo.id ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 font-bold shadow-sm' : 'border-slate-100 bg-white hover:border-slate-200 text-slate-500'}`}
+                        >
+                          <span className="font-bold text-[11px] block">{logo.label}</span>
+                          <span className="text-[9px] text-slate-400 block leading-tight">{logo.desc}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  {[
-                    { id: 'share', label: 'Share NexCard', desc: 'Default link to your profile' },
-                    { id: 'payment', label: 'Receive Payment', desc: 'Direct UPI/Bank QR' }
-                  ].map((qr) => (
-                    <button
-                      key={qr.id}
-                      onClick={() => handleNestedChange("theme", "defaultQr", qr.id)}
-                      className={`p-5 rounded-2xl border-2 transition-all text-left flex flex-col gap-1 ${form.theme.defaultQr === qr.id ? 'border-indigo-600 bg-indigo-50/50' : 'border-slate-100 bg-white hover:border-slate-200'}`}
-                    >
-                      <span className={`font-bold text-sm ${form.theme.defaultQr === qr.id ? 'text-indigo-700' : 'text-slate-700'}`}>{qr.label}</span>
-                      <span className="text-[10px] text-slate-400 font-medium">{qr.desc}</span>
-                    </button>
-                  ))}
+
+                <div className="space-y-3 border-t border-slate-100 pt-6">
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Lead Enquiry Form Aesthetic Style</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {[
+                      { id: 'flat', label: 'Cozy Flat Fills', desc: 'Soft slate backdrop' },
+                      { id: 'pill', label: 'Rounded Pills', desc: 'High curvature bounds' },
+                      { id: 'brutalist', label: 'Solid Brutalist', desc: 'Thick retro outline borders' },
+                      { id: 'frosted', label: 'Frosted Glass', desc: 'Beautiful transparent blurs' }
+                    ].map((frm) => (
+                      <button
+                        key={frm.id}
+                        onClick={() => handleNestedChange("theme", "formAesthetic", frm.id)}
+                        className={`p-4 rounded-2xl border-2 text-center transition-all flex flex-col gap-1 justify-center ${form.theme.formAesthetic === frm.id ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 font-bold shadow-sm' : 'border-slate-100 bg-white hover:border-slate-200 text-slate-500'}`}
+                      >
+                        <span className="text-xs font-bold block">{frm.label}</span>
+                        <span className="text-[9px] text-slate-400 block leading-tight">{frm.desc}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </section>
 

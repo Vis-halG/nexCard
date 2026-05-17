@@ -1,65 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# NexCard Project
+
+This project has been restructured into a monorepo for better scalability.
+
+## Project Structure
+
+- `frontend/`: Contains the Next.js application (UI/UX logic).
+- `backend/`: Contains the server-side logic (Express API).
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js installed
+- npm or yarn
+
+### Installation
+
+Install dependencies for both frontend and backend from the root directory:
+
+```bash
+npm install
+```
+
+### Running the Project
+
+To run the frontend:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To run both frontend and backend (if available):
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+npm run dev:all
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Folder Details
 
-## Learn More
+### Frontend
+The frontend is built with Next.js, React, and Tailwind CSS. All UI components, themes, and client-side logic reside in `frontend/app`.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-
-
-
-<!-- firebase start -->
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyAFSqYPS2AG4ljN2YXRyWwEV3-DvpS6q0U",
-  authDomain: "nexcard-ff8ec.firebaseapp.com",
-  projectId: "nexcard-ff8ec",
-  storageBucket: "nexcard-ff8ec.firebasestorage.app",
-  messagingSenderId: "447761555985",
-  appId: "1:447761555985:web:633893f8ef93a7168507b0",
-  measurementId: "G-9Z08JQF600"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-<!-- firebase end -->
+### Backend
+The backend is an Express server located in `backend/`. This is where you can implement your API endpoints, database integrations, and other server-side logic.

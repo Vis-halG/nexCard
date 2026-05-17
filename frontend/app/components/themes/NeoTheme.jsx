@@ -1,6 +1,8 @@
 "use client";
 
-import { Phone, Mail, Globe, MapPin, Download, MessageCircle, MessageSquare, Calendar, Share2, Star, Terminal, ShieldAlert, Zap, Cpu, ArrowRight, User } from "lucide-react";
+import { useState } from "react";
+import { Phone, Mail, Globe, MapPin, Download, MessageCircle, MessageSquare, Calendar, Share2, Star, Terminal, ShieldAlert, Zap, Cpu, ArrowRight, User, MoreHorizontal } from "lucide-react";
+
 import { QRCodeSVG } from "qrcode.react";
 import BottomNav from "../BottomNav";
 
@@ -12,7 +14,62 @@ const SOCIAL_ICONS = {
   facebook: (cls) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={cls}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>,
 };
 
+const WhatsAppIcon = ({ className }) => (
+  <svg viewBox="0 0 16 16" fill="currentColor" className={className}>
+    <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
+  </svg>
+);
+
+
 export default function NeoTheme({ data }) {
+  const [showMore, setShowMore] = useState(false);
+
+  const actions = [];
+  if (data?.phone) {
+    actions.push({
+      id: "call",
+      href: `tel:${data.phone}`,
+      icon: (cls) => <Phone className={cls} />,
+      label: "Call"
+    });
+    actions.push({
+      id: "whatsapp",
+      href: `https://wa.me/${data.phone.replace(/[^0-9]/g, '')}`,
+      icon: (cls) => <WhatsAppIcon className={cls} />,
+      label: "Ping",
+      target: "_blank",
+      rel: "noreferrer"
+    });
+  }
+  if (data?.address) {
+    actions.push({
+      id: "location",
+      href: "#map",
+      icon: (cls) => <MapPin className={cls} />,
+      label: "Loc"
+    });
+  }
+  if (data?.email) {
+    actions.push({
+      id: "mail",
+      href: `mailto:${data.email}`,
+      icon: (cls) => <Mail className={cls} />,
+      label: "Mail"
+    });
+  }
+  if (data?.phone) {
+    actions.push({
+      id: "sms",
+      href: `sms:${data.phone}`,
+      icon: (cls) => <MessageSquare className={cls} />,
+      label: "SMS"
+    });
+  }
+
+  const hasMore = actions.length > 4;
+  const visibleActions = hasMore ? actions.slice(0, 3) : actions;
+  const remainingActions = hasMore ? actions.slice(3) : [];
+
   const generateVcard = () => {
     const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${data?.name || 'User'}\nTITLE:${data?.title || ''}\nTEL;TYPE=WORK,VOICE:${data?.phone || ''}\nEMAIL;TYPE=WORK:${data?.email || ''}\nURL:${data?.website || ''}\nADR;TYPE=WORK:;;${data?.address || ''};;;;\nEND:VCARD`;
     const blob = new Blob([vcard], { type: "text/vcard" });
@@ -136,31 +193,83 @@ export default function NeoTheme({ data }) {
         {/* CORE ACTIONS */}
         <div className="relative z-10 px-6 mt-4">
            <div className="grid grid-cols-4 gap-3">
-             {data?.phone && (
-               <a href={`tel:${data.phone}`} className="flex flex-col items-center justify-center p-3 bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 transition-all group backdrop-blur-md">
-                 <Phone className="w-5 h-5 text-zinc-400 group-hover:text-white mb-2 transition-colors" />
-                 <span className="text-[8px] uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">Call</span>
+             {visibleActions.map((act) => (
+               <a
+                 key={act.id}
+                 href={act.href}
+                 target={act.target}
+                 rel={act.rel}
+                 className="flex flex-col items-center justify-center p-3 bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 transition-all group backdrop-blur-md"
+               >
+                 {act.id === 'whatsapp'
+                   ? act.icon("w-5 h-5 text-zinc-400 group-hover:text-[#25D366] fill-current mb-2 transition-colors")
+                   : act.icon("w-5 h-5 text-zinc-400 group-hover:text-white mb-2 transition-colors")
+                 }
+                 <span className="text-[8px] uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">{act.label}</span>
                </a>
+             ))}
+
+             {hasMore ? (
+               <button
+                 onClick={() => setShowMore(!showMore)}
+                 className={`flex flex-col items-center justify-center p-3 border transition-all group backdrop-blur-md ${
+                   showMore 
+                     ? 'bg-zinc-800 border-zinc-600 text-white' 
+                     : 'bg-zinc-900/50 border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-white'
+                 }`}
+                 style={showMore ? { borderColor: primaryColor } : undefined}
+               >
+                 <MoreHorizontal 
+                   className={`w-5 h-5 mb-2 transition-colors`} 
+                   style={showMore ? { color: primaryColor } : undefined}
+                 />
+                 <span className="text-[8px] uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">More</span>
+               </button>
+             ) : (
+               actions.slice(3, 4).map((act) => (
+                 <a
+                   key={act.id}
+                   href={act.href}
+                   target={act.target}
+                   rel={act.rel}
+                   className="flex flex-col items-center justify-center p-3 bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 transition-all group backdrop-blur-md"
+                 >
+                   {act.id === 'whatsapp'
+                     ? act.icon("w-5 h-5 text-zinc-400 group-hover:text-[#25D366] fill-current mb-2 transition-colors")
+                     : act.icon("w-5 h-5 text-zinc-400 group-hover:text-white mb-2 transition-colors")
+                   }
+                   <span className="text-[8px] uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">{act.label}</span>
+                 </a>
+               ))
              )}
-             {data?.phone && (
-               <a href={`https://wa.me/${data.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="flex flex-col items-center justify-center p-3 bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 transition-all group backdrop-blur-md">
-                 <MessageCircle className="w-5 h-5 text-zinc-400 group-hover:text-white mb-2 transition-colors" />
-                 <span className="text-[8px] uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">Ping</span>
-               </a>
-             )}
-             {data?.email && (
-               <a href={`mailto:${data.email}`} className="flex flex-col items-center justify-center p-3 bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 transition-all group backdrop-blur-md">
-                 <Mail className="w-5 h-5 text-zinc-400 group-hover:text-white mb-2 transition-colors" />
-                 <span className="text-[8px] uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">Mail</span>
-               </a>
-             )}
-             {data?.address && (
-               <a href="#map" className="flex flex-col items-center justify-center p-3 bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 transition-all group backdrop-blur-md">
-                 <MapPin className="w-5 h-5 text-zinc-400 group-hover:text-white mb-2 transition-colors" />
-                 <span className="text-[8px] uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">Loc</span>
-               </a>
-             )}
+
+             {!hasMore && actions.length < 4 && Array.from({ length: 4 - actions.length }).map((_, i) => (
+               <div key={i} className="bg-zinc-900/10 border border-transparent"></div>
+             ))}
            </div>
+
+           {hasMore && showMore && (
+             <div className="grid grid-cols-4 gap-3 mt-3 animate-in slide-in-from-top duration-300">
+               {remainingActions.map((act) => (
+                 <a
+                   key={act.id}
+                   href={act.href}
+                   target={act.target}
+                   rel={act.rel}
+                   className="flex flex-col items-center justify-center p-3 bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 transition-all group backdrop-blur-md"
+                 >
+                   {act.id === 'whatsapp'
+                     ? act.icon("w-5 h-5 text-zinc-400 group-hover:text-[#25D366] fill-current mb-2 transition-colors")
+                     : act.icon("w-5 h-5 text-zinc-400 group-hover:text-white mb-2 transition-colors")
+                   }
+                   <span className="text-[8px] uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">{act.label}</span>
+                 </a>
+               ))}
+               {Array.from({ length: 4 - remainingActions.length }).map((_, i) => (
+                 <div key={i} className="bg-zinc-900/10 border border-transparent"></div>
+               ))}
+             </div>
+           )}
         </div>
 
         <div className="relative z-10 flex flex-col gap-6 p-6 pb-32">

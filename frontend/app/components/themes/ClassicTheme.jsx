@@ -490,7 +490,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
         [style*="hoverBackgroundColor"]:hover { background-color: ${primaryColor} !important; border-color: ${primaryColor} !important; }
       `}} />
       {/* 📱 MOBILE APP BOTTOM NAVIGATION */}
-      <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} />
+      <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} layout="classic" />
     </div>
   );
 }

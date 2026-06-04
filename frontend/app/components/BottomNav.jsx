@@ -61,7 +61,7 @@ export default function BottomNav({
     { id: 'about', icon: Briefcase, label: 'Services' },
     { id: 'social', icon: Globe, label: 'Network' },
     { id: 'contact', icon: MessageCircle, label: 'Contact' },
-    { id: 'share', icon: QrCode, label: 'Share' }
+    { id: 'share', icon: QrCode, label: 'QR Code' }
   ];
 
   // Visual layout configurations
@@ -211,7 +211,7 @@ export default function BottomNav({
           <a
             key={item.id}
             href={`#${item.id}`}
-            className={itemContainerClass}
+            className={`${itemContainerClass} outline-none focus:outline-none`}
           >
             <div 
               className={`${iconWrapperClass} ${isActive ? iconActiveOffsetClass : `group-hover:${iconActiveOffsetClass}`}`} 
@@ -221,21 +221,6 @@ export default function BottomNav({
                 size={22} 
                 strokeWidth={layout === 'minimal' ? (isActive ? 3 : 2.5) : (isActive ? 2.5 : 2)} 
               />
-              
-              {/* Indicator */}
-              {layout === 'minimal' ? (
-                <div 
-                  className={`absolute -bottom-1 w-1.5 h-1.5 bg-black transition-all duration-300 ${isActive ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}
-                ></div>
-              ) : (
-                <div 
-                  className={`absolute -bottom-1 w-1 h-1 rounded-full transition-all duration-300 ${isActive ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}
-                  style={{ 
-                    backgroundColor: primaryColor,
-                    boxShadow: (layout === 'glass' || layout === 'neo') ? `0 0 8px ${primaryColor}` : 'none'
-                  }}
-                ></div>
-              )}
             </div>
             
             <span 

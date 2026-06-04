@@ -23,6 +23,7 @@ const WhatsAppIcon = ({ className }) => (
 
 export default function NeoTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
+  const [showWhatsAppInput, setShowWhatsAppInput] = useState(false);
 
   const actions = [];
   if (data?.phone) {
@@ -132,6 +133,13 @@ export default function NeoTheme({ data, inPreview = false }) {
       `}} />
 
       <div className="w-full max-w-[500px] min-h-screen relative flex flex-col border-x border-zinc-900 bg-[#050505] overflow-hidden crt-flicker">
+        <button 
+          onClick={() => setShowWhatsAppInput(true)} 
+          className="absolute top-12 right-10 z-40 w-10 h-10 bg-black border flex items-center justify-center cursor-pointer"
+          style={{ borderColor: primaryColor, color: primaryColor, boxShadow: `0 0 10px ${primaryColor}33` }}
+        >
+          <Share2 size={18} />
+        </button>
         
         <div className="scanline"></div>
         
@@ -428,7 +436,7 @@ export default function NeoTheme({ data, inPreview = false }) {
           </div>
           
           {/* FOOTER */}
-          <div className="mt-10 flex flex-col items-center pb-10 border-t border-zinc-900 pt-10">
+          <div id="share" className="scroll-mt-6 mt-10 flex flex-col items-center pb-10 border-t border-zinc-900 pt-10">
              <div className="p-4 bg-white mb-8 border-4" style={{ borderColor: primaryColor }}>
                <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={120} level="M" fgColor="#000" />
              </div>
@@ -445,7 +453,7 @@ export default function NeoTheme({ data, inPreview = false }) {
         </div>
       </div>
       {/* 📱 MOBILE APP BOTTOM NAVIGATION */}
-      <BottomNav data={data} primaryColor={primaryColor} />
+      <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} />
     </div>
   );
 }

@@ -52,6 +52,7 @@ const SOCIAL_COLORS = {
 
 export default function GlassTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
+  const [showWhatsAppInput, setShowWhatsAppInput] = useState(false);
 
   const actions = [];
   if (data?.phone) {
@@ -138,6 +139,12 @@ export default function GlassTheme({ data, inPreview = false }) {
       }}
     >
       <div className={`w-full max-w-[480px] min-h-screen px-5 ${inPreview ? "pt-5 pb-28" : "py-8 pb-28"} relative overflow-hidden`}>
+        <button 
+          onClick={() => setShowWhatsAppInput(true)} 
+          className="absolute top-12 right-8 z-40 w-10 h-10 rounded-full bg-white/60 hover:bg-white/80 border border-white/80 backdrop-blur-md flex items-center justify-center text-slate-700 shadow-md cursor-pointer"
+        >
+          <Share2 size={18} />
+        </button>
         <div className="absolute inset-x-8 top-10 h-72 rounded-full bg-white/50 blur-3xl pointer-events-none" />
 
         <section id="home" className={`${cardClasses} relative overflow-hidden text-center`}>
@@ -373,7 +380,7 @@ export default function GlassTheme({ data, inPreview = false }) {
             </Section>
           )}
 
-          <div className={`${cardClasses} flex flex-col items-center`}>
+          <div id="share" className={`scroll-mt-6 ${cardClasses} flex flex-col items-center`}>
             <div className="rounded-[1.5rem] bg-white p-4 shadow-sm">
               <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={150} level="H" fgColor="#111827" />
             </div>
@@ -395,7 +402,7 @@ export default function GlassTheme({ data, inPreview = false }) {
         </main>
       </div>
       {/* 📱 MOBILE APP BOTTOM NAVIGATION */}
-      <BottomNav data={data} primaryColor={primaryColor} />
+      <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} />
     </div>
   );
 }

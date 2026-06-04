@@ -23,6 +23,7 @@ const WhatsAppIcon = ({ className }) => (
 
 export default function MinimalTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
+  const [showWhatsAppInput, setShowWhatsAppInput] = useState(false);
 
   const actions = [];
   if (data?.phone) {
@@ -99,6 +100,12 @@ export default function MinimalTheme({ data, inPreview = false }) {
   return (
     <div className={`min-h-screen ${fontClass} flex justify-center text-black selection:bg-black selection:text-white overflow-x-hidden bg-[#f4f4f5]`} style={{ scrollBehavior: "smooth" }}>
       <div className="w-full max-w-[500px] min-h-screen relative flex flex-col bg-white border-x-4 border-black" style={{ backgroundColor: bgColor }}>
+        <button 
+          onClick={() => setShowWhatsAppInput(true)} 
+          className="absolute top-8 right-4 z-40 w-10 h-10 border-2 border-black bg-white text-black flex items-center justify-center shadow-[4px_4px_0_0_#000] active:shadow-none active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
+        >
+          <Share2 size={18} strokeWidth={2.5} />
+        </button>
         
         {/* TOP BORDER ACCENT */}
         {!data?.coverImage && <div className="w-full h-4 bg-black" style={{ backgroundColor: primaryColor }}></div>}
@@ -342,7 +349,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
           </div>
           
           {/* FOOTER & QR */}
-          <div className="p-8 flex flex-col items-center bg-white border-b-4 border-black pb-20">
+          <div id="share" className="scroll-mt-6 p-8 flex flex-col items-center bg-white border-b-4 border-black pb-20">
              <div className="border-8 border-black p-4 bg-white shadow-[12px_12px_0_0_#000] mb-10">
                <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={140} level="H" fgColor="#000" />
              </div>
@@ -360,7 +367,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
         </div>
       </div>
       {/* 📱 MOBILE APP BOTTOM NAVIGATION */}
-      <BottomNav data={data} primaryColor={primaryColor} />
+      <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} />
     </div>
   );
 }

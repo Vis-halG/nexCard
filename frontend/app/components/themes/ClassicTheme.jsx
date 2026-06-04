@@ -21,6 +21,7 @@ const WhatsAppIcon = ({ className }) => (
 
 export default function ClassicTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
+  const [showWhatsAppInput, setShowWhatsAppInput] = useState(false);
 
   const actions = [];
   if (data?.phone) {
@@ -109,9 +110,10 @@ export default function ClassicTheme({ data, inPreview = false }) {
              <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: primaryColor }}></div>
              {data?.name ? data.name.split(' ')[0] : 'Profile'}
           </div>
-          <div className="flex gap-5">
+          <div className="flex gap-5 items-center">
              <a href="#about" className="text-slate-400 hover:text-slate-900 transition-all hover:-translate-y-0.5"><User size={20} strokeWidth={1.5} /></a>
              <a href="#contact" className="text-slate-400 hover:text-slate-900 transition-all hover:-translate-y-0.5"><Mail size={20} strokeWidth={1.5} /></a>
+             <button onClick={() => setShowWhatsAppInput(true)} className="text-slate-400 hover:text-slate-900 transition-all hover:-translate-y-0.5 cursor-pointer"><Share2 size={20} strokeWidth={1.5} /></button>
           </div>
         </div>
 
@@ -463,7 +465,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
           )}
 
           {/* SHARE QR */}
-          <div className="pt-10 border-t border-slate-100 flex flex-col items-center">
+          <div id="share" className="scroll-mt-6 pt-10 border-t border-slate-100 flex flex-col items-center">
              <div className="p-4 bg-white border border-slate-100 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.05)] mb-8 rounded-sm">
                 <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={160} level="H" fgColor="#0F172A" />
              </div>
@@ -488,7 +490,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
         [style*="hoverBackgroundColor"]:hover { background-color: ${primaryColor} !important; border-color: ${primaryColor} !important; }
       `}} />
       {/* 📱 MOBILE APP BOTTOM NAVIGATION */}
-      <BottomNav data={data} primaryColor={primaryColor} />
+      <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} />
     </div>
   );
 }

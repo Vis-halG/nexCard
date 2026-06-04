@@ -53,6 +53,7 @@ const SOCIAL_COLORS = {
 
 export default function BoldTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
+  const [showWhatsAppInput, setShowWhatsAppInput] = useState(false);
 
   const actions = [];
   if (data?.phone) {
@@ -130,6 +131,12 @@ export default function BoldTheme({ data, inPreview = false }) {
     <div className="min-h-screen flex justify-center font-sans text-slate-900 selection:bg-teal-100" style={{ backgroundColor: bgColor, scrollBehavior: "smooth" }}>
       <div className="w-full max-w-[500px] min-h-screen overflow-hidden bg-white shadow-[0_35px_90px_rgba(15,23,42,0.10)]">
         <section id="home" className="relative px-6 pb-8 pt-8">
+          <button 
+            onClick={() => setShowWhatsAppInput(true)} 
+            className="absolute top-12 right-10 z-40 w-10 h-10 rounded-2xl bg-white/70 hover:bg-white backdrop-blur-md border border-slate-200/50 flex items-center justify-center text-slate-700 shadow-md cursor-pointer"
+          >
+            <Share2 size={18} />
+          </button>
           <div 
             className="absolute inset-x-0 top-0 h-72 bg-cover bg-center" 
             style={data?.coverImage ? {
@@ -392,7 +399,7 @@ export default function BoldTheme({ data, inPreview = false }) {
             </Panel>
           )}
 
-          <div className="rounded-[2rem] border border-slate-100 bg-white p-6 text-center shadow-[0_18px_55px_rgba(15,23,42,0.08)]">
+          <div id="share" className="scroll-mt-6 rounded-[2rem] border border-slate-100 bg-white p-6 text-center shadow-[0_18px_55px_rgba(15,23,42,0.08)]">
             <div className="mx-auto w-fit rounded-2xl bg-slate-50 p-4">
               <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={148} level="H" fgColor="#0F172A" />
             </div>
@@ -414,7 +421,7 @@ export default function BoldTheme({ data, inPreview = false }) {
         </main>
       </div>
       {/* 📱 MOBILE APP BOTTOM NAVIGATION */}
-      <BottomNav data={data} primaryColor={primaryColor} />
+      <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} />
     </div>
   );
 }

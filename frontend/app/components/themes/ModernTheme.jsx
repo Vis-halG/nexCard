@@ -21,6 +21,7 @@ const WhatsAppIcon = ({ className }) => (
 
 export default function ModernTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
+  const [showWhatsAppInput, setShowWhatsAppInput] = useState(false);
   const [hoveredId, setHoveredId] = useState(null);
 
   const actions = [];
@@ -233,6 +234,12 @@ export default function ModernTheme({ data, inPreview = false }) {
         className="w-full min-h-screen relative overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.05)] sm:rounded-b-[2.5rem]"
         style={{ background: bgGradientStyle || bgColor }}
       >
+        <button 
+          onClick={() => setShowWhatsAppInput(true)} 
+          className="absolute top-4 right-4 z-40 w-10 h-10 rounded-full bg-white/70 hover:bg-white backdrop-blur-md border border-slate-200/50 flex items-center justify-center text-slate-700 shadow-md cursor-pointer"
+        >
+          <Share2 size={18} />
+        </button>
         {/* ✨ Background Effects Layer */}
         {theme.bgEffect === 'mesh' && (
           <div className="absolute inset-0 opacity-[0.4] pointer-events-none" style={{ background: `radial-gradient(at 0% 0%, ${primaryColor}44 0, transparent 50%), radial-gradient(at 50% 0%, ${primaryColor}22 0, transparent 50%), radial-gradient(at 100% 0%, ${primaryColor}33 0, transparent 50%)` }}></div>
@@ -710,7 +717,7 @@ export default function ModernTheme({ data, inPreview = false }) {
       </div>
 
       {/* 📱 MOBILE APP BOTTOM NAVIGATION */}
-      <BottomNav data={data} primaryColor={primaryColor} />
+      <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} />
 
       {/* Injecting some custom style mapping for hover utilities */}
       <style dangerouslySetInnerHTML={{__html: `

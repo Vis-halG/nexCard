@@ -3,9 +3,11 @@
 import { User, Briefcase, Globe, MessageCircle, QrCode, X, Send } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
-export default function BottomNav({ data, primaryColor = "#4f46e5" }) {
+export default function BottomNav({ data, primaryColor = "#4f46e5", showWhatsAppInput: propShowWhatsAppInput, setShowWhatsAppInput: propSetShowWhatsAppInput }) {
   const [activeId, setActiveId] = useState('home');
-  const [showWhatsAppInput, setShowWhatsAppInput] = useState(false);
+  const [localShowWhatsAppInput, setLocalShowWhatsAppInput] = useState(false);
+  const showWhatsAppInput = propShowWhatsAppInput !== undefined ? propShowWhatsAppInput : localShowWhatsAppInput;
+  const setShowWhatsAppInput = propSetShowWhatsAppInput !== undefined ? propSetShowWhatsAppInput : setLocalShowWhatsAppInput;
   const [sharePhone, setSharePhone] = useState("");
   const phoneInputRef = useRef(null);
 
@@ -53,7 +55,7 @@ export default function BottomNav({ data, primaryColor = "#4f46e5" }) {
     { id: 'about', icon: Briefcase, label: 'Services' },
     { id: 'social', icon: Globe, label: 'Network' },
     { id: 'contact', icon: MessageCircle, label: 'Contact' },
-    { id: 'share', icon: QrCode, label: 'Share', action: 'share' }
+    { id: 'share', icon: QrCode, label: 'Share' }
   ];
 
   const handleShareClick = (e) => {

@@ -51,7 +51,7 @@ const SOCIAL_COLORS = {
   facebook:  "hover:text-blue-700 hover:bg-blue-50 hover:border-blue-300",
 };
 
-export default function BoldTheme({ data }) {
+export default function BoldTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
 
   const actions = [];

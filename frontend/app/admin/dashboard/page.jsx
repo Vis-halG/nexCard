@@ -1444,7 +1444,7 @@ export default function Dashboard() {
 
             <div className="w-full lg:w-[400px] shrink-0 h-[600px] lg:h-full flex flex-col pb-2 mt-8 lg:mt-0">
               <div 
-                className="relative group bg-white border border-slate-200 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] overflow-hidden flex-1 min-h-0"
+                className="relative group bg-white border border-slate-200 rounded-[1.75rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] overflow-hidden flex-1 min-h-0"
                 style={{ transform: 'translateZ(0)' }}
               >
                   <div className="w-full h-full overflow-y-auto scrollbar-none relative">

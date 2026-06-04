@@ -21,7 +21,7 @@ const WhatsAppIcon = ({ className }) => (
 );
 
 
-export default function MinimalTheme({ data }) {
+export default function MinimalTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
 
   const actions = [];
@@ -101,7 +101,7 @@ export default function MinimalTheme({ data }) {
       <div className="w-full max-w-[500px] min-h-screen relative flex flex-col bg-white border-x-4 border-black" style={{ backgroundColor: bgColor }}>
         
         {/* TOP BORDER ACCENT */}
-        <div className="w-full h-4 bg-black" style={{ backgroundColor: primaryColor }}></div>
+        {!data?.coverImage && <div className="w-full h-4 bg-black" style={{ backgroundColor: primaryColor }}></div>}
 
         {data?.coverImage && (
           <div className="w-full h-56 relative border-b-4 border-black">
@@ -110,7 +110,7 @@ export default function MinimalTheme({ data }) {
         )}
 
         {/* BRUTALIST HEADER */}
-        <div id="home" className={`w-full ${data?.coverImage ? 'pt-8' : 'pt-20'} pb-12 px-8 flex flex-col items-start relative border-b-4 border-black`}>
+        <div id="home" className={`w-full ${data?.coverImage ? 'pt-8' : (inPreview ? 'pt-2' : 'pt-20')} pb-12 px-8 flex flex-col items-start relative border-b-4 border-black`}>
           <div className="w-full flex justify-between items-start mb-8">
             {data?.image && (
               <div className="w-32 h-32 border-4 border-black shadow-[8px_8px_0_0_#000] relative group bg-white">

@@ -50,7 +50,7 @@ const SOCIAL_COLORS = {
   facebook:  "hover:text-blue-700 hover:bg-blue-50 hover:border-blue-300",
 };
 
-export default function GlassTheme({ data }) {
+export default function GlassTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
 
   const actions = [];
@@ -137,7 +137,7 @@ export default function GlassTheme({ data }) {
         scrollBehavior: "smooth",
       }}
     >
-      <div className="w-full max-w-[480px] min-h-screen px-5 py-8 pb-28 relative overflow-hidden">
+      <div className={`w-full max-w-[480px] min-h-screen px-5 ${inPreview ? "pt-5 pb-28" : "py-8 pb-28"} relative overflow-hidden`}>
         <div className="absolute inset-x-8 top-10 h-72 rounded-full bg-white/50 blur-3xl pointer-events-none" />
 
         <section id="home" className={`${cardClasses} relative overflow-hidden text-center`}>

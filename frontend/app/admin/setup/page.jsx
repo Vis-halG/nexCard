@@ -405,7 +405,7 @@ export default function SetupPage() {
       {/* ── FULL PREVIEW MODAL ── */}
       {previewTheme && (
         <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-8">
-          <div className="relative w-full max-w-[400px] h-[88vh] max-h-[850px] bg-white rounded-[2.5rem] overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.25)] border border-slate-200/50 flex flex-col">
+          <div className="relative w-full max-w-[400px] h-[88vh] max-h-[850px] bg-white rounded-[1.75rem] overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.25)] border border-slate-200/50 flex flex-col">
 
             {/* Modal top bar */}
             <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-50">
@@ -422,7 +422,7 @@ export default function SetupPage() {
             </div>
 
             {/* Card render */}
-            <div className="flex-1 overflow-y-auto scrollbar-none">
+            <div className="flex-1 overflow-y-auto scrollbar-none pt-16">
               <NexCard
                 data={{
                   ...DUMMY_DATA,
@@ -432,6 +432,7 @@ export default function SetupPage() {
                     background: previewTheme.background,
                   },
                 }}
+                inPreview={true}
               />
             </div>
 

@@ -19,7 +19,7 @@ const WhatsAppIcon = ({ className }) => (
 );
 
 
-export default function ModernTheme({ data }) {
+export default function ModernTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
   const [hoveredId, setHoveredId] = useState(null);
 

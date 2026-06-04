@@ -19,7 +19,7 @@ const WhatsAppIcon = ({ className }) => (
 );
 
 
-export default function ClassicTheme({ data }) {
+export default function ClassicTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
 
   const actions = [];
@@ -99,9 +99,9 @@ export default function ClassicTheme({ data }) {
   const wrapperBg = "#F8FAFC"; 
 
   return (
-    <div className="min-h-screen flex justify-center font-sans pb-16 pt-8 selection:bg-slate-900 selection:text-white" style={{ backgroundColor: wrapperBg, scrollBehavior: "smooth" }}>
+    <div className={`min-h-screen flex justify-center font-sans pb-16 ${inPreview ? "pt-0" : "pt-8"} selection:bg-slate-900 selection:text-white`} style={{ backgroundColor: wrapperBg, scrollBehavior: "smooth" }}>
       
-        <div className="w-full max-w-[480px] min-h-screen bg-white rounded-[2rem] shadow-[0_30px_60px_-15px_rgba(15,23,42,0.18)] overflow-hidden relative border border-white bg-clip-padding">
+        <div className={`w-full max-w-[480px] min-h-screen bg-white ${inPreview ? "rounded-t-none rounded-b-[2rem]" : "rounded-[2rem]"} shadow-[0_30px_60px_-15px_rgba(15,23,42,0.18)] overflow-hidden relative border border-white bg-clip-padding`}>
         
         {/* EXECUTIVE TOP BAR */}
         <div className="flex justify-between items-center px-8 py-5 border-b border-slate-100 bg-white sticky top-0 z-50 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)]">

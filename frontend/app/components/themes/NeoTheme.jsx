@@ -21,7 +21,7 @@ const WhatsAppIcon = ({ className }) => (
 );
 
 
-export default function NeoTheme({ data }) {
+export default function NeoTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
 
   const actions = [];
@@ -139,7 +139,7 @@ export default function NeoTheme({ data }) {
         <div className="absolute inset-0 z-0 opacity-20 pointer-events-none" style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}44 1px, transparent 1px), linear-gradient(to bottom, ${primaryColor}44 1px, transparent 1px)`, backgroundSize: '24px 24px', backgroundPosition: 'center center' }}></div>
 
         {/* HEADER AREA */}
-        <div className="relative z-10 p-6 pt-10 flex flex-col items-center">
+        <div className={`relative z-10 p-6 ${inPreview ? "pt-4" : "pt-10"} flex flex-col items-center`}>
           
           {data?.coverImage && (
             <div className="w-full h-40 mb-10 relative overflow-hidden rounded-sm border border-zinc-800" style={neonBox}>
@@ -149,7 +149,7 @@ export default function NeoTheme({ data }) {
             </div>
           )}
 
-          {!data?.coverImage && <div className="h-10"></div>}
+          {!data?.coverImage && !inPreview && <div className="h-10"></div>}
 
           <div className="relative group">
             <div className="w-36 h-36 rounded-none border border-zinc-800 relative z-10 bg-black p-1 overflow-hidden" style={neonBox}>

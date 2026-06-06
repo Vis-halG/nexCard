@@ -60,6 +60,14 @@ export default function Dashboard() {
 
   const [activeTab, setActiveTab] = useState("themes");
   const [previewTheme, setPreviewTheme] = useState(null);
+  const [selectedColorIndexes, setSelectedColorIndexes] = useState({
+    modern: 0,
+    classic: 0,
+    minimal: 0,
+    glass: 0,
+    bold: 0,
+    neo: 0
+  });
 
   // 🔐 AUTH & FETCH DATA
   useEffect(() => {
@@ -1391,39 +1399,145 @@ export default function Dashboard() {
               <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Select a Layout Theme</h2>
               <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
                 {[
-                  { name: "Modern (Curved)", layout: "modern", primary: "#4F46E5", background: "#F8FAFC" },
-                  { name: "Classic Corporate", layout: "classic", primary: "#1D4ED8", background: "#EFF6FF" },
-                  { name: "Swiss Minimal", layout: "minimal", primary: "#475569", background: "#FFFFFF" },
-                  { name: "Rose Glass", layout: "glass", primary: "#B76E79", background: "#FFF7F3" },
-                  { name: "Bold Luxe", layout: "bold", primary: "#0EA5A4", background: "#F7FBF8" },
-                  { name: "Cyber Neon", layout: "neo", primary: "#00FFCC", background: "#0A0A0A" }
+                  {
+                    name: "Modern (Curved)",
+                    layout: "modern",
+                    colorCombinations: [
+                      { primary: "#4F46E5", background: "#F8FAFC", accent: "#6366F1" },
+                      { primary: "#10B981", background: "#F0FDF4", accent: "#34D399" },
+                      { primary: "#F43F5E", background: "#FFF1F2", accent: "#FB7185" },
+                      { primary: "#F59E0B", background: "#FFFBEB", accent: "#FBBF24" },
+                      { primary: "#7C3AED", background: "#F5F3FF", accent: "#A78BFA" }
+                    ]
+                  },
+                  {
+                    name: "Classic Corporate",
+                    layout: "classic",
+                    colorCombinations: [
+                      { primary: "#1D4ED8", background: "#EFF6FF", accent: "#3B82F6" },
+                      { primary: "#0F172A", background: "#F8FAFC", accent: "#475569" },
+                      { primary: "#800020", background: "#FFFDF9", accent: "#A24857" },
+                      { primary: "#14532D", background: "#F0FDF4", accent: "#16A34A" },
+                      { primary: "#0E7490", background: "#ECFEFF", accent: "#06B6D4" }
+                    ]
+                  },
+                  {
+                    name: "Swiss Minimal",
+                    layout: "minimal",
+                    colorCombinations: [
+                      { primary: "#334155", background: "#FFFFFF", accent: "#475569" },
+                      { primary: "#000000", background: "#FFFFFF", accent: "#000000" },
+                      { primary: "#3F6212", background: "#F9FAF8", accent: "#4D7C0F" },
+                      { primary: "#44403C", background: "#FAF8F5", accent: "#57534E" },
+                      { primary: "#991B1B", background: "#FFFDFD", accent: "#B91C1C" }
+                    ]
+                  },
+                  {
+                    name: "Rose Glass",
+                    layout: "glass",
+                    colorCombinations: [
+                      { primary: "#B76E79", background: "#FFF7F3", accent: "#EAB8A6" },
+                      { primary: "#0D9488", background: "#F0FDFA", accent: "#5EEAD4" },
+                      { primary: "#8B5CF6", background: "#FAF5FF", accent: "#C084FC" },
+                      { primary: "#059669", background: "#F0FDF4", accent: "#6EE7B7" },
+                      { primary: "#EA580C", background: "#FFF7ED", accent: "#FDBA74" }
+                    ]
+                  },
+                  {
+                    name: "Bold Luxe",
+                    layout: "bold",
+                    colorCombinations: [
+                      { primary: "#0EA5A4", background: "#F7FBF8", accent: "#F4B860" },
+                      { primary: "#C2410C", background: "#FFF7ED", accent: "#F97316" },
+                      { primary: "#6366F1", background: "#FAF5FF", accent: "#EC4899" },
+                      { primary: "#15803D", background: "#F0FDF4", accent: "#22C55E" },
+                      { primary: "#B45309", background: "#FFFBEB", accent: "#F59E0B" }
+                    ]
+                  },
+                  {
+                    name: "Cyber Neon",
+                    layout: "neo",
+                    colorCombinations: [
+                      { primary: "#00FFCC", background: "#0A0A0A", accent: "#00ccff" },
+                      { primary: "#FF007F", background: "#050505", accent: "#7F00FF" },
+                      { primary: "#39FF14", background: "#030A00", accent: "#00FF00" },
+                      { primary: "#FFD700", background: "#080700", accent: "#FF8C00" },
+                      { primary: "#00E5FF", background: "#000A0A", accent: "#0066FF" }
+                    ]
+                  }
                 ].map((preset, idx) => {
                   const isActive = form.theme?.layout === preset.layout;
+                  const colorIndex = selectedColorIndexes[preset.layout] || 0;
+                  const activeCombo = preset.colorCombinations[colorIndex];
                   return (
                     <div 
                       key={idx}
                       className={`rounded-2xl border-2 transition-all overflow-hidden flex flex-col ${isActive ? 'border-indigo-600 scale-[1.02] shadow-md ring-4 ring-indigo-50' : 'border-slate-200 hover:border-indigo-300'}`}
                     >
-                      <div className="h-28 w-full flex items-end p-4 relative" style={{ backgroundColor: preset.background }}>
-                        <div className="absolute top-0 left-0 w-full h-[60%]" style={{ background: `linear-gradient(145deg, ${preset.primary} 0%, ${preset.primary}dd 100%)`, clipPath: "ellipse(120% 100% at 50% 0%)" }}></div>
+                      <div className="h-28 w-full flex items-end p-4 relative" style={{ backgroundColor: activeCombo.background }}>
+                        <div className="absolute top-0 left-0 w-full h-[60%]" style={{ background: `linear-gradient(145deg, ${activeCombo.primary} 0%, ${activeCombo.primary}dd 100%)`, clipPath: "ellipse(120% 100% at 50% 0%)" }}></div>
                         <div className="w-12 h-12 rounded-full border-2 border-white shadow-sm absolute top-4 left-4 bg-white/50 backdrop-blur-sm"></div>
                         <span className="relative z-10 font-bold text-slate-800 bg-white/90 px-3 py-1.5 rounded-lg text-sm backdrop-blur-md shadow-sm">{preset.name}</span>
                       </div>
                       <div className="bg-white p-4 flex flex-col gap-3">
-                        <div className="flex justify-between items-center text-xs text-slate-500 font-mono">
-                          <div className="flex items-center gap-1.5"><div className="w-3.5 h-3.5 rounded-full shadow-sm" style={{ backgroundColor: preset.primary }}></div> {preset.primary}</div>
-                          <div className="flex items-center gap-1.5"><div className="w-3.5 h-3.5 rounded-full border border-slate-200 shadow-sm" style={{ backgroundColor: preset.background }}></div> {preset.background}</div>
+                        <div className="flex justify-between items-center text-xs text-slate-500 font-mono border-b border-slate-100 pb-2">
+                          <div className="flex items-center gap-1.5"><div className="w-3.5 h-3.5 rounded-full shadow-sm" style={{ backgroundColor: activeCombo.primary }}></div> {activeCombo.primary}</div>
+                          <div className="flex items-center gap-1.5"><div className="w-3.5 h-3.5 rounded-full border border-slate-200 shadow-sm" style={{ backgroundColor: activeCombo.background }}></div> {activeCombo.background}</div>
                         </div>
+
+                        {/* Interactive Color selector */}
+                        <div className="flex flex-col gap-2 pt-1">
+                          <span className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Select Style Color</span>
+                          <div className="flex items-center gap-2 pb-2">
+                            {preset.colorCombinations.map((combo, comboIdx) => {
+                              const isComboSelected = colorIndex === comboIdx;
+                              return (
+                                <button
+                                  key={comboIdx}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSelectedColorIndexes(prev => ({ ...prev, [preset.layout]: comboIdx }));
+                                    // If this theme is currently active/applied, update it in real time
+                                    if (isActive) {
+                                      setForm(prev => ({ 
+                                        ...prev, 
+                                        theme: { 
+                                          ...prev.theme, 
+                                          primary: combo.primary, 
+                                          background: combo.background 
+                                        } 
+                                      }));
+                                    }
+                                  }}
+                                  className={`relative w-7 h-7 rounded-full flex items-center justify-center transition-all border-2 ${
+                                    isComboSelected ? "border-indigo-600 scale-110 shadow-sm" : "border-transparent hover:scale-105"
+                                  }`}
+                                  title={`Palette ${comboIdx + 1}`}
+                                >
+                                  <div className="w-5 h-5 rounded-full overflow-hidden flex rotate-45 border border-black/5">
+                                    <div className="w-1/2 h-full" style={{ backgroundColor: combo.primary }} />
+                                    <div className="w-1/2 h-full" style={{ backgroundColor: combo.accent }} />
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+
                         <div className="flex gap-2 mt-1">
                           <button 
-                            onClick={() => setPreviewTheme(preset)}
+                            onClick={() => setPreviewTheme({
+                              layout: preset.layout,
+                              primary: activeCombo.primary,
+                              background: activeCombo.background
+                            })}
                             className={`flex-1 py-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 ${previewTheme?.layout === preset.layout ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
                           >
                             <Eye className="w-3.5 h-3.5" /> {previewTheme?.layout === preset.layout ? "Previewing" : "Preview"}
                           </button>
                           <button 
                             onClick={() => {
-                              setForm(prev => ({ ...prev, theme: { ...prev.theme, primary: preset.primary, background: preset.background, layout: preset.layout } }));
+                              setForm(prev => ({ ...prev, theme: { ...prev.theme, primary: activeCombo.primary, background: activeCombo.background, layout: preset.layout } }));
                               setPreviewTheme(null);
                             }}
                             className={`flex-1 py-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 ${isActive ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20' : 'bg-slate-900 text-white hover:bg-black'}`}

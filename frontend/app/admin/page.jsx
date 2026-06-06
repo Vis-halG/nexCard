@@ -28,7 +28,7 @@ export default function AdminPage() {
       alert("Please enter your email address first.");
       return;
     }
-    
+
     setResetLoading(true);
     try {
       await sendPasswordResetEmail(auth, email);
@@ -52,13 +52,8 @@ export default function AdminPage() {
 
       if (isLogin) {
         try {
-          const userCred = await signInWithEmailAndPassword(auth, email, password);
-          // Check if user already has a theme → go to dashboard, else setup
-          const snap = await import("firebase/firestore").then(({ doc, getDoc }) =>
-            getDoc(doc(db, "users", userCred.user.uid))
-          );
-          const hasTheme = snap.exists() && snap.data()?.theme?.layout;
-          router.push(hasTheme ? "/admin/dashboard" : "/admin/setup");
+          await signInWithEmailAndPassword(auth, email, password);
+          router.push("/admin/dashboard");
         } catch (err) {
           console.log(err);
           if (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential" || err.code === "auth/wrong-password") {
@@ -71,14 +66,14 @@ export default function AdminPage() {
         try {
           // Derive a username from the email for the public URL
           let cleanUsername = email.trim().toLowerCase().split("@")[0].replace(/[^a-z0-9]/g, "");
-          
+
           // Check if username is already taken by someone else
           const usernameRef = doc(db, "usernames", cleanUsername);
           const usernameSnap = await getDoc(usernameRef);
-          
+
           if (usernameSnap.exists()) {
-             // Append some random digits if common username is taken
-             cleanUsername = `${cleanUsername}${Math.floor(100 + Math.random() * 900)}`;
+            // Append some random digits if common username is taken
+            cleanUsername = `${cleanUsername}${Math.floor(100 + Math.random() * 900)}`;
           }
 
           const newUser = await createUserWithEmailAndPassword(auth, email, password);
@@ -89,20 +84,25 @@ export default function AdminPage() {
             uid
           });
 
-          // 🔥 save user data
+          // 🔥 save user data with default theme
           await setDoc(doc(db, "users", uid), {
             username: cleanUsername,
             email,
             uid,
+            theme: {
+              layout: "modern",
+              primary: "#4f46e5",
+              background: "#f8fafc"
+            }
           });
 
-          router.push("/admin/setup"); // New user → pick theme first
+          router.push("/admin/dashboard");
         } catch (err) {
           console.log(err);
           if (err.code === 'auth/email-already-in-use') {
-             alert("This email is already registered.");
+            alert("This email is already registered.");
           } else {
-             alert("Sign up failed: " + err.message);
+            alert("Sign up failed: " + err.message);
           }
         }
       }
@@ -144,19 +144,30 @@ export default function AdminPage() {
         await setDoc(doc(db, "usernames", finalUsername), { uid: user.uid });
       }
 
-      // 🔥 SAVE GOOGLE USER DATA
-      await setDoc(doc(db, "users", user.uid), {
+      // Check if user already has a theme
+      const gSnap = await getDoc(doc(db, "users", user.uid));
+      const gHasTheme = gSnap.exists() && gSnap.data()?.theme?.layout;
+
+      const googleUserData = {
         name: user.displayName || "",
         email: user.email,
         image: user.photoURL || "",
         uid: user.uid,
         username: finalUsername,
-      }, { merge: true });
+      };
 
-      // Google login → check if theme is already set
-      const gSnap = await getDoc(doc(db, "users", user.uid));
-      const gHasTheme = gSnap.exists() && gSnap.data()?.theme?.layout;
-      router.push(gHasTheme ? "/admin/dashboard" : "/admin/setup");
+      if (!gHasTheme) {
+        googleUserData.theme = {
+          layout: "modern",
+          primary: "#4f46e5",
+          background: "#f8fafc"
+        };
+      }
+
+      // 🔥 SAVE GOOGLE USER DATA
+      await setDoc(doc(db, "users", user.uid), googleUserData, { merge: true });
+
+      router.push("/admin/dashboard");
 
     } catch (err) {
       console.log(err);
@@ -168,7 +179,7 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 relative overflow-hidden font-sans">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -202,7 +213,7 @@ export default function AdminPage() {
               <div className="flex justify-between items-center mb-1.5 ml-1">
                 <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider">Password</label>
                 {isLogin && (
-                  <button 
+                  <button
                     onClick={handleResetPassword}
                     disabled={resetLoading}
                     className="text-[10px] font-bold text-indigo-500 hover:text-indigo-600 uppercase tracking-wider transition-colors disabled:opacity-50"
@@ -238,11 +249,11 @@ export default function AdminPage() {
               )}
             </button>
           </div>
-          
+
           <div className="text-center mt-6">
-             <button onClick={() => setIsLogin(!isLogin)} className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
-               {isLogin ? "New to NexCard? Register here" : "Already have an account? Sign in"}
-             </button>
+            <button onClick={() => setIsLogin(!isLogin)} className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
+              {isLogin ? "New to NexCard? Register here" : "Already have an account? Sign in"}
+            </button>
           </div>
 
           <div className="flex items-center my-8">

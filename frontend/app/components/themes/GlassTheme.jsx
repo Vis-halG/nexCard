@@ -131,14 +131,22 @@ export default function GlassTheme({ data, inPreview = false }) {
 
   return (
     <div
-      className="min-h-screen flex justify-center font-sans text-slate-800 selection:bg-rose-200 selection:text-slate-900"
+      className={inPreview 
+        ? "h-full w-full relative overflow-hidden flex flex-col font-sans text-slate-800 selection:bg-rose-200 selection:text-slate-900"
+        : "min-h-screen flex justify-center font-sans text-slate-800 selection:bg-rose-200 selection:text-slate-900"
+      }
       style={{
         background:
           `radial-gradient(circle at top left, ${primaryColor}26, transparent 34%), radial-gradient(circle at bottom right, #f9c6b944, transparent 32%), ${backgroundColor}`,
-        scrollBehavior: "smooth",
+        scrollBehavior: inPreview ? undefined : "smooth",
       }}
     >
-      <div className={`w-full max-w-[480px] min-h-screen px-5 ${inPreview ? "pt-5 pb-28" : "py-8 pb-28"} relative overflow-hidden`}>
+      <div 
+        className={inPreview
+          ? "w-full h-full overflow-y-auto scrollbar-none px-5 pt-5 pb-28 relative flex-1"
+          : `w-full max-w-[480px] min-h-screen px-5 py-8 pb-28 relative overflow-hidden`
+        }
+      >
         <button 
           onClick={() => setShowWhatsAppInput(true)} 
           className="absolute top-12 right-8 z-40 w-10 h-10 rounded-full bg-white/60 hover:bg-white/80 border border-white/80 backdrop-blur-md flex items-center justify-center text-slate-700 shadow-md cursor-pointer"

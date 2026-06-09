@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useState, use } from "react";
+import Link from "next/link";
 import { db } from "../../lib/firebase";
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import NexCard from "../components/NexCard";
+import { createDemoProfile } from "../demoProfile";
 
 export default function Page({ params }) {
   // ✅ Standard Next.js 16 way to unwrap params
@@ -49,7 +51,13 @@ export default function Page({ params }) {
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
-          setData(userSnap.data());
+          const profileData = userSnap.data();
+          const isDemoUsername = cleanUsername === "vishalgupta25980";
+          setData(
+            isDemoUsername && !profileData.demoReady
+              ? { ...profileData, ...createDemoProfile({ uid, username: cleanUsername }) }
+              : profileData
+          );
         }
       } catch (err) {
         console.error("Profile Fetch Error:", err);
@@ -96,11 +104,11 @@ export default function Page({ params }) {
         </div>
         <h1 className="text-2xl font-bold text-slate-900 mb-2">NexCard Not Found</h1>
         <p className="text-slate-500 max-w-xs mb-8">
-          The username <span className="font-bold text-slate-900">"{username}"</span> doesn&apos;t seem to exist yet.
+          The username <span className="font-bold text-slate-900">&quot;{username}&quot;</span> doesn&apos;t seem to exist yet.
         </p>
-        <a href="/" className="bg-indigo-600 text-white px-8 py-3 rounded-2xl font-bold shadow-lg shadow-indigo-200 hover:scale-105 transition-transform">
+        <Link href="/" className="bg-indigo-600 text-white px-8 py-3 rounded-2xl font-bold shadow-lg shadow-indigo-200 hover:scale-105 transition-transform">
           Back to Home
-        </a>
+        </Link>
       </div>
     );
   }

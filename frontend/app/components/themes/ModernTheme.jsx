@@ -229,9 +229,18 @@ export default function ModernTheme({ data, inPreview = false }) {
   };
 
   return (
-    <div className={`min-h-screen flex justify-center ${fontClass} pb-28 selection:bg-black selection:text-white overflow-x-hidden`} style={{ scrollBehavior: "smooth", backgroundColor: bgColor }}>
+    <div 
+      className={inPreview 
+        ? `h-full w-full relative overflow-hidden flex flex-col ${fontClass} selection:bg-black selection:text-white`
+        : `min-h-screen flex justify-center ${fontClass} pb-28 selection:bg-black selection:text-white overflow-x-hidden`
+      } 
+      style={inPreview ? { backgroundColor: bgColor } : { scrollBehavior: "smooth", backgroundColor: bgColor }}
+    >
       <div 
-        className="w-full min-h-screen relative overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.05)] sm:rounded-b-[2.5rem]"
+        className={inPreview
+          ? "w-full h-full overflow-y-auto scrollbar-none relative flex-1"
+          : "w-full min-h-screen relative overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.05)] sm:rounded-b-[2.5rem]"
+        }
         style={{ background: bgGradientStyle || bgColor }}
       >
         <button 

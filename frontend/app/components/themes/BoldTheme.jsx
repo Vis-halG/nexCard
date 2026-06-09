@@ -128,8 +128,19 @@ export default function BoldTheme({ data, inPreview = false }) {
   };
 
   return (
-    <div className="min-h-screen flex justify-center font-sans text-slate-900 selection:bg-teal-100" style={{ backgroundColor: bgColor, scrollBehavior: "smooth" }}>
-      <div className="w-full max-w-[500px] min-h-screen overflow-hidden bg-white shadow-[0_35px_90px_rgba(15,23,42,0.10)]">
+    <div 
+      className={inPreview 
+        ? "h-full w-full relative overflow-hidden flex flex-col font-sans text-slate-900 selection:bg-teal-100"
+        : "min-h-screen flex justify-center font-sans text-slate-900 selection:bg-teal-100"
+      } 
+      style={inPreview ? { backgroundColor: bgColor } : { backgroundColor: bgColor, scrollBehavior: "smooth" }}
+    >
+      <div 
+        className={inPreview
+          ? "w-full h-full overflow-y-auto scrollbar-none bg-white relative flex-1"
+          : "w-full max-w-[500px] min-h-screen overflow-hidden bg-white shadow-[0_35px_90px_rgba(15,23,42,0.10)]"
+        }
+      >
         <section id="home" className="relative px-6 pb-8 pt-8">
           <button 
             onClick={() => setShowWhatsAppInput(true)} 

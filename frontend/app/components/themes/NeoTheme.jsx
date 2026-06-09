@@ -101,7 +101,13 @@ export default function NeoTheme({ data, inPreview = false }) {
   const neonBox = { boxShadow: `inset 0 0 20px ${primaryColor}11, 0 0 10px ${primaryColor}33`, borderColor: `${primaryColor}66` };
 
   return (
-    <div className={`min-h-screen font-mono flex justify-center text-white selection:bg-[#00ffcc] selection:text-black overflow-x-hidden`} style={{ scrollBehavior: "smooth", backgroundColor: bgColor }}>
+    <div 
+      className={inPreview 
+        ? "h-full w-full relative overflow-hidden flex flex-col font-mono text-white selection:bg-[#00ffcc] selection:text-black"
+        : `min-h-screen font-mono flex justify-center text-white selection:bg-[#00ffcc] selection:text-black overflow-x-hidden`
+      } 
+      style={inPreview ? { backgroundColor: bgColor } : { scrollBehavior: "smooth", backgroundColor: bgColor }}
+    >
       
       {/* GLOBAL CYBER CSS */}
       <style dangerouslySetInnerHTML={{__html: `
@@ -132,7 +138,12 @@ export default function NeoTheme({ data, inPreview = false }) {
         }
       `}} />
 
-      <div className="w-full max-w-[500px] min-h-screen relative flex flex-col border-x border-zinc-900 bg-[#050505] overflow-hidden crt-flicker">
+      <div 
+        className={inPreview
+          ? "w-full h-full overflow-y-auto scrollbar-none relative flex flex-col border-x border-zinc-900 bg-[#050505] flex-1 crt-flicker"
+          : "w-full max-w-[500px] min-h-screen relative flex flex-col border-x border-zinc-900 bg-[#050505] overflow-hidden crt-flicker"
+        }
+      >
         <button 
           onClick={() => setShowWhatsAppInput(true)} 
           className="absolute top-12 right-10 z-40 w-10 h-10 bg-black border flex items-center justify-center cursor-pointer"

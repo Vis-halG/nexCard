@@ -104,7 +104,7 @@ function HeroSection() {
         <div className="relative group w-full sm:w-auto">
           <div className="absolute inset-0 bg-brand-indigo/30 blur-2xl rounded-full scale-110 group-hover:bg-brand-purple/40 group-hover:scale-125 transition-all duration-700 -z-10 animate-pulse"></div>
           <Link
-            href="/demo"
+            href="/admin"
             className="flex items-center justify-center w-full sm:w-auto px-10 py-4 md:py-4 text-base md:text-lg font-bold text-white transition-all duration-300 bg-slate-900 rounded-full hover:bg-slate-800 hover:scale-[1.02] shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-slate-700/50 focus:outline-none"
           >
             Create Your Card

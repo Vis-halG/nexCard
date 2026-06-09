@@ -98,8 +98,20 @@ export default function MinimalTheme({ data, inPreview = false }) {
   const fontClass = theme.font || "font-sans";
 
   return (
-    <div className={`min-h-screen ${fontClass} flex justify-center text-black selection:bg-black selection:text-white overflow-x-hidden bg-[#f4f4f5]`} style={{ scrollBehavior: "smooth" }}>
-      <div className="w-full max-w-[500px] min-h-screen relative flex flex-col bg-white border-x-4 border-black" style={{ backgroundColor: bgColor }}>
+    <div 
+      className={inPreview 
+        ? `h-full w-full relative overflow-hidden flex flex-col ${fontClass} text-black selection:bg-black selection:text-white bg-[#f4f4f5]`
+        : `min-h-screen ${fontClass} flex justify-center text-black selection:bg-black selection:text-white overflow-x-hidden bg-[#f4f4f5]`
+      }
+      style={inPreview ? {} : { scrollBehavior: "smooth" }}
+    >
+      <div 
+        className={inPreview
+          ? "w-full h-full overflow-y-auto scrollbar-none relative flex flex-col bg-white border-x-4 border-black flex-1"
+          : "w-full max-w-[500px] min-h-screen relative flex flex-col bg-white border-x-4 border-black"
+        } 
+        style={{ backgroundColor: bgColor }}
+      >
         <button 
           onClick={() => setShowWhatsAppInput(true)} 
           className="absolute top-8 right-4 z-40 w-10 h-10 border-2 border-black bg-white text-black flex items-center justify-center shadow-[4px_4px_0_0_#000] active:shadow-none active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"

@@ -14,7 +14,7 @@ import {
 import { auth, db } from "../../lib/firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { motion } from "framer-motion";
-import { User, Lock, ArrowRight, ShieldCheck, Sparkles, KeyRound } from "lucide-react";
+import { User, Lock, ArrowRight, ShieldCheck } from "lucide-react";
 
 export default function AdminPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -216,21 +216,24 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-6 relative overflow-hidden font-sans">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
+        className="w-full max-w-4xl"
       >
-        <div className="bg-white p-8 rounded-2xl shadow-xl border border-slate-100">
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200">
-              <ShieldCheck className="w-8 h-8 text-white" />
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden grid md:grid-cols-[1.1fr_0.9fr]">
+          <div className="p-6 sm:p-8">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-200 shrink-0">
+                <ShieldCheck className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900">NexCard Portal</h2>
+                <p className="text-slate-500 mt-1 text-sm">{isLogin ? "Sign in to manage your card" : "Create your professional account"}</p>
+              </div>
             </div>
-            <h2 className="text-2xl font-bold text-slate-900">NexCard Portal</h2>
-            <p className="text-slate-500 mt-2 text-sm">{isLogin ? "Sign in to manage your card" : "Create your professional account"}</p>
-          </div>
 
           <div className="space-y-4">
             <div>
@@ -264,7 +267,7 @@ export default function AdminPage() {
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="Password"
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -288,32 +291,39 @@ export default function AdminPage() {
             </button>
           </div>
 
-          <div className="text-center mt-6">
+          <div className="mt-5">
             <button onClick={() => setIsLogin(!isLogin)} className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
               {isLogin ? "New to NexCard? Register here" : "Already have an account? Sign in"}
             </button>
           </div>
-
-          <div className="flex items-center my-8">
-            <div className="flex-1 h-px bg-slate-100"></div>
-            <div className="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Secure Entry</div>
-            <div className="flex-1 h-px bg-slate-100"></div>
           </div>
 
-          <button
-            onClick={handleGoogleLogin}
-            disabled={googleLoading}
-            className="w-full bg-white hover:bg-slate-50 text-slate-700 font-bold py-3.5 rounded-xl border border-slate-200 transition-all flex justify-center items-center gap-3 shadow-sm active:scale-[0.98]"
-          >
-            {googleLoading ? (
-              <div className="w-5 h-5 border-2 border-slate-300 border-t-indigo-600 rounded-full animate-spin" />
-            ) : (
-              <>
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5 h-5" alt="Google" />
-                Continue with Google
-              </>
-            )}
-          </button>
+          <div className="bg-slate-950 text-white p-6 sm:p-8 flex flex-col justify-between gap-6">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-indigo-100">
+                Secure Entry
+              </div>
+              <h3 className="mt-5 text-2xl font-black tracking-tight">Use Google for faster access</h3>
+              <p className="mt-3 text-sm leading-relaxed text-slate-300">
+                Continue with your Google account and jump straight into your NexCard dashboard.
+              </p>
+            </div>
+
+            <button
+              onClick={handleGoogleLogin}
+              disabled={googleLoading}
+              className="w-full bg-white hover:bg-slate-100 text-slate-900 font-bold py-3.5 rounded-xl border border-white/10 transition-all flex justify-center items-center gap-3 shadow-lg active:scale-[0.98] disabled:opacity-70"
+            >
+              {googleLoading ? (
+                <div className="w-5 h-5 border-2 border-slate-300 border-t-indigo-600 rounded-full animate-spin" />
+              ) : (
+                <>
+                  <span className="w-5 h-5 rounded-full bg-white border border-slate-200 text-sm font-black text-blue-600 flex items-center justify-center leading-none">G</span>
+                  Continue with Google
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </motion.div>
     </div>

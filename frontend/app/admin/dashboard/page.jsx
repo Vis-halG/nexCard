@@ -6,9 +6,10 @@ import { auth, db, storage } from "../../../lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Camera, Trash2, Plus, GripVertical, ExternalLink, Copy, Eye, Check, QrCode, Upload, X, Palette, Layout, Type, Square, Box, Sparkles } from "lucide-react";
+import { Camera, Trash2, Plus, GripVertical, ExternalLink, Copy, Eye, Check, QrCode, Upload, X, Palette, Layout, Type, Square, Box, Sparkles, RotateCcw } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import NexCard from "../../components/NexCard";
+import { DEMO_EMAIL, createDemoProfile } from "../../demoProfile";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -79,20 +80,30 @@ export default function Dashboard() {
         try {
           const docRef = doc(db, "users", u.uid);
           const docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-            setForm((prev) => ({ 
-              ...prev, 
-              ...data,
-              social: { ...prev.social, ...(data.social || {}) },
-              payment: { ...prev.payment, ...(data.payment || {}) },
-              theme: { ...prev.theme, ...(data.theme || {}) },
-              services: data.services || [],
-              gallery: data.gallery || [],
-              customLinks: data.customLinks || [],
-              videos: data.videos || []
-            }));
+          let data = docSnap.exists() ? docSnap.data() : {};
+
+          if (u.email?.toLowerCase() === DEMO_EMAIL && !data.demoReady) {
+            const fallbackUsername = u.email.split("@")[0].toLowerCase().replace(/[^a-z0-9]/g, "");
+            const demoProfile = createDemoProfile({
+              uid: u.uid,
+              username: data.username || fallbackUsername
+            });
+
+            await setDoc(docRef, demoProfile, { merge: true });
+            data = { ...data, ...demoProfile };
           }
+
+          setForm((prev) => ({ 
+            ...prev, 
+            ...data,
+            social: { ...prev.social, ...(data.social || {}) },
+            payment: { ...prev.payment, ...(data.payment || {}) },
+            theme: { ...prev.theme, ...(data.theme || {}) },
+            services: data.services || [],
+            gallery: data.gallery || [],
+            customLinks: data.customLinks || [],
+            videos: data.videos || []
+          }));
         } catch (e) {
           console.error("Error fetching data:", e);
         }
@@ -293,6 +304,52 @@ export default function Dashboard() {
     }
   };
 
+  const DEFAULT_THEME = {
+    primary: "#4f46e5", background: "#f8fafc", layout: "modern",
+    font: "font-sans", radius: "1rem", cardStyle: "standard",
+    avatarStyle: "circle", bgEffect: "none", defaultQr: "share",
+    bgGradient: "none", textAlign: "center", shadowDepth: "subtle",
+    bannerSize: "standard", avatarBorder: "thick", socialStyle: "colored",
+    qrLogo: "none", actionAnimation: "float", bioFontSize: "standard",
+    cardBorderPattern: "none", formAesthetic: "flat",
+    cardBg: "#ffffff", textPrimary: "#0f172a", textSecondary: "#64748b",
+    cardText: "#1e293b", btnBg: "#4f46e5", btnText: "#ffffff",
+    inputBg: "#f1f5f9", inputText: "#0f172a",
+    gradientStart: "#4f46e5", gradientEnd: "#ec4899"
+  };
+
+  const handleTabReset = (tabId) => {
+    const confirmMsg = {
+      themes: "Theme Preset reset ho jayega — layout aur colors default ho jayenge. Sure ho?",
+      profile: "Profile Info reset ho jayegi — naam, title, bio, photos sab clear ho jayenge. Sure ho?",
+      business: "Business & Contacts reset ho jayega — phone, email, payment sab clear ho jayega. Sure ho?",
+      social: "Social Links reset ho jayenge — sab platforms clear ho jayenge. Sure ho?",
+      media: "Media & Arrays reset ho jayenge — gallery, videos, badges, custom links sab hata diye jayenge. Sure ho?",
+      design: "Design Settings reset ho jayengi — sab design options default pe aa jayenge. Sure ho?"
+    };
+    if (!window.confirm(confirmMsg[tabId] || "Is tab ka data reset karna chahte ho?")) return;
+
+    if (tabId === "themes") {
+      setForm(prev => ({ ...prev, theme: { ...prev.theme, layout: "modern" } }));
+      setSelectedColorIndexes({ modern: 0, classic: 0, minimal: 0, glass: 0, bold: 0, neo: 0 });
+    } else if (tabId === "profile") {
+      setForm(prev => ({ ...prev, name: "", title: "", company: "", about: "", image: "", coverImage: "" }));
+    } else if (tabId === "business") {
+      setForm(prev => ({
+        ...prev,
+        phone: "", email: "", address: "", website: "", calendarUrl: "",
+        googleReviewsUrl: "", gstNumber: "",
+        payment: { upi: "", link: "", bankDetails: "", qrCode: "" }
+      }));
+    } else if (tabId === "social") {
+      setForm(prev => ({ ...prev, social: { instagram: "", linkedin: "", twitter: "", facebook: "", youtube: "" } }));
+    } else if (tabId === "media") {
+      setForm(prev => ({ ...prev, services: [], gallery: [], customLinks: [], videos: [] }));
+    } else if (tabId === "design") {
+      setForm(prev => ({ ...prev, theme: { ...prev.theme, ...DEFAULT_THEME } }));
+    }
+  };
+
   const tabs = [
     { id: "themes", label: "Theme Presets" },
     { id: "profile", label: "Profile Info" },
@@ -388,7 +445,15 @@ export default function Dashboard() {
           
           {activeTab === "profile" && (
             <div className="p-6 space-y-5">
-              <h2 className="font-bold text-xl text-slate-800 border-b pb-4">Personal Details</h2>
+              <div className="flex items-center justify-between border-b pb-4">
+                <h2 className="font-bold text-xl text-slate-800">Personal Details</h2>
+                <button
+                  onClick={() => handleTabReset("profile")}
+                  className="flex items-center gap-1.5 text-xs font-bold text-red-500 hover:text-white bg-red-50 hover:bg-red-500 border border-red-200 hover:border-red-500 px-3 py-1.5 rounded-lg transition-all"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" /> Reset Tab
+                </button>
+              </div>
               
               <div className="flex flex-col md:flex-row gap-6 items-start">
                 {/* Cover Image Upload */}
@@ -454,7 +519,15 @@ export default function Dashboard() {
 
           {activeTab === "business" && (
             <div className="p-6 space-y-6">
-              
+              <div className="flex items-center justify-between border-b pb-4 mb-0">
+                <h2 className="font-bold text-xl text-slate-800">Business & Contacts</h2>
+                <button
+                  onClick={() => handleTabReset("business")}
+                  className="flex items-center gap-1.5 text-xs font-bold text-red-500 hover:text-white bg-red-50 hover:bg-red-500 border border-red-200 hover:border-red-500 px-3 py-1.5 rounded-lg transition-all"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" /> Reset Tab
+                </button>
+              </div>
               <div>
                 <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Contact Utilities</h2>
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
@@ -587,7 +660,15 @@ export default function Dashboard() {
 
           {activeTab === "social" && (
             <div className="p-6 space-y-6">
-              <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Social Media Placements</h2>
+              <div className="flex items-center justify-between border-b pb-4 mb-4">
+                <h2 className="font-bold text-xl text-slate-800">Social Media Placements</h2>
+                <button
+                  onClick={() => handleTabReset("social")}
+                  className="flex items-center gap-1.5 text-xs font-bold text-red-500 hover:text-white bg-red-50 hover:bg-red-500 border border-red-200 hover:border-red-500 px-3 py-1.5 rounded-lg transition-all"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" /> Reset Tab
+                </button>
+              </div>
               <div className="space-y-4">
                 {['instagram', 'linkedin', 'twitter', 'facebook', 'youtube'].map((network) => (
                   <div key={network} className="flex flex-wrap items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
@@ -606,7 +687,15 @@ export default function Dashboard() {
 
           {activeTab === "media" && (
             <div className="p-6 space-y-6">
-              
+              <div className="flex items-center justify-between border-b pb-4">
+                <h2 className="font-bold text-xl text-slate-800">Media & Arrays</h2>
+                <button
+                  onClick={() => handleTabReset("media")}
+                  className="flex items-center gap-1.5 text-xs font-bold text-red-500 hover:text-white bg-red-50 hover:bg-red-500 border border-red-200 hover:border-red-500 px-3 py-1.5 rounded-lg transition-all"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" /> Reset Tab
+                </button>
+              </div>
               <div>
                 <div className="flex justify-between items-center border-b pb-4 mb-4">
                   <h2 className="font-bold text-xl text-slate-800">Media Gallery</h2>
@@ -710,6 +799,15 @@ export default function Dashboard() {
 
           {activeTab === "design" && (
             <div className="p-6 space-y-12">
+              <div className="flex items-center justify-between border-b pb-4">
+                <h2 className="font-bold text-xl text-slate-800">Design Settings</h2>
+                <button
+                  onClick={() => handleTabReset("design")}
+                  className="flex items-center gap-1.5 text-xs font-bold text-red-500 hover:text-white bg-red-50 hover:bg-red-500 border border-red-200 hover:border-red-500 px-3 py-1.5 rounded-lg transition-all"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" /> Reset Tab
+                </button>
+              </div>
               
               {/* ======================================================== */}
               {/* 🌟 CATEGORY 1: GLOBAL IDENTITY & CANVAS PRESETS */}
@@ -720,7 +818,7 @@ export default function Dashboard() {
                     <Sparkles className="w-5 h-5 text-indigo-600 animate-pulse" />
                     <h2 className="font-extrabold text-xl text-slate-800">1. Global Identity & Canvas</h2>
                   </div>
-                  <p className="text-xs text-slate-500 font-medium leading-relaxed">Configure your digital card's structural canvas, preset color styles, banner heights, text alignment, and typography.</p>
+                  <p className="text-xs text-slate-500 font-medium leading-relaxed">Configure your digital card&apos;s structural canvas, preset color styles, banner heights, text alignment, and typography.</p>
                 </div>
 
                 {/* Grid 1: Layout presets & Effects */}
@@ -1396,7 +1494,15 @@ export default function Dashboard() {
 
           {activeTab === "themes" && (
             <div className="p-6 space-y-5">
-              <h2 className="font-bold text-xl text-slate-800 border-b pb-4 mb-4">Select a Layout Theme</h2>
+              <div className="flex items-center justify-between border-b pb-4 mb-4">
+                <h2 className="font-bold text-xl text-slate-800">Select a Layout Theme</h2>
+                <button
+                  onClick={() => handleTabReset("themes")}
+                  className="flex items-center gap-1.5 text-xs font-bold text-red-500 hover:text-white bg-red-50 hover:bg-red-500 border border-red-200 hover:border-red-500 px-3 py-1.5 rounded-lg transition-all"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" /> Reset Tab
+                </button>
+              </div>
               <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
                 {[
                   {
@@ -1561,7 +1667,7 @@ export default function Dashboard() {
                 className="relative group bg-white border border-slate-200 rounded-[1.75rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] overflow-hidden flex-1 min-h-0"
                 style={{ transform: 'translateZ(0)' }}
               >
-                  <div className="w-full h-full overflow-y-auto scrollbar-none relative">
+                  <div className="w-full h-full overflow-hidden relative">
                     <NexCard 
                       key={previewTheme ? `preview-${previewTheme.layout}` : `live-${form.theme.layout}`} 
                       data={previewTheme ? { ...form, theme: { ...form.theme, ...previewTheme } } : form} 

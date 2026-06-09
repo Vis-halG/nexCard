@@ -421,7 +421,7 @@ export default function BoldTheme({ data, inPreview = false }) {
         </main>
       </div>
       {/* 📱 MOBILE APP BOTTOM NAVIGATION */}
-      <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} layout="bold" />
+      <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} layout="bold" inPreview={inPreview} />
     </div>
   );
 }

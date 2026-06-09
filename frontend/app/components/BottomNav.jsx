@@ -8,7 +8,8 @@ export default function BottomNav({
   primaryColor = "#4f46e5", 
   showWhatsAppInput: propShowWhatsAppInput, 
   setShowWhatsAppInput: propSetShowWhatsAppInput,
-  layout = "modern"
+  layout = "modern",
+  inPreview = false
 }) {
   const [activeId, setActiveId] = useState('home');
   const [localShowWhatsAppInput, setLocalShowWhatsAppInput] = useState(false);
@@ -108,7 +109,7 @@ export default function BottomNav({
   if (showWhatsAppInput) {
     return (
       <div 
-        className={`fixed bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[100] px-4 pt-3 flex flex-col justify-center pb-safe animate-slideUp ${wsContainerClass} ${fontClass}`}
+        className={`${inPreview ? "absolute" : "fixed"} bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[100] px-4 pt-3 flex flex-col justify-center pb-safe animate-slideUp ${wsContainerClass} ${fontClass}`}
         style={layout === 'neo' ? { borderTopColor: `${primaryColor}44`, boxShadow: `0 -6px 20px ${primaryColor}22` } : (layout === 'minimal' ? { borderTopColor: '#000000' } : {})}
       >
         <div className="w-full flex items-center gap-3 h-11">
@@ -194,7 +195,7 @@ export default function BottomNav({
 
   return (
     <div 
-      className={`fixed bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[100] flex justify-between items-end px-4 pt-2 pb-safe ${containerClass} ${fontClass}`}
+      className={`${inPreview ? "absolute" : "fixed"} bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[100] flex justify-between items-end px-4 pt-2 pb-safe ${containerClass} ${fontClass}`}
       style={customStyle}
     >
       {navItems.map((item) => {

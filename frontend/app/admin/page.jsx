@@ -1,11 +1,13 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   GoogleAuthProvider,
   sendPasswordResetEmail
 } from "firebase/auth";
@@ -115,63 +117,99 @@ export default function AdminPage() {
     }
   };
 
+  const processUserLogin = async (user) => {
+    // 🔥 CLEAN USERNAME
+    let baseUsername = user.email
+      .split("@")[0]
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "");
+
+    let finalUsername = baseUsername;
+
+    const usernameRef = doc(db, "usernames", baseUsername);
+    const usernameDoc = await getDoc(usernameRef);
+
+    if (usernameDoc.exists()) {
+      if (usernameDoc.data().uid !== user.uid) {
+        const randomSuffix = Math.floor(100 + Math.random() * 900);
+        finalUsername = `${baseUsername}${randomSuffix}`;
+        await setDoc(doc(db, "usernames", finalUsername), { uid: user.uid });
+      }
+    } else {
+      await setDoc(doc(db, "usernames", finalUsername), { uid: user.uid });
+    }
+
+    // Check if user already has a theme
+    const gSnap = await getDoc(doc(db, "users", user.uid));
+    const gHasTheme = gSnap.exists() && gSnap.data()?.theme?.layout;
+
+    const googleUserData = {
+      name: user.displayName || "",
+      email: user.email,
+      image: user.photoURL || "",
+      uid: user.uid,
+      username: finalUsername,
+    };
+
+    if (!gHasTheme) {
+      googleUserData.theme = {
+        layout: "modern",
+        primary: "#4f46e5",
+        background: "#f8fafc"
+      };
+    }
+
+    // 🔥 SAVE GOOGLE USER DATA
+    await setDoc(doc(db, "users", user.uid), googleUserData, { merge: true });
+
+    router.push("/admin/dashboard");
+  };
+
+  useEffect(() => {
+    const handleRedirectResult = async () => {
+      try {
+        setGoogleLoading(true);
+        const result = await getRedirectResult(auth);
+        if (result && result.user) {
+          await processUserLogin(result.user);
+        }
+      } catch (err) {
+        console.error("Error with redirect login:", err);
+        alert("Google login failed: " + err.message);
+      } finally {
+        setGoogleLoading(false);
+      }
+    };
+    handleRedirectResult();
+  }, []);
+
   const handleGoogleLogin = async () => {
     try {
       setGoogleLoading(true);
 
       const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-
-      // 🔥 CLEAN USERNAME
-      let baseUsername = user.email
-        .split("@")[0]
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, "");
-
-      let finalUsername = baseUsername;
-
-      const usernameRef = doc(db, "usernames", baseUsername);
-      const usernameDoc = await getDoc(usernameRef);
-
-      if (usernameDoc.exists()) {
-        if (usernameDoc.data().uid !== user.uid) {
-          const randomSuffix = Math.floor(100 + Math.random() * 900);
-          finalUsername = `${baseUsername}${randomSuffix}`;
-          await setDoc(doc(db, "usernames", finalUsername), { uid: user.uid });
+      // Try popup first
+      try {
+        const result = await signInWithPopup(auth, provider);
+        if (result && result.user) {
+          await processUserLogin(result.user);
         }
-      } else {
-        await setDoc(doc(db, "usernames", finalUsername), { uid: user.uid });
+      } catch (popupErr) {
+        console.log("Popup failed, trying redirect...", popupErr);
+        if (
+          popupErr.code === "auth/popup-blocked" ||
+          popupErr.code === "auth/cancelled-popup-request" ||
+          popupErr.code === "auth/popup-closed-by-user"
+        ) {
+          await signInWithRedirect(auth, provider);
+        } else {
+          throw popupErr;
+        }
       }
-
-      // Check if user already has a theme
-      const gSnap = await getDoc(doc(db, "users", user.uid));
-      const gHasTheme = gSnap.exists() && gSnap.data()?.theme?.layout;
-
-      const googleUserData = {
-        name: user.displayName || "",
-        email: user.email,
-        image: user.photoURL || "",
-        uid: user.uid,
-        username: finalUsername,
-      };
-
-      if (!gHasTheme) {
-        googleUserData.theme = {
-          layout: "modern",
-          primary: "#4f46e5",
-          background: "#f8fafc"
-        };
-      }
-
-      // 🔥 SAVE GOOGLE USER DATA
-      await setDoc(doc(db, "users", user.uid), googleUserData, { merge: true });
-
-      router.push("/admin/dashboard");
 
     } catch (err) {
       console.log(err);
-      alert("Google login failed");
+      alert("Google login failed: " + err.message);
     } finally {
       setGoogleLoading(false);
     }

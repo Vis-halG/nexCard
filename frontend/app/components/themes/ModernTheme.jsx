@@ -717,7 +717,7 @@ export default function ModernTheme({ data, inPreview = false }) {
       </div>
 
       {/* 📱 MOBILE APP BOTTOM NAVIGATION */}
-      <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} layout="modern" />
+      <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} layout="modern" inPreview={inPreview} />
 
       {/* Injecting some custom style mapping for hover utilities */}
       <style dangerouslySetInnerHTML={{__html: `

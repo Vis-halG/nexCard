@@ -285,7 +285,7 @@ export default function BoldTheme({ data, inPreview = false }) {
           )}
 
           {data?.services?.length > 0 && (
-            <Panel title="Expertise">
+            <Panel title="Specialities">
               <div className="grid gap-3">
                 {data.services.map((service, index) => (
                   <div key={index} className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 font-bold text-slate-700">
@@ -405,29 +405,77 @@ export default function BoldTheme({ data, inPreview = false }) {
                 ))}
               </div>
               <a href={data.googleReviewsUrl} target="_blank" rel="noreferrer" className="font-black" style={{ color: primaryColor }}>
-                Write a review
+Write a review
               </a>
             </Panel>
           )}
 
-          <div id="share" className="scroll-mt-6 rounded-[2rem] border border-slate-100 bg-white p-6 text-center shadow-[0_18px_55px_rgba(15,23,42,0.08)]">
-            <div className="mx-auto w-fit rounded-2xl bg-slate-50 p-4">
-              <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={148} level="H" fgColor="#0F172A" />
-            </div>
-            <button
-              onClick={() => {
-                if (navigator.share) {
-                  navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : "Digital Card", url: window.location.href }).catch(console.error);
-                } else {
-                  navigator.clipboard.writeText(window.location.href);
-                  alert("Link copied to clipboard!");
-                }
-              }}
-              className="mx-auto mt-5 flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-slate-500"
-            >
-              <Share2 className="h-4 w-4" />
-              Share
-            </button>
+          <div id="share" className={`scroll-mt-6 rounded-[2rem] border border-slate-100 bg-white p-6 text-center shadow-[0_18px_55px_rgba(15,23,42,0.08)] flex flex-col items-center`}>
+            {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (
+              <div className="flex flex-col items-center gap-6 w-full">
+                <div className="flex justify-center gap-4 sm:gap-6 w-full">
+                  <div className="flex flex-col items-center flex-1">
+                    <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400 mb-2">Connect</span>
+                    <div className="rounded-2xl bg-slate-50 p-3.5 shadow-inner border border-slate-100 flex items-center justify-center w-[120px] h-[120px]">
+                      <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={95} level="H" fgColor="#0F172A" />
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center flex-1">
+                    <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400 mb-2">Pay Now</span>
+                    <div className="rounded-2xl bg-slate-50 p-3.5 shadow-inner border border-slate-100 flex items-center justify-center w-[120px] h-[120px]">
+                      {data.payment?.qrCode ? (
+                        <img src={data.payment.qrCode} alt="Payment QR" className="w-full h-full object-contain rounded-md" />
+                      ) : data.payment?.upi ? (
+                        <QRCodeSVG value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} size={95} level="M" fgColor="#0F172A" />
+                      ) : (
+                        <span className="text-[9px] font-mono text-slate-400">No QR</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full max-w-[320px] space-y-4 flex flex-col items-center">
+                  <button
+                    onClick={() => {
+                      if (navigator.share) {
+                        navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : "Digital Card", url: window.location.href }).catch(console.error);
+                      } else {
+                        navigator.clipboard.writeText(window.location.href);
+                        alert("Link copied to clipboard!");
+                      }
+                    }}
+                    className="flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-slate-500 hover:text-slate-800 transition-colors"
+                  >
+                    <Share2 className="h-4 w-4" />
+                    Share
+                  </button>
+                  {data.payment?.link && (
+                    <a href={data.payment.link} target="_blank" rel="noreferrer" className="flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-xs font-black uppercase tracking-widest text-white transition hover:-translate-y-0.5" style={{ backgroundColor: primaryColor }}>
+                      <CreditCard className="h-4 w-4" /> Make Payment
+                    </a>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="mx-auto w-fit rounded-2xl bg-slate-50 p-4">
+                  <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={148} level="H" fgColor="#0F172A" />
+                </div>
+                <button
+                  onClick={() => {
+                    if (navigator.share) {
+                      navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : "Digital Card", url: window.location.href }).catch(console.error);
+                    } else {
+                      navigator.clipboard.writeText(window.location.href);
+                      alert("Link copied to clipboard!");
+                    }
+                  }}
+                  className="mx-auto mt-5 flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-slate-500"
+                >
+                  <Share2 className="h-4 w-4" />
+                  Share
+                </button>
+              </>
+            )}
           </div>
         </main>
       </div>

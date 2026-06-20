@@ -462,7 +462,7 @@ export default function ModernTheme({ data, inPreview = false }) {
           {/* 🛠 SPECIALTIES */}
           {data?.services?.length > 0 && (
             <div className="scroll-mt-6">
-              <h2 className="text-[20px] font-bold mb-4 tracking-tight" style={{ color: textPrimary }}>Core Services</h2>
+              <h2 className="text-[20px] font-bold mb-4 tracking-tight" style={{ color: textPrimary }}>Specialities</h2>
               <div className="flex flex-wrap gap-2.5">
                 {data.services.map((s, i) => (
                   <span key={i} className="px-5 py-2.5 text-[13px] font-semibold rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.02)] transition-colors cursor-default" style={{ backgroundColor: cardBg, color: cardText, border: `1px solid ${cardText}15` }}>
@@ -684,31 +684,81 @@ export default function ModernTheme({ data, inPreview = false }) {
 
           {/* 📲 SHARING & QR CODE (Minimalist) */}
           <div id="share" className="scroll-mt-6 pt-6 pb-4">
-            <h2 className="text-[20px] font-bold mb-6 tracking-tight text-center" style={{ color: textPrimary }}>Share Profile</h2>
-            <div className="flex flex-col items-center">
-              <div className="p-5 rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.06)] mb-6 border border-slate-50" style={{ backgroundColor: cardBg }}>
-                <QRCodeSVG 
-                  value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} 
-                  size={180} 
-                  level="Q" 
-                  className="rounded-xl" 
-                  fgColor={textPrimary} 
-                  {...(qrLogo === 'avatar' && data?.image ? {
-                    imageSettings: {
-                      src: data.image,
-                      x: null,
-                      y: null,
-                      height: 38,
-                      width: 38,
-                      excavate: true,
-                    }
-                  } : {})}
-                />
+            <h2 className="text-[20px] font-bold mb-6 tracking-tight text-center" style={{ color: textPrimary }}>Share & Pay</h2>
+            
+            {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (
+              <div className="flex flex-col items-center gap-6 w-full">
+                <div className="flex justify-center gap-4 sm:gap-6 w-full px-4">
+                  {/* Share QR */}
+                  <div className="flex flex-col items-center flex-1">
+                    <span className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: textSecondary }}>Connect</span>
+                    <div className="p-3.5 rounded-[1.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.05)] border border-slate-100 bg-white flex items-center justify-center aspect-square w-[130px] h-[130px]">
+                      <QRCodeSVG 
+                        value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} 
+                        size={100} 
+                        level="Q" 
+                        className="rounded-md" 
+                        fgColor={textPrimary} 
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Payment QR */}
+                  <div className="flex flex-col items-center flex-1">
+                    <span className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: textSecondary }}>Pay Now</span>
+                    <div className="p-3.5 rounded-[1.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.05)] border border-slate-100 bg-white flex items-center justify-center aspect-square w-[130px] h-[130px]">
+                      {data.payment?.qrCode ? (
+                        <img src={data.payment.qrCode} alt="Payment QR" className="w-full h-full object-contain rounded-md" />
+                      ) : data.payment?.upi ? (
+                        <QRCodeSVG 
+                          value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} 
+                          size={100} 
+                          level="M" 
+                          className="rounded-md" 
+                          fgColor={textPrimary} 
+                        />
+                      ) : (
+                        <div className="text-[10px] text-slate-400 font-semibold text-center">No QR Code</div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="w-full max-w-[320px] px-4 space-y-3 mt-2">
+                  <ShareActions data={data} layout="modern" primaryColor={primaryColor} />
+                  {data.payment?.link && (
+                    <a href={data.payment.link} target="_blank" rel="noreferrer" className="w-full py-3.5 font-bold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all duration-350 text-[14px]" style={{ backgroundColor: btnBg, color: btnText, borderRadius: borderRadius }}>
+                      Make a Payment
+                    </a>
+                  )}
+                </div>
               </div>
-              <div className="w-full max-w-[320px] mt-2">
-                <ShareActions data={data} layout="modern" primaryColor={primaryColor} />
+            ) : (
+              <div className="flex flex-col items-center">
+                <div className="p-5 rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.06)] mb-6 border border-slate-50" style={{ backgroundColor: cardBg }}>
+                  <QRCodeSVG 
+                    value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} 
+                    size={180} 
+                    level="Q" 
+                    className="rounded-xl" 
+                    fgColor={textPrimary} 
+                    {...(qrLogo === 'avatar' && data?.image ? {
+                      imageSettings: {
+                        src: data.image,
+                        x: null,
+                        y: null,
+                        height: 38,
+                        width: 38,
+                        excavate: true,
+                      }
+                    } : {})}
+                  />
+                </div>
+                <div className="w-full max-w-[320px] mt-2">
+                  <ShareActions data={data} layout="modern" primaryColor={primaryColor} />
+                </div>
               </div>
-            </div>
+            )}
           </div>
           
         </div>

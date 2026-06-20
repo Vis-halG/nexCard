@@ -253,7 +253,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
           {/* SERVICES / EXPERTISE */}
           {data?.services?.length > 0 && (
             <div className="p-8 border-b-4 border-black bg-white">
-              <span className="text-xs font-black uppercase tracking-widest text-black bg-cyan-300 px-2 py-1 inline-block mb-6 shadow-[4px_4px_0_0_#000] border-2 border-black">Capabilities</span>
+              <span className="text-xs font-black uppercase tracking-widest text-black bg-cyan-300 px-2 py-1 inline-block mb-6 shadow-[4px_4px_0_0_#000] border-2 border-black">Specialities</span>
               <div className="flex flex-col gap-0 divide-y-2 divide-black border-2 border-black">
                 {data.services.map((s, i) => (
                   <div key={i} className="px-4 py-4 text-lg font-bold tracking-tight text-black hover:bg-black hover:text-white transition-colors duration-300">
@@ -362,14 +362,53 @@ export default function MinimalTheme({ data, inPreview = false }) {
           
           {/* FOOTER & QR */}
           <div id="share" className="scroll-mt-6 p-8 flex flex-col items-center bg-white border-b-4 border-black pb-20">
-             <div className="border-8 border-black p-4 bg-white shadow-[12px_12px_0_0_#000] mb-10">
-               <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={140} level="H" fgColor="#000" />
-             </div>
-             <button onClick={() => {
-                if (navigator.share) { navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : 'Digital Card', url: window.location.href }).catch(console.error); } else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }
-              }} className="flex items-center gap-3 text-black hover:bg-black hover:text-white border-4 border-black px-8 py-3 transition-colors duration-300 font-black uppercase tracking-widest shadow-[4px_4px_0_0_#000] active:shadow-none active:translate-y-1 active:translate-x-1">
-                <Share2 className="w-5 h-5" strokeWidth={2.5} /> Share Profile
-             </button>
+             {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (
+               <div className="flex flex-col items-center gap-8 w-full">
+                 <div className="flex justify-center gap-4 sm:gap-6 w-full">
+                   <div className="flex flex-col items-center flex-1">
+                     <span className="text-[10px] font-black uppercase tracking-widest text-black mb-3">Connect</span>
+                     <div className="border-4 border-black p-2 bg-white shadow-[6px_6px_0_0_#000] flex items-center justify-center w-[120px] h-[120px]">
+                       <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={95} level="H" fgColor="#000" />
+                     </div>
+                   </div>
+                   <div className="flex flex-col items-center flex-1">
+                     <span className="text-[10px] font-black uppercase tracking-widest text-black mb-3">Pay Now</span>
+                     <div className="border-4 border-black p-2 bg-white shadow-[6px_6px_0_0_#000] flex items-center justify-center w-[120px] h-[120px]">
+                       {data.payment?.qrCode ? (
+                         <img src={data.payment.qrCode} alt="Payment QR" className="w-full h-full object-contain" />
+                       ) : data.payment?.upi ? (
+                         <QRCodeSVG value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} size={95} level="M" fgColor="#000" />
+                       ) : (
+                         <span className="text-[9px] font-mono">No QR</span>
+                       )}
+                     </div>
+                   </div>
+                 </div>
+                 <div className="w-full max-w-[320px] space-y-4 flex flex-col items-center">
+                   <button onClick={() => {
+                      if (navigator.share) { navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : 'Digital Card', url: window.location.href }).catch(console.error); } else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }
+                    }} className="w-full flex items-center justify-center gap-3 text-black hover:bg-black hover:text-white border-4 border-black py-3 transition-colors duration-300 font-black uppercase tracking-widest shadow-[4px_4px_0_0_#000] active:shadow-none active:translate-y-1 active:translate-x-1">
+                      <Share2 className="w-4 h-4" strokeWidth={2.5} /> Share Profile
+                   </button>
+                   {data.payment?.link && (
+                     <a href={data.payment.link} target="_blank" rel="noreferrer" className="w-full text-center py-3.5 bg-black text-white hover:bg-white hover:text-black border-4 border-black font-black uppercase tracking-widest text-xs transition-colors shadow-[4px_4px_0_0_#000] active:shadow-none active:translate-y-1 active:translate-x-1">
+                       Make Payment
+                     </a>
+                   )}
+                 </div>
+               </div>
+             ) : (
+               <>
+                 <div className="border-8 border-black p-4 bg-white shadow-[12px_12px_0_0_#000] mb-10">
+                   <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={140} level="H" fgColor="#000" />
+                 </div>
+                 <button onClick={() => {
+                    if (navigator.share) { navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : 'Digital Card', url: window.location.href }).catch(console.error); } else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }
+                  }} className="flex items-center gap-3 text-black hover:bg-black hover:text-white border-4 border-black px-8 py-3 transition-colors duration-300 font-black uppercase tracking-widest shadow-[4px_4px_0_0_#000] active:shadow-none active:translate-y-1 active:translate-x-1">
+                    <Share2 className="w-5 h-5" strokeWidth={2.5} /> Share Profile
+                 </button>
+               </>
+             )}
           </div>
 
           <div className="p-4 bg-black text-center">

@@ -43,7 +43,7 @@ export default function BottomNav({
   useEffect(() => {
     const handleScroll = () => {
       if (showWhatsAppInput) return;
-      const sections = ['home', 'about', 'social', 'contact'];
+      const sections = ['home', 'about', 'social', 'contact', 'share'];
       let current = 'home';
       for (const section of sections) {
         const element = document.getElementById(section);
@@ -362,13 +362,7 @@ export default function BottomNav({
         return (
           <a
             key={item.id}
-            href={item.id === 'share' ? undefined : `#${item.id}`}
-            onClick={(e) => {
-              if (item.id === 'share') {
-                e.preventDefault();
-                setShowWhatsAppInput(true);
-              }
-            }}
+            href={`#${item.id}`}
             className={`${itemContainerClass} outline-none focus:outline-none cursor-pointer`}
           >
             <div 

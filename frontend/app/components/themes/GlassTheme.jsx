@@ -291,7 +291,7 @@ export default function GlassTheme({ data, inPreview = false }) {
           )}
 
           {data?.services?.length > 0 && (
-            <Section title="Services" className={cardClasses}>
+            <Section title="Specialities" className={cardClasses}>
               <div className="flex flex-wrap gap-2">
                 {data.services.map((service, index) => (
                   <span key={index} className="rounded-full border border-rose-100 bg-rose-50/70 px-4 py-2 text-sm font-bold text-slate-700">
@@ -389,23 +389,71 @@ export default function GlassTheme({ data, inPreview = false }) {
           )}
 
           <div id="share" className={`scroll-mt-6 ${cardClasses} flex flex-col items-center`}>
-            <div className="rounded-[1.5rem] bg-white p-4 shadow-sm">
-              <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={150} level="H" fgColor="#111827" />
-            </div>
-            <button
-              onClick={() => {
-                if (navigator.share) {
-                  navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : "Digital Card", url: window.location.href }).catch(console.error);
-                } else {
-                  navigator.clipboard.writeText(window.location.href);
-                  alert("Link copied to clipboard!");
-                }
-              }}
-              className="mt-5 flex items-center gap-2 text-sm font-bold text-slate-500"
-            >
-              <Share2 className="h-4 w-4" />
-              Share Profile
-            </button>
+            {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (
+              <div className="flex flex-col items-center gap-6 w-full">
+                <div className="flex justify-center gap-4 sm:gap-6 w-full">
+                  <div className="flex flex-col items-center flex-1">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-2">Connect</span>
+                    <div className="rounded-[1.25rem] bg-white/90 p-3.5 shadow-sm flex items-center justify-center w-[120px] h-[120px]">
+                      <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={95} level="H" fgColor="#111827" />
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center flex-1">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-2">Pay Now</span>
+                    <div className="rounded-[1.25rem] bg-white/90 p-3.5 shadow-sm flex items-center justify-center w-[120px] h-[120px]">
+                      {data.payment?.qrCode ? (
+                        <img src={data.payment.qrCode} alt="Payment QR" className="w-full h-full object-contain rounded-md" />
+                      ) : data.payment?.upi ? (
+                        <QRCodeSVG value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} size={95} level="M" fgColor="#111827" />
+                      ) : (
+                        <span className="text-[9px] text-slate-400 font-mono">No QR</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full max-w-[320px] space-y-4 flex flex-col items-center">
+                  <button
+                    onClick={() => {
+                      if (navigator.share) {
+                        navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : "Digital Card", url: window.location.href }).catch(console.error);
+                      } else {
+                        navigator.clipboard.writeText(window.location.href);
+                        alert("Link copied to clipboard!");
+                      }
+                    }}
+                    className="flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors"
+                  >
+                    <Share2 className="h-4 w-4" />
+                    Share Profile
+                  </button>
+                  {data.payment?.link && (
+                    <a href={data.payment.link} target="_blank" rel="noreferrer" className="w-full py-3 rounded-2xl font-black text-center text-white text-xs uppercase tracking-widest shadow-sm hover:shadow-md transition-all" style={{ backgroundColor: primaryColor }}>
+                      Make Payment
+                    </a>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="rounded-[1.5rem] bg-white p-4 shadow-sm">
+                  <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={150} level="H" fgColor="#111827" />
+                </div>
+                <button
+                  onClick={() => {
+                    if (navigator.share) {
+                      navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : "Digital Card", url: window.location.href }).catch(console.error);
+                    } else {
+                      navigator.clipboard.writeText(window.location.href);
+                      alert("Link copied to clipboard!");
+                    }
+                  }}
+                  className="mt-5 flex items-center gap-2 text-sm font-bold text-slate-500"
+                >
+                  <Share2 className="h-4 w-4" />
+                  Share Profile
+                </button>
+              </>
+            )}
           </div>
         </main>
       </div>

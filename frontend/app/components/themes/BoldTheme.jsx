@@ -299,10 +299,10 @@ export default function BoldTheme({ data, inPreview = false }) {
 
           {socials.length > 0 && (
             <Panel title="Network">
-              <div className="flex flex-wrap gap-3">
+              <div className="grid grid-cols-5 gap-3">
                 {socials.map(([network, url]) => (
                   <a key={network} href={url} target="_blank" rel="noreferrer" aria-label={network}
-                    className={`w-14 h-14 rounded-2xl border border-slate-100 bg-slate-50 flex items-center justify-center text-slate-400 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md ${SOCIAL_COLORS[network] || 'hover:text-slate-700'}`}>
+                    className={`aspect-square w-full max-w-14 justify-self-center rounded-2xl border border-slate-100 bg-slate-50 flex items-center justify-center text-slate-400 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md ${SOCIAL_COLORS[network] || 'hover:text-slate-700'}`}>
                     {SOCIAL_ICONS[network] ? SOCIAL_ICONS[network]("w-6 h-6") : <ArrowUpRight className="w-6 h-6" />}
                   </a>
                 ))}
@@ -356,14 +356,9 @@ export default function BoldTheme({ data, inPreview = false }) {
             <Panel title="Payments">
               <div className="space-y-3">
                 {data.payment.upi && <InfoRow label="UPI" value={data.payment.upi} />}
-                {data.gstNumber && <InfoRow label="GSTIN" value={data.gstNumber} />}
+
                 {data.payment.bankDetails && <p className="rounded-2xl bg-slate-50 p-4 font-mono text-xs leading-6 text-slate-600 whitespace-pre-line">{data.payment.bankDetails}</p>}
-                {data.payment.link && (
-                  <a href={data.payment.link} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 rounded-2xl px-5 py-4 font-black text-white" style={{ backgroundColor: primaryColor }}>
-                    <CreditCard className="h-4 w-4" />
-                    Make Payment
-                  </a>
-                )}
+
               </div>
             </Panel>
           )}
@@ -402,20 +397,20 @@ export default function BoldTheme({ data, inPreview = false }) {
           <div id="share" className={`scroll-mt-6 rounded-[2rem] border border-slate-100 bg-white p-6 text-center shadow-[0_18px_55px_rgba(15,23,42,0.08)] flex flex-col items-center`}>
             {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (
               <div className="flex flex-col items-center gap-6 w-full">
-                <div className="flex justify-center gap-4 sm:gap-6 w-full">
-                  <div className="flex flex-col items-center flex-1">
+                <div className="flex flex-col items-center gap-6 w-full">
+                  <div className="flex flex-col items-center">
                     <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400 mb-2">Connect</span>
-                    <div className="rounded-2xl bg-slate-50 p-3.5 shadow-inner border border-slate-100 flex items-center justify-center w-[120px] h-[120px]">
-                      <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={95} level="H" fgColor="#0F172A" />
+                    <div className="rounded-2xl bg-slate-50 p-4 shadow-inner border border-slate-100 flex items-center justify-center w-[180px] h-[180px]">
+                      <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={148} level="H" fgColor="#0F172A" />
                     </div>
                   </div>
-                  <div className="flex flex-col items-center flex-1">
+                  <div className="flex flex-col items-center">
                     <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400 mb-2">Pay Now</span>
-                    <div className="rounded-2xl bg-slate-50 p-3.5 shadow-inner border border-slate-100 flex items-center justify-center w-[120px] h-[120px]">
+                    <div className="rounded-2xl bg-slate-50 p-4 shadow-inner border border-slate-100 flex items-center justify-center w-[180px] h-[180px]">
                       {data.payment?.qrCode ? (
                         <img src={data.payment.qrCode} alt="Payment QR" className="w-full h-full object-contain rounded-md" />
                       ) : data.payment?.upi ? (
-                        <QRCodeSVG value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} size={95} level="M" fgColor="#0F172A" />
+                        <QRCodeSVG value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} size={148} level="M" fgColor="#0F172A" />
                       ) : (
                         <span className="text-[9px] font-mono text-slate-400">No QR</span>
                       )}
@@ -437,11 +432,6 @@ export default function BoldTheme({ data, inPreview = false }) {
                     <Share2 className="h-4 w-4" />
                     Share
                   </button>
-                  {data.payment?.link && (
-                    <a href={data.payment.link} target="_blank" rel="noreferrer" className="flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-xs font-black uppercase tracking-widest text-white transition hover:-translate-y-0.5" style={{ backgroundColor: primaryColor }}>
-                      <CreditCard className="h-4 w-4" /> Make Payment
-                    </a>
-                  )}
                 </div>
               </div>
             ) : (

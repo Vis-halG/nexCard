@@ -21,7 +21,7 @@ export default function Dashboard() {
 
   const [form, setForm] = useState({
     name: "", title: "", company: "", phone: "", email: "", about: "", image: "", coverImage: "",
-    address: "", website: "", calendarUrl: "", googleReviewsUrl: "", gstNumber: "",
+    address: "", website: "", calendarUrl: "", googleReviewsUrl: "",
     social: { instagram: "", linkedin: "", twitter: "", facebook: "", youtube: "" },
     payment: { upi: "", link: "", bankDetails: "", qrCode: "" },
     services: [], gallery: [], customLinks: [], videos: [],
@@ -365,7 +365,7 @@ export default function Dashboard() {
       setForm(prev => ({
         ...prev,
         phone: "", email: "", address: "", website: "", calendarUrl: "",
-        googleReviewsUrl: "", gstNumber: "",
+        googleReviewsUrl: "",
         payment: { upi: "", link: "", bankDetails: "", qrCode: "" }
       }));
     } else if (tabId === "social") {
@@ -610,10 +610,7 @@ export default function Dashboard() {
                       <input value={form.payment.link} onChange={(e) => handleNestedChange("payment", "link", e.target.value)} placeholder="https://rzp.io/..." className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                     </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">GSTIN Number</label>
-                    <input name="gstNumber" value={form.gstNumber} onChange={handleChange} placeholder="22AAAAA0000A1Z5" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono" />
-                  </div>
+
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Bank Account Guidelines</label>
                     <textarea value={form.payment.bankDetails} onChange={(e) => handleNestedChange("payment", "bankDetails", e.target.value)} rows="3" placeholder={"Bank Name: \nAcct No: \nIFSC: "} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none" />

@@ -15,7 +15,6 @@ export const createDemoProfile = ({ uid, username }) => ({
   website: "https://nexcard.app",
   calendarUrl: "https://calendly.com/vishalgupta25980/intro-call",
   googleReviewsUrl: "https://g.page/r/demo-nexcard/review",
-  gstNumber: "27ABCDE1234F1Z5",
   social: {
     instagram: "https://instagram.com/nexcard.app",
     linkedin: "https://linkedin.com/in/vishalgupta25980",

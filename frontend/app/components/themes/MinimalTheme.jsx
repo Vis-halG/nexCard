@@ -16,7 +16,7 @@ const SOCIAL_ICONS = {
 
 const WhatsAppIcon = ({ className }) => (
   <svg viewBox="0 0 16 16" fill="currentColor" className={className}>
-    <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
+    <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232" />
   </svg>
 );
 
@@ -98,27 +98,27 @@ export default function MinimalTheme({ data, inPreview = false }) {
   const fontClass = theme.font || "font-sans";
 
   return (
-    <div 
-      className={inPreview 
+    <div
+      className={inPreview
         ? `h-full w-full relative overflow-hidden flex flex-col ${fontClass} text-black selection:bg-black selection:text-white bg-[#f4f4f5]`
         : `min-h-screen ${fontClass} flex justify-center text-black selection:bg-black selection:text-white overflow-x-hidden bg-[#f4f4f5]`
       }
       style={inPreview ? {} : { scrollBehavior: "smooth" }}
     >
-      <div 
+      <div
         className={inPreview
           ? "w-full h-full overflow-y-auto scrollbar-none relative flex flex-col bg-white border-x-4 border-black flex-1"
           : "w-full max-w-[500px] min-h-screen relative flex flex-col bg-white border-x-4 border-black"
-        } 
+        }
         style={{ backgroundColor: bgColor }}
       >
-        <button 
-          onClick={() => setShowWhatsAppInput(true)} 
+        <button
+          onClick={() => setShowWhatsAppInput(true)}
           className="absolute top-8 right-4 z-40 w-10 h-10 border-2 border-black bg-white text-black flex items-center justify-center shadow-[4px_4px_0_0_#000] active:shadow-none active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer"
         >
           <Share2 size={18} strokeWidth={2.5} />
         </button>
-        
+
         {/* TOP BORDER ACCENT */}
         {!data?.coverImage && <div className="w-full h-4 bg-black" style={{ backgroundColor: primaryColor }}></div>}
 
@@ -140,19 +140,19 @@ export default function MinimalTheme({ data, inPreview = false }) {
               <span className="text-[10px] font-black uppercase tracking-[0.2em] border-2 border-black px-2 py-1 bg-black text-white" style={{ backgroundColor: primaryColor, borderColor: primaryColor }}>ID: {Math.floor(Math.random() * 9000) + 1000}</span>
             </div>
           </div>
-          
+
           <h1 className="text-5xl md:text-6xl font-black tracking-tighter uppercase leading-[0.9] text-black mb-4">
             {data?.name || "YOUR NAME"}
           </h1>
-          
+
           <div className="flex flex-col gap-1 w-full border-t-2 border-black pt-4 mt-2">
             <p className="text-sm font-bold uppercase tracking-widest text-black">
               {data?.title || "TITLE"}
             </p>
             {data?.company && (
-               <p className="text-xs font-bold uppercase tracking-widest text-slate-500">
-                 {data.company}
-               </p>
+              <p className="text-xs font-bold uppercase tracking-widest text-slate-500">
+                {data.company}
+              </p>
             )}
           </div>
         </div>
@@ -167,13 +167,13 @@ export default function MinimalTheme({ data, inPreview = false }) {
               rel={act.rel}
               className="h-16 flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 group"
             >
-              {act.id === "whatsapp" 
+              {act.id === "whatsapp"
                 ? act.icon("w-6 h-6 fill-black group-hover:fill-white transition-colors duration-300")
                 : act.icon("w-6 h-6 stroke-black group-hover:stroke-white transition-colors duration-300")
               }
             </a>
           ))}
-          
+
           {hasMore ? (
             <button
               onClick={() => setShowMore(!showMore)}
@@ -227,7 +227,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
 
 
         <div className="flex-1 flex flex-col pb-32 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed">
-          
+
           {/* ABOUT */}
           {data?.about && (
             <div id="about" className="p-8 border-b-4 border-black bg-white">
@@ -240,14 +240,14 @@ export default function MinimalTheme({ data, inPreview = false }) {
 
           {/* CTA SECTIONS */}
           <div className="p-8 border-b-4 border-black flex flex-col gap-4 bg-[#f4f4f5]">
-             <button onClick={generateVcard} className="w-full py-4 border-4 border-black bg-white text-black font-black text-sm uppercase tracking-widest hover:bg-black hover:text-white transition-colors duration-300 shadow-[6px_6px_0_0_#000] active:shadow-[0_0_0_0_#000] active:translate-x-1.5 active:translate-y-1.5 flex justify-between px-6 items-center">
-               <span>Save Contact</span> <Download className="w-5 h-5" />
-             </button>
-             {data?.calendarUrl && (
-               <a href={data.calendarUrl} target="_blank" rel="noreferrer" className="w-full mt-4 py-4 border-4 border-black bg-white text-black font-black text-sm uppercase tracking-widest hover:bg-black hover:text-white transition-colors duration-300 shadow-[6px_6px_0_0_#000] active:shadow-[0_0_0_0_#000] active:translate-x-1.5 active:translate-y-1.5 flex justify-between px-6 items-center" style={{ backgroundColor: primaryColor, color: '#fff' }}>
-                 <span>Book Meeting</span> <Calendar className="w-5 h-5" />
-               </a>
-             )}
+            <button onClick={generateVcard} className="w-full py-4 border-4 border-black bg-white text-black font-black text-sm uppercase tracking-widest hover:bg-black hover:text-white transition-colors duration-300 shadow-[6px_6px_0_0_#000] active:shadow-[0_0_0_0_#000] active:translate-x-1.5 active:translate-y-1.5 flex justify-between px-6 items-center">
+              <span>Save Contact</span> <Download className="w-5 h-5" />
+            </button>
+            {data?.calendarUrl && (
+              <a href={data.calendarUrl} target="_blank" rel="noreferrer" className="w-full mt-4 py-4 border-4 border-black bg-white text-black font-black text-sm uppercase tracking-widest hover:bg-black hover:text-white transition-colors duration-300 shadow-[6px_6px_0_0_#000] active:shadow-[0_0_0_0_#000] active:translate-x-1.5 active:translate-y-1.5 flex justify-between px-6 items-center" style={{ backgroundColor: primaryColor, color: '#fff' }}>
+                <span>Book Meeting</span> <Calendar className="w-5 h-5" />
+              </a>
+            )}
           </div>
 
           {/* SERVICES / EXPERTISE */}
@@ -257,7 +257,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
               <div className="flex flex-col gap-0 divide-y-2 divide-black border-2 border-black">
                 {data.services.map((s, i) => (
                   <div key={i} className="px-4 py-4 text-lg font-bold tracking-tight text-black hover:bg-black hover:text-white transition-colors duration-300">
-                    <span className="text-xs font-mono mr-4 opacity-50">{(i+1).toString().padStart(2, '0')}</span> {s}
+                    <span className="text-xs font-mono mr-4 opacity-50">{(i + 1).toString().padStart(2, '0')}</span> {s}
                   </div>
                 ))}
               </div>
@@ -284,30 +284,30 @@ export default function MinimalTheme({ data, inPreview = false }) {
           {/* GALLERY - EDGE TO EDGE */}
           {data?.gallery?.length > 0 && (
             <div className="w-full border-b-4 border-black bg-white">
-               <div className="p-8 pb-4">
-                 <span className="text-xs font-black uppercase tracking-widest text-black bg-green-300 px-2 py-1 inline-block shadow-[4px_4px_0_0_#000] border-2 border-black">Gallery</span>
-               </div>
-               <div className="flex flex-col gap-0 border-t-4 border-black divide-y-4 divide-black">
-                 {data.gallery.map((img, i) => img && (
-                   <div key={i} className="w-full aspect-video overflow-hidden relative group">
-                     <div className="absolute top-4 left-4 bg-white border-2 border-black px-2 py-1 text-xs font-black z-10 shadow-[2px_2px_0_0_#000]">IMG_{(i+1).toString().padStart(2, '0')}</div>
-                     <img src={img} className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700" />
-                   </div>
-                 ))}
-               </div>
+              <div className="p-8 pb-4">
+                <span className="text-xs font-black uppercase tracking-widest text-black bg-green-300 px-2 py-1 inline-block shadow-[4px_4px_0_0_#000] border-2 border-black">Gallery</span>
+              </div>
+              <div className="flex flex-col gap-0 border-t-4 border-black divide-y-4 divide-black">
+                {data.gallery.map((img, i) => img && (
+                  <div key={i} className="w-full aspect-video overflow-hidden relative group">
+                    <div className="absolute top-4 left-4 bg-white border-2 border-black px-2 py-1 text-xs font-black z-10 shadow-[2px_2px_0_0_#000]">IMG_{(i + 1).toString().padStart(2, '0')}</div>
+                    <img src={img} className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700" />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
           {/* VIDEOS */}
           {data?.videos?.length > 0 && (
             <div className="w-full border-b-4 border-black bg-white">
-               <div className="p-8 pb-4">
-                 <span className="text-xs font-black uppercase tracking-widest text-black bg-orange-300 px-2 py-1 inline-block shadow-[4px_4px_0_0_#000] border-2 border-black">Media</span>
-               </div>
-               <div className="flex flex-col gap-0 border-t-4 border-black divide-y-4 divide-black">
+              <div className="p-8 pb-4">
+                <span className="text-xs font-black uppercase tracking-widest text-black bg-orange-300 px-2 py-1 inline-block shadow-[4px_4px_0_0_#000] border-2 border-black">Media</span>
+              </div>
+              <div className="flex flex-col gap-0 border-t-4 border-black divide-y-4 divide-black">
                 {data.videos.map((vid, i) => (
                   <div key={i} className="w-full overflow-hidden relative pt-[56.25%] bg-black">
-                    <div className="absolute top-4 right-4 bg-black text-white border-2 border-white px-2 py-1 text-xs font-black z-10 shadow-[2px_2px_0_0_#fff]">VID_{(i+1).toString().padStart(2, '0')}</div>
+                    <div className="absolute top-4 right-4 bg-black text-white border-2 border-white px-2 py-1 text-xs font-black z-10 shadow-[2px_2px_0_0_#fff]">VID_{(i + 1).toString().padStart(2, '0')}</div>
                     <iframe className="absolute top-0 left-0 w-full h-full filter grayscale hover:grayscale-0 transition-all duration-700" src={vid.includes('youtube.com/watch?v=') ? vid.replace('watch?v=', 'embed/') : vid} frameBorder="0" allowFullScreen></iframe>
                   </div>
                 ))}
@@ -326,23 +326,14 @@ export default function MinimalTheme({ data, inPreview = false }) {
                     <span className="text-lg font-black text-black">{data.payment.upi}</span>
                   </div>
                 )}
-                {data.payment.gstNumber && (
-                  <div className="mb-4 pb-4 border-b-2 border-black border-dashed">
-                    <span className="text-xs font-bold tracking-widest uppercase text-slate-500 block mb-1">GSTIN</span>
-                    <span className="text-lg font-black text-black">{data.gstNumber}</span>
-                  </div>
-                )}
+
                 {data.payment.bankDetails && (
                   <div className="mb-6">
-                     <span className="text-xs font-bold tracking-widest uppercase text-slate-500 block mb-2">Bank Info</span>
-                     <p className="text-sm font-bold leading-relaxed text-black whitespace-pre-line bg-slate-100 p-4 border-2 border-black">{data.payment.bankDetails}</p>
+                    <span className="text-xs font-bold tracking-widest uppercase text-slate-500 block mb-2">Bank Info</span>
+                    <p className="text-sm font-bold leading-relaxed text-black whitespace-pre-line bg-slate-100 p-4 border-2 border-black">{data.payment.bankDetails}</p>
                   </div>
                 )}
-                {data.payment.link && (
-                  <a href={data.payment.link} target="_blank" rel="noreferrer" className="block w-full py-4 bg-black text-white text-center font-black uppercase tracking-widest hover:bg-white hover:text-black border-4 border-black transition-colors duration-300">
-                    Execute Transfer
-                  </a>
-                )}
+
               </div>
             </div>
           )}
@@ -359,60 +350,55 @@ export default function MinimalTheme({ data, inPreview = false }) {
               </button>
             </form>
           </div>
-          
+
           {/* FOOTER & QR */}
           <div id="share" className="scroll-mt-6 p-8 flex flex-col items-center bg-white border-b-4 border-black pb-20">
-             {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (
-               <div className="flex flex-col items-center gap-8 w-full">
-                 <div className="flex justify-center gap-4 sm:gap-6 w-full">
-                   <div className="flex flex-col items-center flex-1">
-                     <span className="text-[10px] font-black uppercase tracking-widest text-black mb-3">Connect</span>
-                     <div className="border-4 border-black p-2 bg-white shadow-[6px_6px_0_0_#000] flex items-center justify-center w-[120px] h-[120px]">
-                       <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={95} level="H" fgColor="#000" />
-                     </div>
-                   </div>
-                   <div className="flex flex-col items-center flex-1">
-                     <span className="text-[10px] font-black uppercase tracking-widest text-black mb-3">Pay Now</span>
-                     <div className="border-4 border-black p-2 bg-white shadow-[6px_6px_0_0_#000] flex items-center justify-center w-[120px] h-[120px]">
-                       {data.payment?.qrCode ? (
-                         <img src={data.payment.qrCode} alt="Payment QR" className="w-full h-full object-contain" />
-                       ) : data.payment?.upi ? (
-                         <QRCodeSVG value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} size={95} level="M" fgColor="#000" />
-                       ) : (
-                         <span className="text-[9px] font-mono">No QR</span>
-                       )}
-                     </div>
-                   </div>
-                 </div>
-                 <div className="w-full max-w-[320px] space-y-4 flex flex-col items-center">
-                   <button onClick={() => {
-                      if (navigator.share) { navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : 'Digital Card', url: window.location.href }).catch(console.error); } else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }
-                    }} className="w-full flex items-center justify-center gap-3 text-black hover:bg-black hover:text-white border-4 border-black py-3 transition-colors duration-300 font-black uppercase tracking-widest shadow-[4px_4px_0_0_#000] active:shadow-none active:translate-y-1 active:translate-x-1">
-                      <Share2 className="w-4 h-4" strokeWidth={2.5} /> Share Profile
-                   </button>
-                   {data.payment?.link && (
-                     <a href={data.payment.link} target="_blank" rel="noreferrer" className="w-full text-center py-3.5 bg-black text-white hover:bg-white hover:text-black border-4 border-black font-black uppercase tracking-widest text-xs transition-colors shadow-[4px_4px_0_0_#000] active:shadow-none active:translate-y-1 active:translate-x-1">
-                       Make Payment
-                     </a>
-                   )}
-                 </div>
-               </div>
-             ) : (
-               <>
-                 <div className="border-8 border-black p-4 bg-white shadow-[12px_12px_0_0_#000] mb-10">
-                   <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={140} level="H" fgColor="#000" />
-                 </div>
-                 <button onClick={() => {
+            {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (
+              <div className="flex flex-col items-center gap-8 w-full">
+                <div className="flex flex-col items-center gap-6 w-full">
+                  <div className="flex flex-col items-center">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-black mb-3">Connect</span>
+                    <div className="border-4 border-black p-3 bg-white shadow-[6px_6px_0_0_#000] flex items-center justify-center w-[180px] h-[180px]">
+                      <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={148} level="H" fgColor="#000" />
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-black mb-3">Pay Now</span>
+                    <div className="border-4 border-black p-3 bg-white shadow-[6px_6px_0_0_#000] flex items-center justify-center w-[180px] h-[180px]">
+                      {data.payment?.qrCode ? (
+                        <img src={data.payment.qrCode} alt="Payment QR" className="w-full h-full object-contain" />
+                      ) : data.payment?.upi ? (
+                        <QRCodeSVG value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} size={148} level="M" fgColor="#000" />
+                      ) : (
+                        <span className="text-[9px] font-mono">No QR</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full max-w-[320px] space-y-4 flex flex-col items-center">
+                  <button onClick={() => {
                     if (navigator.share) { navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : 'Digital Card', url: window.location.href }).catch(console.error); } else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }
-                  }} className="flex items-center gap-3 text-black hover:bg-black hover:text-white border-4 border-black px-8 py-3 transition-colors duration-300 font-black uppercase tracking-widest shadow-[4px_4px_0_0_#000] active:shadow-none active:translate-y-1 active:translate-x-1">
-                    <Share2 className="w-5 h-5" strokeWidth={2.5} /> Share Profile
-                 </button>
-               </>
-             )}
+                  }} className="w-full flex items-center justify-center gap-3 text-black hover:bg-black hover:text-white border-4 border-black py-3 transition-colors duration-300 font-black uppercase tracking-widest shadow-[4px_4px_0_0_#000] active:shadow-none active:translate-y-1 active:translate-x-1">
+                    <Share2 className="w-4 h-4" strokeWidth={2.5} /> Share Profile
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="border-8 border-black p-4 bg-white shadow-[12px_12px_0_0_#000] mb-10">
+                  <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={140} level="H" fgColor="#000" />
+                </div>
+                <button onClick={() => {
+                  if (navigator.share) { navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : 'Digital Card', url: window.location.href }).catch(console.error); } else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }
+                }} className="flex items-center gap-3 text-black hover:bg-black hover:text-white border-4 border-black px-8 py-3 transition-colors duration-300 font-black uppercase tracking-widest shadow-[4px_4px_0_0_#000] active:shadow-none active:translate-y-1 active:translate-x-1">
+                  <Share2 className="w-5 h-5" strokeWidth={2.5} /> Share Profile
+                </button>
+              </>
+            )}
           </div>
 
           <div className="p-4 bg-black text-center">
-             <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white">NEXCARD // BRUTALIST</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white">NEXCARD // BRUTALIST</p>
           </div>
 
         </div>

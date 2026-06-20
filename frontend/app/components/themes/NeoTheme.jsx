@@ -413,11 +413,6 @@ export default function NeoTheme({ data, inPreview = false }) {
                      <p className="text-xs leading-relaxed text-zinc-400 whitespace-pre-line bg-zinc-900/50 p-3 border border-zinc-800">{data.payment.bankDetails}</p>
                   </div>
                 )}
-                {data.payment.link && (
-                  <a href={data.payment.link} target="_blank" rel="noreferrer" className="block w-full py-3 bg-zinc-900 border border-zinc-700 text-center text-xs uppercase tracking-widest text-white hover:bg-zinc-800 transition-colors">
-                    Init_Transaction
-                  </a>
-                )}
               </div>
             </div>
           )}
@@ -450,38 +445,33 @@ export default function NeoTheme({ data, inPreview = false }) {
           <div id="share" className="scroll-mt-6 mt-10 flex flex-col items-center pb-10 border-t border-zinc-900 pt-10">
              {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (
                <div className="flex flex-col items-center gap-6 w-full">
-                 <div className="flex justify-center gap-4 sm:gap-6 w-full px-4">
-                   <div className="flex flex-col items-center flex-1">
-                     <span className="text-[9px] uppercase tracking-widest text-zinc-500 mb-2">Connect</span>
-                     <div className="p-3 bg-black border border-zinc-800 flex items-center justify-center w-[120px] h-[120px]">
-                       <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={95} level="M" fgColor="#000" />
-                     </div>
-                   </div>
-                   <div className="flex flex-col items-center flex-1">
-                     <span className="text-[9px] uppercase tracking-widest text-zinc-500 mb-2">Pay Now</span>
-                     <div className="p-3 bg-black border border-zinc-800 flex items-center justify-center w-[120px] h-[120px]">
-                       {data.payment?.qrCode ? (
-                         <img src={data.payment.qrCode} alt="Payment QR" className="w-full h-full object-contain" />
-                       ) : data.payment?.upi ? (
-                         <QRCodeSVG value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} size={95} level="M" fgColor="#000" />
-                       ) : (
-                         <span className="text-[8px] text-zinc-600 font-mono">No QR</span>
-                       )}
-                     </div>
-                   </div>
-                 </div>
-                 <div className="w-full max-w-[320px] px-4 space-y-4 flex flex-col items-center">
-                   <button onClick={() => {
-                      if (navigator.share) { navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : 'Digital Card', url: window.location.href }).catch(console.error); } else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }
-                    }} className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-zinc-400 hover:text-white transition-colors">
-                      <Share2 className="w-3 h-3" /> Broadcast_URL
-                   </button>
-                   {data.payment?.link && (
-                     <a href={data.payment.link} target="_blank" rel="noreferrer" className="w-full block text-center py-3 bg-zinc-900 border border-zinc-700 text-xs uppercase tracking-widest text-white hover:bg-zinc-800 transition-colors">
-                       Init_Transaction
-                     </a>
-                   )}
-                 </div>
+                  <div className="flex flex-col items-center gap-6 w-full px-4">
+                    <div className="flex flex-col items-center">
+                      <span className="text-[9px] uppercase tracking-widest text-zinc-500 mb-2">Connect</span>
+                      <div className="p-3.5 bg-black border border-zinc-800 flex items-center justify-center w-[180px] h-[180px]">
+                        <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={152} level="M" fgColor="#000" />
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <span className="text-[9px] uppercase tracking-widest text-zinc-500 mb-2">Pay Now</span>
+                      <div className="p-3.5 bg-black border border-zinc-800 flex items-center justify-center w-[180px] h-[180px]">
+                        {data.payment?.qrCode ? (
+                          <img src={data.payment.qrCode} alt="Payment QR" className="w-full h-full object-contain" />
+                        ) : data.payment?.upi ? (
+                          <QRCodeSVG value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} size={152} level="M" fgColor="#000" />
+                        ) : (
+                          <span className="text-[8px] text-zinc-600 font-mono">No QR</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full max-w-[320px] px-4 space-y-4 flex flex-col items-center">
+                    <button onClick={() => {
+                       if (navigator.share) { navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : 'Digital Card', url: window.location.href }).catch(console.error); } else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }
+                     }} className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-zinc-400 hover:text-white transition-colors">
+                       <Share2 className="w-3 h-3" /> Broadcast_URL
+                    </button>
+                  </div>
                </div>
              ) : (
                <>

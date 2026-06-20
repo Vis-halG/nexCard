@@ -14,7 +14,7 @@ const YoutubeIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" 
 
 const WhatsAppIcon = ({ className }) => (
   <svg viewBox="0 0 16 16" fill="currentColor" className={className}>
-    <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
+    <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232" />
   </svg>
 );
 
@@ -96,34 +96,34 @@ export default function ClassicTheme({ data, inPreview = false }) {
   };
 
   const primaryColor = data?.theme?.primary || "#1D4ED8";
-  
-  const wrapperBg = "#F8FAFC"; 
+
+  const wrapperBg = "#F8FAFC";
 
   return (
-    <div 
-      className={inPreview 
+    <div
+      className={inPreview
         ? "h-full w-full relative overflow-hidden flex flex-col font-sans selection:bg-slate-900 selection:text-white"
         : `min-h-screen flex justify-center font-sans pb-16 ${inPreview ? "pt-0" : "pt-8"} selection:bg-slate-900 selection:text-white`
-      } 
+      }
       style={inPreview ? { backgroundColor: wrapperBg } : { backgroundColor: wrapperBg, scrollBehavior: "smooth" }}
     >
-      <div 
+      <div
         className={inPreview
           ? "w-full h-full overflow-y-auto scrollbar-none bg-white rounded-t-none rounded-b-[2rem] relative border border-white bg-clip-padding flex-1"
           : `w-full max-w-[480px] min-h-screen bg-white ${inPreview ? "rounded-t-none rounded-b-[2rem]" : "rounded-[2rem]"} shadow-[0_30px_60px_-15px_rgba(15,23,42,0.18)] overflow-hidden relative border border-white bg-clip-padding`
         }
       >
-        
+
         {/* EXECUTIVE TOP BAR */}
         <div className="flex justify-between items-center px-8 py-5 border-b border-slate-100 bg-white sticky top-0 z-50 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)]">
           <div className="font-serif font-bold text-slate-900 tracking-tight text-xl flex items-center gap-3">
-             <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: primaryColor }}></div>
-             {data?.name ? data.name.split(' ')[0] : 'Profile'}
+            <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: primaryColor }}></div>
+            {data?.name ? data.name.split(' ')[0] : 'Profile'}
           </div>
           <div className="flex gap-5 items-center">
-             <a href="#about" className="text-slate-400 hover:text-slate-900 transition-all hover:-translate-y-0.5"><User size={20} strokeWidth={1.5} /></a>
-             <a href="#contact" className="text-slate-400 hover:text-slate-900 transition-all hover:-translate-y-0.5"><Mail size={20} strokeWidth={1.5} /></a>
-             <button onClick={() => setShowWhatsAppInput(true)} className="text-slate-400 hover:text-slate-900 transition-all hover:-translate-y-0.5 cursor-pointer"><Share2 size={20} strokeWidth={1.5} /></button>
+            <a href="#about" className="text-slate-400 hover:text-slate-900 transition-all hover:-translate-y-0.5"><User size={20} strokeWidth={1.5} /></a>
+            <a href="#contact" className="text-slate-400 hover:text-slate-900 transition-all hover:-translate-y-0.5"><Mail size={20} strokeWidth={1.5} /></a>
+            <button onClick={() => setShowWhatsAppInput(true)} className="text-slate-400 hover:text-slate-900 transition-all hover:-translate-y-0.5 cursor-pointer"><Share2 size={20} strokeWidth={1.5} /></button>
           </div>
         </div>
 
@@ -131,103 +131,54 @@ export default function ClassicTheme({ data, inPreview = false }) {
         <div id="home" className="flex flex-col items-center text-center relative bg-gradient-to-b from-slate-50/50 to-white">
           {data?.coverImage && (
             <div className="w-full h-40 relative">
-               <img src={data.coverImage} className="w-full h-full object-cover" alt="Cover" />
-               <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40"></div>
+              <img src={data.coverImage} className="w-full h-full object-cover" alt="Cover" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40"></div>
             </div>
           )}
-          
+
           {!data?.coverImage && <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>}
 
           <div className={`px-8 ${data?.coverImage ? '-mt-20' : 'pt-12'} pb-10 flex flex-col items-center w-full relative z-10`}>
 
-          <div className="relative group">
-            <div className="absolute inset-0 rounded-full blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500" style={{ backgroundColor: primaryColor }}></div>
-            <div className="w-36 h-36 rounded-full border-4 border-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] overflow-hidden mb-8 relative z-10 bg-slate-100">
-              <img 
-                src={data?.image || "https://i.pravatar.cc/150"} 
-                alt={data?.name || "profile"} 
-                className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-              />
+            <div className="relative group">
+              <div className="absolute inset-0 rounded-full blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500" style={{ backgroundColor: primaryColor }}></div>
+              <div className="w-36 h-36 rounded-full border-4 border-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] overflow-hidden mb-8 relative z-10 bg-slate-100">
+                <img
+                  src={data?.image || "https://i.pravatar.cc/150"}
+                  alt={data?.name || "profile"}
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                />
+              </div>
             </div>
-          </div>
 
-          <h1 className="text-4xl font-serif text-slate-900 tracking-tight">
-            {data?.name || "Your Name"}
-          </h1>
-          <div className="flex items-center justify-center gap-3 mt-4 mb-5 w-full">
-            <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-slate-200"></div>
-            <p className="text-slate-500 font-medium text-[15px] tracking-widest uppercase">
-              {data?.title || "Professional Title"}
-            </p>
-            <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-slate-200"></div>
-          </div>
-          
-          {data?.company && (
-            <p className="text-slate-400 font-medium text-sm tracking-widest uppercase">
-              {data.company}
-            </p>
-          )}
+            <h1 className="text-4xl font-serif text-slate-900 tracking-tight">
+              {data?.name || "Your Name"}
+            </h1>
+            <div className="flex items-center justify-center gap-3 mt-4 mb-5 w-full">
+              <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-slate-200"></div>
+              <p className="text-slate-500 font-medium text-[15px] tracking-widest uppercase">
+                {data?.title || "Professional Title"}
+              </p>
+              <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-slate-200"></div>
+            </div>
 
-          {/* LUXURY ACTION ROW */}
-          <div className="flex flex-col items-center gap-4 mt-10 w-full px-4">
-            <div className="flex justify-center gap-4 w-full">
-              {visibleActions.map((act) => (
-                <a
-                  key={act.id}
-                  href={act.href}
-                  target={act.target}
-                  rel={act.rel}
-                  className={`w-12 h-12 rounded-full border border-slate-200 text-slate-600 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-1 group ${act.hoverClass || ''}`}
-                  style={act.id === 'call' || act.id === 'location' ? { hoverBackgroundColor: primaryColor } : undefined}
-                >
-                  {act.id === "whatsapp" 
-                    ? act.icon("w-5 h-5 fill-slate-600 group-hover:fill-white transition-colors duration-300")
-                    : act.icon("w-5 h-5 stroke-slate-600 group-hover:stroke-white transition-colors duration-300")
-                  }
-                </a>
-              ))}
+            {data?.company && (
+              <p className="text-slate-400 font-medium text-sm tracking-widest uppercase">
+                {data.company}
+              </p>
+            )}
 
-              {hasMore ? (
-                <button
-                  onClick={() => setShowMore(!showMore)}
-                  className={`w-12 h-12 rounded-full border border-slate-200 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:-translate-y-1 group ${
-                    showMore 
-                      ? 'bg-slate-900 text-white border-transparent shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)]' 
-                      : 'text-slate-600 hover:bg-slate-900'
-                  }`}
-                  style={!showMore ? { hoverBackgroundColor: primaryColor } : undefined}
-                >
-                  <MoreHorizontal className="w-5 h-5" />
-                </button>
-              ) : (
-                actions.slice(3, 4).map((act) => (
+            {/* LUXURY ACTION ROW */}
+            <div className="flex flex-col items-center gap-4 mt-10 w-full px-4">
+              <div className="flex justify-center gap-4 w-full">
+                {visibleActions.map((act) => (
                   <a
                     key={act.id}
                     href={act.href}
                     target={act.target}
                     rel={act.rel}
                     className={`w-12 h-12 rounded-full border border-slate-200 text-slate-600 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-1 group ${act.hoverClass || ''}`}
-                    style={act.id === 'mail' ? undefined : { hoverBackgroundColor: primaryColor }}
-                  >
-                    {act.id === "whatsapp"
-                      ? act.icon("w-5 h-5 fill-slate-600 group-hover:fill-white transition-colors duration-300")
-                      : act.icon("w-5 h-5 stroke-slate-600 group-hover:stroke-white transition-colors duration-300")
-                    }
-                  </a>
-                ))
-              )}
-            </div>
-
-            {hasMore && showMore && (
-              <div className="flex justify-center gap-4 w-full animate-in slide-in-from-top duration-300">
-                {remainingActions.map((act) => (
-                  <a
-                    key={act.id}
-                    href={act.href}
-                    target={act.target}
-                    rel={act.rel}
-                    className={`w-12 h-12 rounded-full border border-slate-200 text-slate-600 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-1 group ${act.hoverClass || ''}`}
-                    style={act.id === 'sms' ? undefined : (act.id === 'mail' ? undefined : { hoverBackgroundColor: primaryColor })}
+                    style={act.id === 'call' || act.id === 'location' ? { hoverBackgroundColor: primaryColor } : undefined}
                   >
                     {act.id === "whatsapp"
                       ? act.icon("w-5 h-5 fill-slate-600 group-hover:fill-white transition-colors duration-300")
@@ -235,24 +186,72 @@ export default function ClassicTheme({ data, inPreview = false }) {
                     }
                   </a>
                 ))}
+
+                {hasMore ? (
+                  <button
+                    onClick={() => setShowMore(!showMore)}
+                    className={`w-12 h-12 rounded-full border border-slate-200 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:-translate-y-1 group ${showMore
+                        ? 'bg-slate-900 text-white border-transparent shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)]'
+                        : 'text-slate-600 hover:bg-slate-900'
+                      }`}
+                    style={!showMore ? { hoverBackgroundColor: primaryColor } : undefined}
+                  >
+                    <MoreHorizontal className="w-5 h-5" />
+                  </button>
+                ) : (
+                  actions.slice(3, 4).map((act) => (
+                    <a
+                      key={act.id}
+                      href={act.href}
+                      target={act.target}
+                      rel={act.rel}
+                      className={`w-12 h-12 rounded-full border border-slate-200 text-slate-600 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-1 group ${act.hoverClass || ''}`}
+                      style={act.id === 'mail' ? undefined : { hoverBackgroundColor: primaryColor }}
+                    >
+                      {act.id === "whatsapp"
+                        ? act.icon("w-5 h-5 fill-slate-600 group-hover:fill-white transition-colors duration-300")
+                        : act.icon("w-5 h-5 stroke-slate-600 group-hover:stroke-white transition-colors duration-300")
+                      }
+                    </a>
+                  ))
+                )}
               </div>
-            )}
-          </div>
+
+              {hasMore && showMore && (
+                <div className="flex justify-center gap-4 w-full animate-in slide-in-from-top duration-300">
+                  {remainingActions.map((act) => (
+                    <a
+                      key={act.id}
+                      href={act.href}
+                      target={act.target}
+                      rel={act.rel}
+                      className={`w-12 h-12 rounded-full border border-slate-200 text-slate-600 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-1 group ${act.hoverClass || ''}`}
+                      style={act.id === 'sms' ? undefined : (act.id === 'mail' ? undefined : { hoverBackgroundColor: primaryColor })}
+                    >
+                      {act.id === "whatsapp"
+                        ? act.icon("w-5 h-5 fill-slate-600 group-hover:fill-white transition-colors duration-300")
+                        : act.icon("w-5 h-5 stroke-slate-600 group-hover:stroke-white transition-colors duration-300")
+                      }
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
         {/* 📥 PRIMARY CTA (EXECUTIVE BUTTON) */}
         <div className="px-8 py-8 border-y border-slate-100 bg-slate-50/50">
-          <button 
+          <button
             onClick={generateVcard}
             className="w-full py-4 text-white font-medium tracking-widest uppercase text-sm flex items-center justify-center gap-3 hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 rounded-sm"
             style={{ backgroundColor: primaryColor }}
           >
             <Download className="w-4 h-4" /> Save to Contacts
           </button>
-          
+
           {data?.calendarUrl && (
-            <a 
+            <a
               href={data.calendarUrl}
               target="_blank"
               rel="noreferrer"
@@ -264,7 +263,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
         </div>
 
         <div className="px-8 py-12 space-y-16">
-          
+
           {/* ABOUT */}
           {data?.about && (
             <div id="about" className="scroll-mt-24">
@@ -297,13 +296,13 @@ export default function ClassicTheme({ data, inPreview = false }) {
           {/* SOCIAL LINKS */}
           <div id="social" className="scroll-mt-24">
             <h2 className="text-2xl font-serif text-slate-900 mb-6 flex flex-col gap-2">
-               Connect
-               <div className="w-10 h-0.5" style={{ backgroundColor: primaryColor }}></div>
+              Connect
+              <div className="w-10 h-0.5" style={{ backgroundColor: primaryColor }}></div>
             </h2>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex overflow-x-auto whitespace-nowrap gap-3 pb-2">
               {data?.social?.instagram && (
                 <a href={data.social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"
-                  className="w-14 h-14 border border-slate-200 bg-white flex items-center justify-center text-slate-400 hover:text-pink-600 hover:bg-pink-50 hover:border-pink-300 hover:shadow-[0_10px_20px_-5px_rgba(236,72,153,0.15)] transition-all duration-300 hover:-translate-y-0.5 rounded-sm">
+                  className="inline-flex w-14 h-14 border border-slate-200 bg-white items-center justify-center text-slate-400 hover:text-pink-600 hover:bg-pink-50 hover:border-pink-300 hover:shadow-[0_10px_20px_-5px_rgba(236,72,153,0.15)] transition-all duration-300 hover:-translate-y-0.5 rounded-sm shrink-0">
                   <InstagramIcon className="w-5 h-5" />
                 </a>
               )}
@@ -401,23 +400,14 @@ export default function ClassicTheme({ data, inPreview = false }) {
                     <span className="font-mono font-medium text-slate-900 text-[15px]">{data.payment.upi}</span>
                   </div>
                 )}
-                {data.payment.gstNumber && (
-                  <div className="flex justify-between items-center border-b border-slate-100 pb-4">
-                    <span className="text-slate-400 font-medium tracking-widest uppercase text-xs">GSTIN</span>
-                    <span className="font-mono font-medium text-slate-900 text-[15px] uppercase">{data.gstNumber}</span>
-                  </div>
-                )}
+
                 {data.payment.bankDetails && (
                   <div className="pt-2">
                     <span className="text-slate-400 font-medium tracking-widest uppercase text-xs block mb-3">Bank Details</span>
                     <p className="text-[13px] font-mono leading-relaxed text-slate-600 whitespace-pre-line bg-slate-50 p-4 border border-slate-100 rounded-sm">{data.payment.bankDetails}</p>
                   </div>
                 )}
-                {data.payment.link && (
-                  <a href={data.payment.link} target="_blank" rel="noreferrer" className="block w-full text-center py-4 text-white font-medium tracking-widest uppercase text-xs mt-6 transition-all hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-0.5 rounded-sm" style={{ backgroundColor: primaryColor }}>
-                    Make a Secure Payment
-                  </a>
-                )}
+
               </div>
             </div>
           )}
@@ -443,71 +433,64 @@ export default function ClassicTheme({ data, inPreview = false }) {
 
           {/* CONTACT FORM */}
           <div id="contact" className="scroll-mt-24">
-             <h2 className="text-2xl font-serif text-slate-900 mb-6 flex flex-col gap-2">
-                Direct Inquiry
-                <div className="w-10 h-0.5" style={{ backgroundColor: primaryColor }}></div>
-              </h2>
-              <form onSubmit={handleEnquiry} className="space-y-4">
-                <input type="text" name="name" required placeholder="Full Name" className="w-full p-5 border border-slate-200 bg-slate-50 focus:outline-none focus:border-slate-400 focus:bg-white text-[15px] font-light transition-all rounded-sm placeholder:text-slate-400" />
-                <input type="tel" name="phone" placeholder="Phone Number" className="w-full p-5 border border-slate-200 bg-slate-50 focus:outline-none focus:border-slate-400 focus:bg-white text-[15px] font-light transition-all rounded-sm placeholder:text-slate-400" />
-                <textarea name="message" required placeholder="Your Message" rows="5" className="w-full p-5 border border-slate-200 bg-slate-50 focus:outline-none focus:border-slate-400 focus:bg-white text-[15px] font-light transition-all rounded-sm placeholder:text-slate-400 resize-none"></textarea>
-                <button type="submit" className="w-full py-5 text-white font-medium tracking-widest uppercase text-xs transition-all hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 rounded-sm mt-2" style={{ backgroundColor: primaryColor }}>
-                  Submit Inquiry
-                </button>
-              </form>
+            <h2 className="text-2xl font-serif text-slate-900 mb-6 flex flex-col gap-2">
+              Direct Inquiry
+              <div className="w-10 h-0.5" style={{ backgroundColor: primaryColor }}></div>
+            </h2>
+            <form onSubmit={handleEnquiry} className="space-y-4">
+              <input type="text" name="name" required placeholder="Full Name" className="w-full p-5 border border-slate-200 bg-slate-50 focus:outline-none focus:border-slate-400 focus:bg-white text-[15px] font-light transition-all rounded-sm placeholder:text-slate-400" />
+              <input type="tel" name="phone" placeholder="Phone Number" className="w-full p-5 border border-slate-200 bg-slate-50 focus:outline-none focus:border-slate-400 focus:bg-white text-[15px] font-light transition-all rounded-sm placeholder:text-slate-400" />
+              <textarea name="message" required placeholder="Your Message" rows="5" className="w-full p-5 border border-slate-200 bg-slate-50 focus:outline-none focus:border-slate-400 focus:bg-white text-[15px] font-light transition-all rounded-sm placeholder:text-slate-400 resize-none"></textarea>
+              <button type="submit" className="w-full py-5 text-white font-medium tracking-widest uppercase text-xs transition-all hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 rounded-sm mt-2" style={{ backgroundColor: primaryColor }}>
+                Submit Inquiry
+              </button>
+            </form>
           </div>
 
 
 
           {/* SHARE QR */}
           <div id="share" className="scroll-mt-6 pt-10 border-t border-slate-100 flex flex-col items-center">
-             {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (
-               <div className="flex flex-col items-center gap-6 w-full">
-                 <div className="flex justify-center gap-4 sm:gap-6 w-full px-4">
-                   <div className="flex flex-col items-center flex-1">
-                     <span className="text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2">Connect</span>
-                     <div className="p-3 bg-white border border-slate-100 shadow-sm rounded-sm flex items-center justify-center w-[120px] h-[120px]">
-                       <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={95} level="H" fgColor="#0F172A" />
-                     </div>
-                   </div>
-                   <div className="flex flex-col items-center flex-1">
-                     <span className="text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2">Pay Now</span>
-                     <div className="p-3 bg-white border border-slate-100 shadow-sm rounded-sm flex items-center justify-center w-[120px] h-[120px]">
-                       {data.payment?.qrCode ? (
-                         <img src={data.payment.qrCode} alt="Payment QR" className="w-full h-full object-contain" />
-                       ) : data.payment?.upi ? (
-                         <QRCodeSVG value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} size={95} level="M" fgColor="#0F172A" />
-                       ) : (
-                         <span className="text-[9px] text-slate-400 font-mono">No QR</span>
-                       )}
-                     </div>
-                   </div>
-                 </div>
-                 <div className="w-full max-w-[320px] px-4 space-y-4 flex flex-col items-center">
-                   <button onClick={() => {
-                      if (navigator.share) { navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : 'Digital Card', url: window.location.href }).catch(console.error); } else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }
-                    }} className="flex items-center justify-center gap-3 text-slate-500 font-medium tracking-widest uppercase text-xs hover:text-slate-900 transition-colors">
-                      <Share2 className="w-4 h-4" /> Share Credentials
-                   </button>
-                   {data.payment?.link && (
-                     <a href={data.payment.link} target="_blank" rel="noreferrer" className="w-full text-center py-3 text-white font-medium tracking-widest uppercase text-[11px] shadow-sm hover:shadow-md transition-all rounded-sm" style={{ backgroundColor: primaryColor }}>
-                       Make a Payment
-                     </a>
-                   )}
-                 </div>
-               </div>
-             ) : (
-               <>
-                 <div className="p-4 bg-white border border-slate-100 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.05)] mb-8 rounded-sm">
-                    <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={160} level="H" fgColor="#0F172A" />
-                 </div>
-                 <button onClick={() => {
+            {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (
+              <div className="flex flex-col items-center gap-6 w-full px-4">
+                <div className="flex flex-col items-center">
+                  <span className="text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2">Connect</span>
+                  <div className="p-3.5 bg-white border border-slate-100 shadow-sm rounded-sm flex items-center justify-center w-[180px] h-[180px]">
+                    <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={152} level="H" fgColor="#0F172A" />
+                  </div>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className="text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2">Pay Now</span>
+                  <div className="p-3.5 bg-white border border-slate-100 shadow-sm rounded-sm flex items-center justify-center w-[180px] h-[180px]">
+                    {data.payment?.qrCode ? (
+                      <img src={data.payment.qrCode} alt="Payment QR" className="w-full h-full object-contain" />
+                    ) : data.payment?.upi ? (
+                      <QRCodeSVG value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} size={152} level="M" fgColor="#0F172A" />
+                    ) : (
+                      <span className="text-[9px] text-slate-400 font-mono">No QR</span>
+                    )}
+                  </div>
+                </div>
+                <div className="w-full max-w-[320px] px-4 space-y-4 flex flex-col items-center">
+                  <button onClick={() => {
                     if (navigator.share) { navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : 'Digital Card', url: window.location.href }).catch(console.error); } else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }
                   }} className="flex items-center justify-center gap-3 text-slate-500 font-medium tracking-widest uppercase text-xs hover:text-slate-900 transition-colors">
                     <Share2 className="w-4 h-4" /> Share Credentials
-                 </button>
-               </>
-             )}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="p-4 bg-white border border-slate-100 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.05)] mb-8 rounded-sm">
+                  <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={160} level="H" fgColor="#0F172A" />
+                </div>
+                <button onClick={() => {
+                  if (navigator.share) { navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : 'Digital Card', url: window.location.href }).catch(console.error); } else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }
+                }} className="flex items-center justify-center gap-3 text-slate-500 font-medium tracking-widest uppercase text-xs hover:text-slate-900 transition-colors">
+                  <Share2 className="w-4 h-4" /> Share Credentials
+                </button>
+              </>
+            )}
           </div>
 
         </div>
@@ -518,9 +501,10 @@ export default function ClassicTheme({ data, inPreview = false }) {
         </div>
 
       </div>
-      
+
       {/* Injecting CSS logic to override background colors cleanly on hover */}
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         [style*="hoverBackgroundColor"]:hover { background-color: ${primaryColor} !important; border-color: ${primaryColor} !important; }
       `}} />
       {/* 📱 MOBILE APP BOTTOM NAVIGATION */}

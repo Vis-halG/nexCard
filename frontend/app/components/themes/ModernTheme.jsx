@@ -15,7 +15,7 @@ const YoutubeIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" 
 
 const WhatsAppIcon = ({ className }) => (
   <svg viewBox="0 0 16 16" fill="currentColor" className={className}>
-    <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
+    <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232" />
   </svg>
 );
 
@@ -98,7 +98,7 @@ export default function ModernTheme({ data, inPreview = false }) {
   const fontClass = theme.font || "font-sans";
   const borderRadius = theme.radius || "1rem";
   const avatarRadius = theme.avatarStyle === 'circle' ? '9999px' : (theme.avatarStyle === 'rounded' ? '1.5rem' : '0px');
-  
+
   // Custom Gradients
   const bgGradient = theme.bgGradient || "none";
   const gradientPresets = {
@@ -140,12 +140,12 @@ export default function ModernTheme({ data, inPreview = false }) {
     shadowClass = 'border-slate-100/50';
   }
 
-  const cardClasses = cardStyle === 'glass' 
-    ? `backdrop-blur-md border border-white/40 ${shadowDepth === 'glow' ? '' : 'shadow-xl'}` 
+  const cardClasses = cardStyle === 'glass'
+    ? `backdrop-blur-md border border-white/40 ${shadowDepth === 'glow' ? '' : 'shadow-xl'}`
     : (cardStyle === 'outline' ? 'bg-transparent border border-slate-200 shadow-none' : `border border-slate-100 ${shadowClass}`);
 
-  const cardStyleOverride = cardStyle === 'glass' 
-    ? { backgroundColor: 'rgba(255, 255, 255, 0.7)' } 
+  const cardStyleOverride = cardStyle === 'glass'
+    ? { backgroundColor: 'rgba(255, 255, 255, 0.7)' }
     : (cardStyle === 'outline' ? {} : { backgroundColor: cardBg });
 
   // Banner Size
@@ -230,22 +230,22 @@ export default function ModernTheme({ data, inPreview = false }) {
   };
 
   return (
-    <div 
-      className={inPreview 
+    <div
+      className={inPreview
         ? `h-full w-full relative overflow-hidden flex flex-col ${fontClass} selection:bg-black selection:text-white`
         : `min-h-screen flex justify-center ${fontClass} pb-28 selection:bg-black selection:text-white overflow-x-hidden`
-      } 
+      }
       style={inPreview ? { backgroundColor: bgColor } : { scrollBehavior: "smooth", backgroundColor: bgColor }}
     >
-      <div 
+      <div
         className={inPreview
           ? "w-full h-full overflow-y-auto scrollbar-none relative flex-1"
           : "w-full min-h-screen relative overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.05)] sm:rounded-b-[2.5rem]"
         }
         style={{ background: bgGradientStyle || bgColor }}
       >
-        <button 
-          onClick={() => setShowWhatsAppInput(true)} 
+        <button
+          onClick={() => setShowWhatsAppInput(true)}
           className="absolute top-4 right-4 z-40 w-10 h-10 rounded-full bg-white/70 hover:bg-white backdrop-blur-md border border-slate-200/50 flex items-center justify-center text-slate-700 shadow-md cursor-pointer"
         >
           <Share2 size={18} />
@@ -257,14 +257,14 @@ export default function ModernTheme({ data, inPreview = false }) {
 
         {/* 🔥 HERO SECTION */}
         <div id="home" className="relative pb-10">
-          <div 
-            className={`${bannerHeightClass} w-full relative`} 
+          <div
+            className={`${bannerHeightClass} w-full relative`}
             style={data?.coverImage ? {
               backgroundImage: `url(${data.coverImage})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               clipPath: "ellipse(120% 100% at 50% 0%)"
-            } : { 
+            } : {
               background: `linear-gradient(145deg, ${primaryColor} 0%, ${primaryColor}dd 100%)`,
               clipPath: "ellipse(120% 100% at 50% 0%)"
             }}
@@ -274,13 +274,13 @@ export default function ModernTheme({ data, inPreview = false }) {
           </div>
 
           <div className={`px-6 relative -mt-24 flex flex-col ${textAlignClass}`}>
-            <div 
+            <div
               className={`w-40 h-40 ${avatarBorderClass} shadow-[0_8px_30px_rgba(0,0,0,0.12)] overflow-hidden bg-white relative z-10 transition-transform hover:scale-105 duration-500`}
               style={{ borderRadius: avatarRadius, ...avatarBorderStyle }}
             >
-              <img 
-                src={data?.image || "https://i.pravatar.cc/150"} 
-                alt={data?.name || "profile"} 
+              <img
+                src={data?.image || "https://i.pravatar.cc/150"}
+                alt={data?.name || "profile"}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -421,7 +421,7 @@ export default function ModernTheme({ data, inPreview = false }) {
 
           {/* 📥 SAVE CONTACT (Ultra Premium Button) */}
           <div className="px-8 mt-10">
-            <button 
+            <button
               onClick={generateVcard}
               className="w-full py-[18px] font-bold flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-all duration-400 relative overflow-hidden group"
               style={{ background: `linear-gradient(135deg, ${btnBg}, ${btnBg}ee)`, color: btnText, borderRadius: borderRadius }}
@@ -430,9 +430,9 @@ export default function ModernTheme({ data, inPreview = false }) {
               <Download className="w-[18px] h-[18px] relative z-10" />
               <span className="relative z-10 tracking-wide font-semibold text-[15px]">Save to Contacts</span>
             </button>
-            
+
             {data?.calendarUrl && (
-              <a 
+              <a
                 href={data.calendarUrl}
                 target="_blank"
                 rel="noreferrer"
@@ -475,79 +475,79 @@ export default function ModernTheme({ data, inPreview = false }) {
 
           {/* 🌐 SOCIAL MEDIA LINKS */}
           {data?.social && Object.values(data.social).some(Boolean) && (
-          <div id="social" className="scroll-mt-6">
-            <h2 className="text-[20px] font-bold mb-4 tracking-tight" style={{ color: textPrimary }}>Connect</h2>
-            <div className="flex flex-wrap gap-8">
-              {Object.entries(data.social).map(([key, val]) => {
-                if (!val) return null;
-                const Icon = {
-                  instagram: InstagramIcon,
-                  linkedin: LinkedinIcon,
-                  twitter: TwitterIcon,
-                  youtube: YoutubeIcon,
-                  facebook: FacebookIcon
-                }[key];
+            <div id="social" className="scroll-mt-6">
+              <h2 className="text-[20px] font-bold mb-4 tracking-tight" style={{ color: textPrimary }}>Connect</h2>
+              <div className="grid grid-cols-5 gap-3">
+                {Object.entries(data.social).map(([key, val]) => {
+                  if (!val) return null;
+                  const Icon = {
+                    instagram: InstagramIcon,
+                    linkedin: LinkedinIcon,
+                    twitter: TwitterIcon,
+                    youtube: YoutubeIcon,
+                    facebook: FacebookIcon
+                  }[key];
 
-                const brandColors = {
-                  instagram: '#E1306C',
-                  linkedin: '#0077B5',
-                  twitter: '#1DA1F2',
-                  youtube: '#FF0000',
-                  facebook: '#1877F2'
-                };
-                const brandColor = brandColors[key] || primaryColor;
+                  const brandColors = {
+                    instagram: '#E1306C',
+                    linkedin: '#0077B5',
+                    twitter: '#1DA1F2',
+                    youtube: '#FF0000',
+                    facebook: '#1877F2'
+                  };
+                  const brandColor = brandColors[key] || primaryColor;
 
-                let socialClasses = "w-14 h-14 transition-all duration-300 flex items-center justify-center group";
-                let socialStyles = { borderRadius: borderRadius };
+                  let socialClasses = "aspect-square w-full max-w-14 justify-self-center transition-all duration-300 flex items-center justify-center group";
+                  let socialStyles = { borderRadius: borderRadius };
 
-                if (socialStyle === 'monochrome') {
-                  socialClasses += " bg-slate-900 border-0 text-slate-300 hover:text-white hover:bg-black";
-                } else if (socialStyle === 'outline') {
-                  socialClasses += " bg-transparent border border-slate-200 text-slate-500 hover:border-slate-800 hover:text-slate-800";
-                } else if (socialStyle === 'glow') {
-                  socialClasses += " bg-white border border-slate-100 text-slate-400 hover:text-white";
-                } else {
-                  // colored
-                  socialClasses += " bg-white border border-slate-100 text-slate-400 hover:text-white";
-                }
-
-                // Hover style hook for dynamic hover brand color
-                const handleMouseEnter = (e) => {
-                  if (socialStyle === 'colored') {
-                    e.currentTarget.style.backgroundColor = brandColor;
-                    e.currentTarget.style.borderColor = brandColor;
+                  if (socialStyle === 'monochrome') {
+                    socialClasses += " bg-slate-900 border-0 text-slate-300 hover:text-white hover:bg-black";
+                  } else if (socialStyle === 'outline') {
+                    socialClasses += " bg-transparent border border-slate-200 text-slate-500 hover:border-slate-800 hover:text-slate-800";
                   } else if (socialStyle === 'glow') {
-                    e.currentTarget.style.backgroundColor = brandColor;
-                    e.currentTarget.style.borderColor = brandColor;
-                    e.currentTarget.style.boxShadow = `0 0 15px ${brandColor}99`;
+                    socialClasses += " bg-white border border-slate-100 text-slate-400 hover:text-white";
+                  } else {
+                    // colored
+                    socialClasses += " bg-white border border-slate-100 text-slate-400 hover:text-white";
                   }
-                };
 
-                const handleMouseLeave = (e) => {
-                  if (socialStyle === 'colored' || socialStyle === 'glow') {
-                    e.currentTarget.style.backgroundColor = '#fff';
-                    e.currentTarget.style.borderColor = '#f1f5f9';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }
-                };
+                  // Hover style hook for dynamic hover brand color
+                  const handleMouseEnter = (e) => {
+                    if (socialStyle === 'colored') {
+                      e.currentTarget.style.backgroundColor = brandColor;
+                      e.currentTarget.style.borderColor = brandColor;
+                    } else if (socialStyle === 'glow') {
+                      e.currentTarget.style.backgroundColor = brandColor;
+                      e.currentTarget.style.borderColor = brandColor;
+                      e.currentTarget.style.boxShadow = `0 0 15px ${brandColor}99`;
+                    }
+                  };
 
-                return (
-                  <a 
-                    key={key} 
-                    href={val} 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className={socialClasses} 
-                    style={socialStyles}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    <Icon className="w-6 h-6 group-hover:stroke-current" />
-                  </a>
-                );
-              })}
+                  const handleMouseLeave = (e) => {
+                    if (socialStyle === 'colored' || socialStyle === 'glow') {
+                      e.currentTarget.style.backgroundColor = '#fff';
+                      e.currentTarget.style.borderColor = '#f1f5f9';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }
+                  };
+
+                  return (
+                    <a
+                      key={key}
+                      href={val}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={socialClasses}
+                      style={socialStyles}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                    >
+                      <Icon className="w-6 h-6 group-hover:stroke-current" />
+                    </a>
+                  );
+                })}
+              </div>
             </div>
-          </div>
           )}
 
           {/* 🖼 IMAGE GALLERY */}
@@ -607,17 +607,7 @@ export default function ModernTheme({ data, inPreview = false }) {
                     <span className="text-[15px] font-bold font-mono tracking-tight" style={{ color: cardText }}>{data.payment.upi}</span>
                   </div>
                 )}
-                {data.gstNumber && (
-                  <div className={`px-5 py-4 rounded-3xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 ${cardClasses}`} style={{ ...shadowStyle, ...cardStyleOverride }}>
-                    <span className="font-semibold text-[14px]" style={{ color: textSecondary }}>GSTIN</span>
-                    <span className="text-[15px] font-bold font-mono tracking-tight uppercase" style={{ color: cardText }}>{data.gstNumber}</span>
-                  </div>
-                )}
-                {data.payment.link && (
-                  <a href={data.payment.link} target="_blank" rel="noreferrer" className="w-full flex items-center justify-center py-4 rounded-3xl font-bold shadow-[0_10px_25px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 transition-all duration-300 mt-2" style={{ backgroundColor: btnBg, color: btnText }}>
-                    Make a Payment
-                  </a>
-                )}
+
                 {data.payment.bankDetails && (
                   <div className="p-6 rounded-3xl border border-transparent shadow-inner mt-2" style={{ backgroundColor: `${cardText}09`, border: `1px solid ${cardText}15` }}>
                     <h3 className="font-bold text-[14px] mb-3 uppercase tracking-wider" style={{ color: textPrimary }}>Bank Details</h3>
@@ -633,11 +623,11 @@ export default function ModernTheme({ data, inPreview = false }) {
             <div id="map" className="scroll-mt-6">
               <h2 className="text-[20px] font-bold mb-4 tracking-tight" style={{ color: textPrimary }}>Location</h2>
               <p className="text-[15px] leading-relaxed mb-5 font-normal" style={{ color: textSecondary }}>{data.address}</p>
-              
+
               <div className="w-full h-56 rounded-[2rem] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.08)] relative mb-5 border border-slate-100">
                 <iframe width="100%" height="100%" style={{ border: 0, position: 'absolute', top: 0, left: 0 }} loading="lazy" allowFullScreen src={`https://maps.google.com/maps?q=${encodeURIComponent(data.address)}&t=&z=14&ie=UTF8&iwloc=&output=embed`}></iframe>
               </div>
-              
+
               <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(data.address)}`} target="_blank" rel="noreferrer" className="w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-[0_4px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.06)] hover:bg-slate-50 transition-all duration-300" style={{ color: cardText, backgroundColor: cardBg, border: `1px solid ${cardText}15` }}>
                 <MapPin className="w-4 h-4" />
                 Navigate
@@ -671,37 +661,37 @@ export default function ModernTheme({ data, inPreview = false }) {
           {/* 📲 SHARING & QR CODE (Minimalist) */}
           <div id="share" className="scroll-mt-6 pt-6 pb-4">
             <h2 className="text-[20px] font-bold mb-6 tracking-tight text-center" style={{ color: textPrimary }}>Share & Pay</h2>
-            
+
             {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (
               <div className="flex flex-col items-center gap-6 w-full">
-                <div className="flex justify-center gap-4 sm:gap-6 w-full px-4">
+                <div className="flex flex-col items-center gap-6 w-full px-4">
                   {/* Share QR */}
-                  <div className="flex flex-col items-center flex-1">
+                  <div className="flex flex-col items-center">
                     <span className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: textSecondary }}>Connect</span>
-                    <div className="p-3.5 rounded-[1.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.05)] border border-slate-100 bg-white flex items-center justify-center aspect-square w-[130px] h-[130px]">
-                      <QRCodeSVG 
-                        value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} 
-                        size={100} 
-                        level="Q" 
-                        className="rounded-md" 
-                        fgColor={textPrimary} 
+                    <div className="p-4 rounded-[1.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.05)] border border-slate-100 bg-white flex items-center justify-center aspect-square w-[180px] h-[180px]">
+                      <QRCodeSVG
+                        value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'}
+                        size={148}
+                        level="Q"
+                        className="rounded-md"
+                        fgColor={textPrimary}
                       />
                     </div>
                   </div>
-                  
+
                   {/* Payment QR */}
-                  <div className="flex flex-col items-center flex-1">
+                  <div className="flex flex-col items-center">
                     <span className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: textSecondary }}>Pay Now</span>
-                    <div className="p-3.5 rounded-[1.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.05)] border border-slate-100 bg-white flex items-center justify-center aspect-square w-[130px] h-[130px]">
+                    <div className="p-4 rounded-[1.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.05)] border border-slate-100 bg-white flex items-center justify-center aspect-square w-[180px] h-[180px]">
                       {data.payment?.qrCode ? (
                         <img src={data.payment.qrCode} alt="Payment QR" className="w-full h-full object-contain rounded-md" />
                       ) : data.payment?.upi ? (
-                        <QRCodeSVG 
-                          value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} 
-                          size={100} 
-                          level="M" 
-                          className="rounded-md" 
-                          fgColor={textPrimary} 
+                        <QRCodeSVG
+                          value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`}
+                          size={148}
+                          level="M"
+                          className="rounded-md"
+                          fgColor={textPrimary}
                         />
                       ) : (
                         <div className="text-[10px] text-slate-400 font-semibold text-center">No QR Code</div>
@@ -709,25 +699,21 @@ export default function ModernTheme({ data, inPreview = false }) {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="w-full max-w-[320px] px-4 space-y-3 mt-2">
                   <ShareActions data={data} layout="modern" primaryColor={primaryColor} />
-                  {data.payment?.link && (
-                    <a href={data.payment.link} target="_blank" rel="noreferrer" className="w-full py-3.5 font-bold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all duration-350 text-[14px]" style={{ backgroundColor: btnBg, color: btnText, borderRadius: borderRadius }}>
-                      Make a Payment
-                    </a>
-                  )}
+                  {/* ShareActions is kept but make payment button is removed */}
                 </div>
               </div>
             ) : (
               <div className="flex flex-col items-center">
                 <div className="p-5 rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.06)] mb-6 border border-slate-50" style={{ backgroundColor: cardBg }}>
-                  <QRCodeSVG 
-                    value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} 
-                    size={180} 
-                    level="Q" 
-                    className="rounded-xl" 
-                    fgColor={textPrimary} 
+                  <QRCodeSVG
+                    value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'}
+                    size={180}
+                    level="Q"
+                    className="rounded-xl"
+                    fgColor={textPrimary}
                     {...(qrLogo === 'avatar' && data?.image ? {
                       imageSettings: {
                         src: data.image,
@@ -746,7 +732,7 @@ export default function ModernTheme({ data, inPreview = false }) {
               </div>
             )}
           </div>
-          
+
         </div>
 
         {/* FOOTER & VIEW COUNTER */}
@@ -763,7 +749,8 @@ export default function ModernTheme({ data, inPreview = false }) {
       <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} layout="modern" inPreview={inPreview} />
 
       {/* Injecting some custom style mapping for hover utilities */}
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .group:hover svg.hoverColor { stroke: ${primaryColor}; }
         .focus-color:focus { border-color: ${primaryColor}; box-shadow: 0 0 0 4px ${primaryColor}20; }
       `}} />

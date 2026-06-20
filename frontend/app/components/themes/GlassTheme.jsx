@@ -304,10 +304,10 @@ export default function GlassTheme({ data, inPreview = false }) {
 
           {socials.length > 0 && (
             <Section title="Connect" className={cardClasses}>
-              <div className="flex flex-wrap gap-3">
+              <div className="grid grid-cols-5 gap-3">
                 {socials.map(([network, url]) => (
                   <a key={network} href={url} target="_blank" rel="noreferrer" aria-label={network}
-                    className={`w-14 h-14 rounded-2xl border border-slate-100 bg-white/80 flex items-center justify-center text-slate-400 shadow-sm transition-all duration-300 hover:-translate-y-0.5 ${SOCIAL_COLORS[network] || 'hover:text-slate-700'}` }>
+                    className={`aspect-square w-full max-w-14 justify-self-center rounded-2xl border border-slate-100 bg-white/80 flex items-center justify-center text-slate-400 shadow-sm transition-all duration-300 hover:-translate-y-0.5 ${SOCIAL_COLORS[network] || 'hover:text-slate-700'}` }>
                     {SOCIAL_ICONS[network] ? SOCIAL_ICONS[network]("w-6 h-6") : <ExternalLink className="w-6 h-6" />}
                   </a>
                 ))}
@@ -380,20 +380,20 @@ export default function GlassTheme({ data, inPreview = false }) {
           <div id="share" className={`scroll-mt-6 ${cardClasses} flex flex-col items-center`}>
             {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (
               <div className="flex flex-col items-center gap-6 w-full">
-                <div className="flex justify-center gap-4 sm:gap-6 w-full">
-                  <div className="flex flex-col items-center flex-1">
+                <div className="flex flex-col items-center gap-6 w-full">
+                  <div className="flex flex-col items-center">
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-2">Connect</span>
-                    <div className="rounded-[1.25rem] bg-white/90 p-3.5 shadow-sm flex items-center justify-center w-[120px] h-[120px]">
-                      <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={95} level="H" fgColor="#111827" />
+                    <div className="rounded-[1.5rem] bg-white/90 p-4 shadow-sm flex items-center justify-center w-[180px] h-[180px]">
+                      <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={148} level="H" fgColor="#111827" />
                     </div>
                   </div>
-                  <div className="flex flex-col items-center flex-1">
+                  <div className="flex flex-col items-center">
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-2">Pay Now</span>
-                    <div className="rounded-[1.25rem] bg-white/90 p-3.5 shadow-sm flex items-center justify-center w-[120px] h-[120px]">
+                    <div className="rounded-[1.5rem] bg-white/90 p-4 shadow-sm flex items-center justify-center w-[180px] h-[180px]">
                       {data.payment?.qrCode ? (
                         <img src={data.payment.qrCode} alt="Payment QR" className="w-full h-full object-contain rounded-md" />
                       ) : data.payment?.upi ? (
-                        <QRCodeSVG value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} size={95} level="M" fgColor="#111827" />
+                        <QRCodeSVG value={`upi://pay?pa=${encodeURIComponent(data.payment.upi)}&pn=${encodeURIComponent(data.name || 'Payment')}&cu=INR`} size={148} level="M" fgColor="#111827" />
                       ) : (
                         <span className="text-[9px] text-slate-400 font-mono">No QR</span>
                       )}
@@ -415,11 +415,6 @@ export default function GlassTheme({ data, inPreview = false }) {
                     <Share2 className="h-4 w-4" />
                     Share Profile
                   </button>
-                  {data.payment?.link && (
-                    <a href={data.payment.link} target="_blank" rel="noreferrer" className="w-full py-3 rounded-2xl font-black text-center text-white text-xs uppercase tracking-widest shadow-sm hover:shadow-md transition-all" style={{ backgroundColor: primaryColor }}>
-                      Make Payment
-                    </a>
-                  )}
                 </div>
               </div>
             ) : (
@@ -473,13 +468,9 @@ function InfoRows({ data }) {
   return (
     <div className="space-y-3 text-sm">
       {data.payment.upi && <InfoRow label="UPI" value={data.payment.upi} />}
-      {data.gstNumber && <InfoRow label="GSTIN" value={data.gstNumber} />}
+
       {data.payment.bankDetails && <p className="rounded-2xl bg-slate-50 p-4 font-mono text-xs leading-6 text-slate-600 whitespace-pre-line">{data.payment.bankDetails}</p>}
-      {data.payment.link && (
-        <a href={data.payment.link} target="_blank" rel="noreferrer" className="block rounded-2xl bg-slate-900 px-5 py-4 text-center font-bold text-white">
-          Make Payment
-        </a>
-      )}
+
     </div>
   );
 }

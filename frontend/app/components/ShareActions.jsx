@@ -82,7 +82,7 @@ export default function ShareActions({ data, layout = "modern", primaryColor = "
 
   return (
     <div className="w-full">
-      <div className="flex items-center gap-4.5 overflow-x-auto pb-3 pt-1 scrollbar-none snap-x snap-mandatory px-1 select-none w-full">
+      <div className="flex items-center gap-4.5 whitespace-nowrap pb-3 pt-1 select-none w-full">
         {/* Copy Link */}
         <button 
           onClick={handleCopy}

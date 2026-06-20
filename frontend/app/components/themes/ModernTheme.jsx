@@ -666,21 +666,7 @@ export default function ModernTheme({ data, inPreview = false }) {
             </form>
           </div>
 
-          {/* ⭐ GOOGLE REVIEWS (Glass Banner) */}
-          {data?.googleReviewsUrl && (
-            <div className="pt-6">
-              <div className="rounded-[2rem] p-8 text-center relative overflow-hidden" style={{ backgroundColor: `${cardBg}`, border: `1px solid ${cardText}15` }}>
-                <div className="flex justify-center mb-4 gap-1">
-                  {[1, 2, 3, 4, 5].map(star => <Star key={star} className="w-6 h-6 text-amber-500 fill-amber-500 drop-shadow-sm" />)}
-                </div>
-                <h3 className="font-bold text-xl mb-1 tracking-tight" style={{ color: textPrimary }}>Rate your experience</h3>
-                <p className="text-[14px] mb-6 font-medium" style={{ color: textSecondary }}>Loved working with us? Leave a review!</p>
-                <a href={data.googleReviewsUrl} target="_blank" rel="noreferrer" className="inline-block w-full py-4 rounded-2xl font-bold bg-white/80 backdrop-blur-sm border border-white hover:bg-white shadow-[0_8px_20px_rgba(0,0,0,0.04)] transition-all" style={{ backgroundColor: btnBg, color: btnText }}>
-                  Write a Review
-                </a>
-              </div>
-            </div>
-          )}
+
 
           {/* 📲 SHARING & QR CODE (Minimalist) */}
           <div id="share" className="scroll-mt-6 pt-6 pb-4">

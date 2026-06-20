@@ -457,22 +457,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
               </form>
           </div>
 
-          {/* GOOGLE REVIEWS */}
-          {data?.googleReviewsUrl && (
-            <div className="bg-slate-50 text-slate-900 p-10 shadow-[0_20px_40px_-10px_rgba(15,23,42,0.10)] rounded-sm relative overflow-hidden text-center border border-slate-100">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-2xl"></div>
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-50 rounded-full blur-2xl"></div>
-              
-              <div className="flex justify-center mb-5 gap-1.5 relative z-10">
-                {[1, 2, 3, 4, 5].map(star => <Star key={star} className="w-6 h-6 text-yellow-500 fill-yellow-500" strokeWidth={1.5} />)}
-              </div>
-              <h3 className="font-serif text-2xl mb-3 relative z-10">Client Feedback</h3>
-              <p className="text-slate-500 font-light text-[15px] mb-8 relative z-10">Your experience is paramount to us.</p>
-              <a href={data.googleReviewsUrl} target="_blank" rel="noreferrer" className="inline-block w-full py-4 text-white font-medium tracking-widest uppercase text-xs transition-colors relative z-10 rounded-sm shadow-[0_10px_20px_-5px_rgba(15,23,42,0.15)]" style={{ backgroundColor: primaryColor }}>
-                Leave a Review
-              </a>
-            </div>
-          )}
+
 
           {/* SHARE QR */}
           <div id="share" className="scroll-mt-6 pt-10 border-t border-slate-100 flex flex-col items-center">

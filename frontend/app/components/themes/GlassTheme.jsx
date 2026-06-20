@@ -375,18 +375,7 @@ export default function GlassTheme({ data, inPreview = false }) {
             </form>
           </Section>
 
-          {data?.googleReviewsUrl && (
-            <Section title="Reviews" className={`${cardClasses} text-center`}>
-              <div className="mb-4 flex justify-center gap-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} className="h-5 w-5 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <a href={data.googleReviewsUrl} target="_blank" rel="noreferrer" className="font-bold" style={{ color: primaryColor }}>
-                Write a review
-              </a>
-            </Section>
-          )}
+
 
           <div id="share" className={`scroll-mt-6 ${cardClasses} flex flex-col items-center`}>
             {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (

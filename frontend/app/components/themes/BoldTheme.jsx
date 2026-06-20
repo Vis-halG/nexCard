@@ -397,18 +397,7 @@ export default function BoldTheme({ data, inPreview = false }) {
             </form>
           </Panel>
 
-          {data?.googleReviewsUrl && (
-            <Panel title="Reviews">
-              <div className="mb-4 flex gap-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} className="h-5 w-5 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <a href={data.googleReviewsUrl} target="_blank" rel="noreferrer" className="font-black" style={{ color: primaryColor }}>
-Write a review
-              </a>
-            </Panel>
-          )}
+
 
           <div id="share" className={`scroll-mt-6 rounded-[2rem] border border-slate-100 bg-white p-6 text-center shadow-[0_18px_55px_rgba(15,23,42,0.08)] flex flex-col items-center`}>
             {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (

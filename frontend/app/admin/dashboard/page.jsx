@@ -59,7 +59,7 @@ export default function Dashboard() {
     }
   });
 
-  const [activeTab, setActiveTab] = useState("themes");
+  const [activeTab, setActiveTab] = useState("profile");
   const [previewTheme, setPreviewTheme] = useState(null);
   const [selectedColorIndexes, setSelectedColorIndexes] = useState({
     modern: 0,
@@ -351,11 +351,11 @@ export default function Dashboard() {
   };
 
   const tabs = [
-    { id: "themes", label: "Theme Presets" },
     { id: "profile", label: "Profile Info" },
     { id: "business", label: "Business & Contacts" },
     { id: "social", label: "Social Links" },
     { id: "media", label: "Media & Arrays" },
+    { id: "themes", label: "Theme Presets" },
     { id: "design", label: "Design Settings" }
   ];
 

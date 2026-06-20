@@ -5,6 +5,7 @@ import { Phone, Mail, Globe, MapPin, Download, MessageCircle, MessageSquare, Use
 
 import { QRCodeSVG } from "qrcode.react";
 import BottomNav from "../BottomNav";
+import ShareActions from "../ShareActions";
 
 const FacebookIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>);
 const InstagramIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>);
@@ -704,12 +705,9 @@ export default function ModernTheme({ data, inPreview = false }) {
                   } : {})}
                 />
               </div>
-              <button onClick={() => {
-                if (navigator.share) { navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : 'Digital Card', url: window.location.href }).catch(console.error); } else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }
-              }} className="px-8 py-3.5 rounded-full font-bold shadow-sm transition-all flex items-center justify-center gap-2" style={{ backgroundColor: cardBg, color: cardText, border: `1px solid ${cardText}15` }}>
-                <Share2 className="w-4 h-4" />
-                Share Link
-              </button>
+              <div className="w-full max-w-[320px] mt-2">
+                <ShareActions data={data} layout="modern" primaryColor={primaryColor} />
+              </div>
             </div>
           </div>
           

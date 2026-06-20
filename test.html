@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>nuvio — Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #e8e8f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* subtle background pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(120, 80, 220, 0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 20%, rgba(100, 60, 200, 0.10) 0%, transparent 70%),
+        #dde0ea;
+    }
+
+    .logo-corner {
+      position: fixed;
+      top: 28px;
+      left: 32px;
+      font-size: 26px;
+      font-weight: 800;
+      color: #1a1a2e;
+      letter-spacing: -1px;
+      font-style: italic;
+      z-index: 10;
+    }
+
+    .login-card {
+      position: relative;
+      z-index: 1;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      width: 480px;
+      overflow: hidden;
+    }
+
+    .card-top-bar {
+      height: 8px;
+      background: linear-gradient(90deg, #1a1a2e, #2d1b69, #4c1d95);
+    }
+
+    .card-body {
+      padding: 48px 48px 52px;
+    }
+
+    .field-group {
+      margin-bottom: 18px;
+    }
+
+    .field-wrap {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 50px;
+      padding: 14px 20px;
+      gap: 12px;
+      background: #fafafa;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .field-wrap:focus-within {
+      border-color: #7c3aed;
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+      background: #fff;
+    }
+
+    .field-wrap input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #1e293b;
+    }
+
+    .field-wrap input::placeholder {
+      color: #94a3b8;
+    }
+
+    .field-icon {
+      font-size: 18px;
+      color: #7c3aed;
+      flex-shrink: 0;
+    }
+
+    .field-icon.green {
+      color: #22c55e;
+    }
+
+    .eye-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: #94a3b8;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .sign-in-btn {
+      width: 100%;
+      margin-top: 28px;
+      padding: 16px;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35);
+    }
+
+    .sign-in-btn:hover {
+      background: linear-gradient(135deg, #6d28d9, #5b21b6);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .error-msg {
+      display: none;
+      color: #ef4444;
+      font-size: 13px;
+      text-align: center;
+      margin-top: 14px;
+      padding: 10px;
+      background: #fef2f2;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="logo-corner">nuvio</div>
+
+  <div class="login-card">
+    <div class="card-top-bar"></div>
+    <div class="card-body">
+      <div class="field-group">
+        <div class="field-wrap">
+          <input type="text" id="login-username" placeholder="Username" autocomplete="off" />
+          <span class="field-icon">👤</span>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-wrap">
+          <input type="password" id="login-password" placeholder="Password" autocomplete="off" />
+          <button class="eye-btn" id="toggle-pw" type="button" title="Show/hide password">👁</button>
+          <span class="field-icon green">🔒</span>
+        </div>
+      </div>
+
+      <button class="sign-in-btn" id="signin-btn" onclick="doLogin()">
+        Sign In &nbsp;→
+      </button>
+
+      <div class="error-msg" id="error-msg">Invalid username or password. Please try again.</div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('toggle-pw').addEventListener('click', function () {
+      const pw = document.getElementById('login-password');
+      pw.type = pw.type === 'password' ? 'text' : 'password';
+    });
+
+    // allow Enter key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') doLogin();
+    });
+
+    function doLogin() {
+      const user = document.getElementById('login-username').value.trim().toLowerCase();
+      const pass = document.getElementById('login-password').value.trim();
+      const err = document.getElementById('error-msg');
+
+      if (user === 'nelson' && pass === 'Nelson@143405') {
+        err.style.display = 'none';
+        window.location.href = 'dashboard.html';
+      } else {
+        err.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+
+</html>

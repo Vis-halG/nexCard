@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { auth, db, storage } from "../../../lib/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Camera, Trash2, Plus, GripVertical, ExternalLink, Copy, Eye, Check, QrCode, Upload, X, Palette, Layout, Type, Square, Box, Sparkles, RotateCcw } from "lucide-react";
+import { Camera, Trash2, Plus, GripVertical, ExternalLink, Copy, Eye, Check, QrCode, Upload, X, Palette, Layout, Type, Square, Box, Sparkles, RotateCcw, LogOut } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import NexCard from "../../components/NexCard";
 import { DEMO_EMAIL, createDemoProfile } from "../../demoProfile";
@@ -211,6 +211,33 @@ export default function Dashboard() {
     }
   };
 
+  const handleLoadDemo = () => {
+    if (!window.confirm("This will overwrite your current form values with the demo profile data. Proceed?")) return;
+    const demoData = createDemoProfile({
+      uid: user.uid,
+      username: form.username || "vishalgupta25980790"
+    });
+    setForm(prev => ({
+      ...prev,
+      ...demoData,
+      image: prev.image || demoData.image,
+      social: { ...demoData.social, ...prev.social },
+      payment: { ...demoData.payment, ...prev.payment },
+      theme: { ...demoData.theme, ...prev.theme }
+    }));
+  };
+
+  const handleLogout = async () => {
+    if (!window.confirm("Are you sure you want to log out?")) return;
+    try {
+      await signOut(auth);
+      router.push("/admin");
+    } catch (err) {
+      console.error("Error signing out:", err);
+      alert("Failed to log out.");
+    }
+  };
+
   if (loading) return (
     <div className="min-h-screen bg-slate-100 p-8 animate-pulse">
       <div className="max-w-4xl mx-auto">
@@ -369,12 +396,18 @@ export default function Dashboard() {
             </div>
             <h1 className="text-xl font-bold text-slate-900 tracking-tight">NexCard Studio</h1>
           </div>
-          <div className="flex w-full sm:w-auto justify-between sm:justify-start items-center gap-4 lg:gap-8">
-             <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-slate-600 hover:text-indigo-600 font-bold text-sm px-4 py-2 rounded-xl transition-all">
+          <div className="flex w-full sm:w-auto justify-between sm:justify-start items-center gap-2 sm:gap-4 lg:gap-6 flex-wrap">
+             <button onClick={handleLoadDemo} className="flex items-center gap-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-4 py-2 rounded-xl font-bold transition-all text-sm shadow-sm">
+                <Sparkles className="w-4 h-4 text-indigo-600" /> Fill Demo Data
+             </button>
+             <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-slate-600 hover:text-indigo-600 font-bold text-sm px-3 py-2 rounded-xl transition-all">
                 <Eye className="w-4 h-4" /> View Live
              </a>
-             <button onClick={handleSave} className="bg-slate-900 hover:bg-black text-white px-6 lg:px-8 py-2 lg:py-2.5 rounded-xl font-bold shadow-md transition-all text-sm lg:text-base">
+             <button onClick={handleSave} className="bg-slate-900 hover:bg-black text-white px-5 lg:px-7 py-2 lg:py-2.5 rounded-xl font-bold shadow-md transition-all text-sm lg:text-base">
                Save Changes
+             </button>
+             <button onClick={handleLogout} className="flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-xl font-bold transition-all text-sm shadow-sm">
+                <LogOut className="w-4 h-4" /> Logout
              </button>
           </div>
         </div>

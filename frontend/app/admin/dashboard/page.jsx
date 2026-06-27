@@ -358,25 +358,14 @@ export default function Dashboard() {
                       onClick={() => setActiveTab(tab.id)}
                       aria-current={isActive ? "page" : undefined}
                       title={tab.label}
-                      className={`group flex min-h-[58px] transition-all duration-300 font-bold items-center justify-center leading-none text-xs ${
+                      className={`group flex min-h-[48px] flex-row items-center justify-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-300 ${
                         isActive
-                          ? "flex-row gap-2 rounded-full bg-brand-indigo text-white px-4 py-2 shadow-sm"
-                          : "flex-col gap-1 rounded-full text-slate-500 hover:bg-slate-50 hover:text-slate-900 px-2 py-2"
+                          ? "bg-brand-indigo text-white shadow-sm"
+                          : "text-slate-550 hover:bg-slate-50 hover:text-slate-900"
                       }`}
                     >
-                      {isActive ? (
-                        <>
-                          <TabIcon className="h-4 w-4 text-white" />
-                          <span className="truncate">{tab.shortLabel || tab.label}</span>
-                        </>
-                      ) : (
-                        <>
-                          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100/80 text-slate-500 group-hover:bg-white group-hover:text-slate-800 transition-colors">
-                            <TabIcon className="h-4 w-4" />
-                          </span>
-                          <span className="max-w-full truncate text-[10px] text-slate-500 group-hover:text-slate-900 mt-1">{tab.shortLabel || tab.label}</span>
-                        </>
-                      )}
+                      <TabIcon className={`h-4 w-4 shrink-0 ${isActive ? "text-white" : "text-slate-400 group-hover:text-slate-700"}`} />
+                      <span className="truncate">{tab.shortLabel || tab.label}</span>
                     </button>
                   );
                 })}

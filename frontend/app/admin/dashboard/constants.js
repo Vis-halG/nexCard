@@ -50,7 +50,20 @@ export const INITIAL_FORM = {
   gallery: [],
   customLinks: [],
   videos: [],
-  theme: DEFAULT_THEME
+  theme: DEFAULT_THEME,
+  preferences: {
+    showAbout: true,
+    showServices: true,
+    showSocial: true,
+    showGallery: true,
+    showVideos: true,
+    showCustomLinks: true,
+    showPayment: true,
+    showLocation: true,
+    showContactForm: true,
+    showShare: true,
+    showSaveContact: true
+  }
 };
 
 export const DEFAULT_COLOR_INDEXES = {
@@ -68,7 +81,8 @@ export const DASHBOARD_TABS = [
   { id: "social", label: "Social Links" },
   { id: "media", label: "Media & Arrays" },
   { id: "themes", label: "Theme Presets" },
-  { id: "design", label: "Design Settings" }
+  { id: "design", label: "Design Settings" },
+  { id: "visibility", label: "Section Visibility" }
 ];
 
 export const THEME_PRESETS = [

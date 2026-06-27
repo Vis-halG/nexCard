@@ -60,14 +60,7 @@ export default function BottomNav({
     return () => window.removeEventListener('scroll', handleScroll);
   }, [showWhatsAppInput]);
 
-  useEffect(() => {
-    if (showWhatsAppInput && phoneInputRef.current) {
-      const timer = setTimeout(() => {
-        phoneInputRef.current?.focus();
-      }, 150);
-      return () => clearTimeout(timer);
-    }
-  }, [showWhatsAppInput]);
+
 
   const getCardUrl = () => {
     if (typeof window === 'undefined') return '';

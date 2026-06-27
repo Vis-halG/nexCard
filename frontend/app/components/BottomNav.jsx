@@ -245,7 +245,8 @@ export default function BottomNav({
             className={drawerClasses}
             style={{
               ...drawerStyles,
-              backgroundColor: drawerBg
+              backgroundColor: drawerBg,
+              paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 12px)'
             }}
           >
             {/* Header */}
@@ -338,16 +339,16 @@ export default function BottomNav({
                 </button>
               </div>
             </div>
-            <style dangerouslySetInnerHTML={{__html: `
-              .pb-safe { padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 12px); }
-            `}} />
           </motion.div>
         )}
       </AnimatePresence>
 
       <div 
-        className={`${inPreview ? "absolute" : "fixed"} bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[100] flex justify-between items-end px-4 pt-2 pb-safe ${containerClass} ${fontClass}`}
-        style={customStyle}
+        className={`${inPreview ? "absolute" : "fixed"} bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[100] flex justify-between items-end px-4 pt-2 ${containerClass} ${fontClass}`}
+        style={{
+          ...customStyle,
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 8px)'
+        }}
       >
         {navItems.map((item) => {
           const isActive = activeId === item.id;
@@ -384,10 +385,6 @@ export default function BottomNav({
             </a>
           );
         })}
-        
-        <style dangerouslySetInnerHTML={{__html: `
-          .pb-safe { padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 8px); }
-        `}} />
       </div>
     </>
   );

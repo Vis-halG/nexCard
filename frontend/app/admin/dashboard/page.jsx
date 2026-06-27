@@ -344,7 +344,7 @@ export default function Dashboard() {
 
             <nav
               aria-label="Dashboard sections"
-              className="sticky top-[64px] lg:top-0 z-50 rounded-xl border border-slate-200 bg-white p-1.5 shadow-sm"
+              className="sticky top-[64px] lg:top-0 z-50 rounded-full border border-slate-200 bg-white p-1.5 shadow-sm"
             >
               <div className="grid grid-cols-4 gap-1.5 sm:grid-cols-7">
                 {DASHBOARD_TABS.map((tab) => {
@@ -358,20 +358,25 @@ export default function Dashboard() {
                       onClick={() => setActiveTab(tab.id)}
                       aria-current={isActive ? "page" : undefined}
                       title={tab.label}
-                      className={`group flex min-h-[58px] flex-col items-center justify-center gap-1 rounded-lg border px-2 py-2 text-[11px] font-bold leading-none transition-all sm:text-xs ${
+                      className={`group flex min-h-[58px] transition-all duration-300 font-bold items-center justify-center leading-none text-xs ${
                         isActive
-                          ? "border-transparent bg-brand-indigo text-white shadow-sm"
-                          : "border-transparent text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                          ? "flex-row gap-2 rounded-full bg-brand-indigo text-white px-4 py-2 shadow-sm"
+                          : "flex-col gap-1 rounded-full text-slate-500 hover:bg-slate-50 hover:text-slate-900 px-2 py-2"
                       }`}
                     >
-                      <span
-                        className={`flex h-7 w-7 items-center justify-center rounded-md transition-colors ${
-                          isActive ? "bg-white/15 text-white" : "bg-slate-100 text-slate-500 group-hover:bg-white group-hover:text-slate-800"
-                        }`}
-                      >
-                        <TabIcon className="h-4 w-4" />
-                      </span>
-                      <span className="max-w-full truncate">{tab.shortLabel || tab.label}</span>
+                      {isActive ? (
+                        <>
+                          <TabIcon className="h-4 w-4 text-white" />
+                          <span className="truncate">{tab.shortLabel || tab.label}</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100/80 text-slate-500 group-hover:bg-white group-hover:text-slate-800 transition-colors">
+                            <TabIcon className="h-4 w-4" />
+                          </span>
+                          <span className="max-w-full truncate text-[10px] text-slate-500 group-hover:text-slate-900 mt-1">{tab.shortLabel || tab.label}</span>
+                        </>
+                      )}
                     </button>
                   );
                 })}

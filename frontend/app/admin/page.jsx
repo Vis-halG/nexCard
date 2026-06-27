@@ -93,8 +93,8 @@ export default function AdminPage() {
             uid,
             theme: {
               layout: "modern",
-              primary: "#4f46e5",
-              background: "#f8fafc"
+              primary: "#06b6d4",
+              background: "#f0fdff"
             }
           });
 
@@ -154,8 +154,8 @@ export default function AdminPage() {
     if (!gHasTheme) {
       googleUserData.theme = {
         layout: "modern",
-        primary: "#4f46e5",
-        background: "#f8fafc"
+        primary: "#06b6d4",
+        background: "#f0fdff"
       };
     }
 
@@ -216,7 +216,7 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-6 relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[linear-gradient(145deg,#e0fbff_0%,#fff7d6_48%,#ffe8f0_100%)] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden font-sans">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -298,7 +298,7 @@ export default function AdminPage() {
           </div>
           </div>
 
-          <div className="bg-slate-950 text-white p-6 sm:p-8 flex flex-col justify-between gap-6">
+          <div className="bg-[linear-gradient(145deg,#00a6d6_0%,#ff2d55_58%,#ffb703_100%)] text-white p-6 sm:p-8 flex flex-col justify-between gap-6">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-indigo-100">
                 Secure Entry

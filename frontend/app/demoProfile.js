@@ -53,8 +53,8 @@ export const createDemoProfile = ({ uid, username }) => ({
     { title: "WhatsApp Quick Chat", url: "https://wa.me/919876543210" }
   ],
   theme: {
-    primary: "#4F46E5",
-    background: "#F8FAFC",
+    primary: "#06B6D4",
+    background: "#F0FDFF",
     layout: "modern",
     font: "font-sans",
     radius: "1.5rem",
@@ -77,12 +77,12 @@ export const createDemoProfile = ({ uid, username }) => ({
     textPrimary: "#0F172A",
     textSecondary: "#64748B",
     cardText: "#1E293B",
-    btnBg: "#4F46E5",
+    btnBg: "#06B6D4",
     btnText: "#FFFFFF",
     inputBg: "#F1F5F9",
     inputText: "#0F172A",
-    gradientStart: "#4F46E5",
-    gradientEnd: "#EC4899"
+    gradientStart: "#06B6D4",
+    gradientEnd: "#FF2D55"
   },
   demoReady: true
 });

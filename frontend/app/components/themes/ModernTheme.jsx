@@ -94,7 +94,7 @@ export default function ModernTheme({ data, inPreview = false }) {
   };
 
   const theme = data?.theme || {};
-  const primaryColor = theme.primary || "#4f46e5";
+  const primaryColor = theme.primary || "#06b6d4";
   const bgColor = theme.background || "#ffffff";
   const fontClass = theme.font || "font-sans";
   const borderRadius = theme.radius || "1rem";
@@ -108,7 +108,7 @@ export default function ModernTheme({ data, inPreview = false }) {
     ocean: 'linear-gradient(135deg, #00C9FF 0%, #92FE9D 100%)',
     forest: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
     mystic: 'linear-gradient(135deg, #7F00FF 0%, #E100FF 100%)',
-    custom: `linear-gradient(135deg, ${theme.gradientStart || '#4F46E5'} 0%, ${theme.gradientEnd || '#EC4899'} 100%)`
+    custom: `linear-gradient(135deg, ${theme.gradientStart || '#06B6D4'} 0%, ${theme.gradientEnd || '#FF2D55'} 100%)`
   };
   const bgGradientStyle = bgGradient !== 'none' ? gradientPresets[bgGradient] : null;
 

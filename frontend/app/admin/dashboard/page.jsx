@@ -294,7 +294,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen lg:h-screen bg-slate-100 font-sans flex flex-col lg:overflow-hidden">
+    <div className="min-h-screen lg:h-screen bg-[linear-gradient(180deg,#e0fbff_0%,#fff7d6_52%,#ffe8f0_100%)] font-sans flex flex-col lg:overflow-hidden">
       <DashboardHeader
         profileUrl={profileUrl}
         onLoadDemo={handleLoadDemo}
@@ -344,7 +344,7 @@ export default function Dashboard() {
 
             <nav
               aria-label="Dashboard sections"
-              className="sticky top-[64px] lg:top-0 z-50 rounded-xl border border-slate-200 bg-white/95 p-1.5 shadow-[0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-md"
+              className="sticky top-[64px] lg:top-0 z-50 rounded-xl border border-cyan-100 bg-white/95 p-1.5 shadow-[0_10px_30px_rgba(6,182,212,0.16)] backdrop-blur-md"
             >
               <div className="grid grid-cols-4 gap-1.5 sm:grid-cols-7">
                 {DASHBOARD_TABS.map((tab) => {
@@ -360,7 +360,7 @@ export default function Dashboard() {
                       title={tab.label}
                       className={`group flex min-h-[58px] flex-col items-center justify-center gap-1 rounded-lg border px-2 py-2 text-[11px] font-bold leading-none transition-all sm:text-xs ${
                         isActive
-                          ? "border-slate-900 bg-slate-900 text-white shadow-sm"
+                          ? "border-indigo-600 bg-indigo-600 text-white shadow-[0_10px_24px_rgba(6,182,212,0.24)]"
                           : "border-transparent text-slate-500 hover:bg-slate-50 hover:text-slate-900"
                       }`}
                     >
@@ -779,7 +779,7 @@ export default function Dashboard() {
                       ].map((grad) => {
                         const isCustom = grad.id === 'custom';
                         const previewStyle = isCustom 
-                          ? { background: `linear-gradient(135deg, ${form.theme.gradientStart || '#4F46E5'} 0%, ${form.theme.gradientEnd || '#EC4899'} 100%)` }
+                          ? { background: `linear-gradient(135deg, ${form.theme.gradientStart || '#06B6D4'} 0%, ${form.theme.gradientEnd || '#FF2D55'} 100%)` }
                           : {};
                         return (
                           <button
@@ -801,13 +801,13 @@ export default function Dashboard() {
                           <div className="flex items-center gap-2">
                             <input 
                               type="color" 
-                              value={form.theme.gradientStart || "#4F46E5"} 
+                              value={form.theme.gradientStart || "#06B6D4"} 
                               onChange={(e) => handleNestedChange("theme", "gradientStart", e.target.value)} 
                               className="w-8 h-8 rounded-lg cursor-pointer border-none p-0 bg-transparent animate-pulse"
                             />
                             <input 
                               type="text" 
-                              value={form.theme.gradientStart || "#4F46E5"} 
+                              value={form.theme.gradientStart || "#06B6D4"} 
                               onChange={(e) => handleNestedChange("theme", "gradientStart", e.target.value)}
                               className="w-full p-1.5 bg-slate-50 border border-slate-100 rounded-md font-mono text-[10px] uppercase text-slate-600 focus:outline-none"
                             />
@@ -818,13 +818,13 @@ export default function Dashboard() {
                           <div className="flex items-center gap-2">
                             <input 
                               type="color" 
-                              value={form.theme.gradientEnd || "#EC4899"} 
+                              value={form.theme.gradientEnd || "#FF2D55"} 
                               onChange={(e) => handleNestedChange("theme", "gradientEnd", e.target.value)} 
                               className="w-8 h-8 rounded-lg cursor-pointer border-none p-0 bg-transparent animate-pulse"
                             />
                             <input 
                               type="text" 
-                              value={form.theme.gradientEnd || "#EC4899"} 
+                              value={form.theme.gradientEnd || "#FF2D55"} 
                               onChange={(e) => handleNestedChange("theme", "gradientEnd", e.target.value)}
                               className="w-full p-1.5 bg-slate-50 border border-slate-100 rounded-md font-mono text-[10px] uppercase text-slate-600 focus:outline-none"
                             />
@@ -1077,13 +1077,13 @@ export default function Dashboard() {
                     <div className="flex items-center gap-3">
                       <input 
                         type="color" 
-                        value={form.theme.btnBg || "#4f46e5"} 
+                        value={form.theme.btnBg || "#06b6d4"} 
                         onChange={(e) => handleNestedChange("theme", "btnBg", e.target.value)} 
                         className="w-10 h-10 rounded-xl cursor-pointer border-none p-0 bg-transparent"
                       />
                       <input 
                         type="text" 
-                        value={form.theme.btnBg || "#4f46e5"} 
+                        value={form.theme.btnBg || "#06b6d4"} 
                         onChange={(e) => handleNestedChange("theme", "btnBg", e.target.value)}
                         className="flex-1 p-2 bg-slate-50 border border-slate-100 rounded-lg font-mono text-xs uppercase text-slate-700 focus:outline-none"
                       />
@@ -1586,7 +1586,7 @@ export default function Dashboard() {
 
 function DashboardSkeleton() {
   return (
-    <div className="min-h-screen bg-slate-100 p-8 animate-pulse">
+    <div className="min-h-screen bg-[linear-gradient(180deg,#e0fbff_0%,#fff7d6_52%,#ffe8f0_100%)] p-8 animate-pulse">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div className="h-10 w-64 bg-slate-200 rounded-xl" />
@@ -1631,10 +1631,10 @@ function DashboardSkeleton() {
 
 function DashboardHeader({ profileUrl, onLoadDemo, onLogout, onSave }) {
   return (
-    <header className="sticky top-0 z-[60] border-b border-slate-200 bg-white/95 backdrop-blur-md">
+    <header className="sticky top-0 z-[60] border-b border-cyan-100 bg-white/95 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[1500px] items-center gap-3 px-4 lg:px-6">
         <div className="flex min-w-0 shrink-0 items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-950 text-white shadow-sm">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 via-rose-500 to-amber-400 text-white shadow-[0_10px_24px_rgba(6,182,212,0.24)]">
             <Layout className="h-5 w-5" />
           </div>
           <h1 className="truncate text-lg font-black tracking-tight text-slate-950 sm:text-xl">NexCard Studio</h1>
@@ -1660,7 +1660,7 @@ function DashboardHeader({ profileUrl, onLoadDemo, onLogout, onSave }) {
           <button
             type="button"
             onClick={onSave}
-            className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg bg-slate-950 px-4 text-sm font-bold text-white shadow-sm transition-colors hover:bg-slate-800"
+            className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 text-sm font-bold text-white shadow-[0_8px_20px_rgba(6,182,212,0.26)] transition-colors hover:bg-indigo-700"
           >
             <Check className="h-4 w-4" />
             <span>Save</span>
@@ -1697,7 +1697,7 @@ function LivePreviewPanel({ form, previewTheme }) {
         <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
       </div>
       <div className="mt-2 flex items-center justify-center gap-2">
-        <div className={`w-2 h-2 rounded-full ${previewTheme ? "bg-indigo-500 animate-pulse" : "bg-green-500"}`}></div>
+        <div className={`w-2 h-2 rounded-full ${previewTheme ? "bg-rose-500 animate-pulse" : "bg-indigo-500"}`}></div>
         <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
           {previewTheme ? "Theme Preview Active" : "Live Preview (Real-Time)"}
         </p>

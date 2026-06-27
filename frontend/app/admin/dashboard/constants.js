@@ -1,6 +1,6 @@
 export const DEFAULT_THEME = {
-  primary: "#4f46e5",
-  background: "#f8fafc",
+  primary: "#06b6d4",
+  background: "#f0fdff",
   layout: "modern",
   font: "font-sans",
   radius: "1rem",
@@ -23,12 +23,12 @@ export const DEFAULT_THEME = {
   textPrimary: "#0f172a",
   textSecondary: "#64748b",
   cardText: "#1e293b",
-  btnBg: "#4f46e5",
+  btnBg: "#06b6d4",
   btnText: "#ffffff",
   inputBg: "#f1f5f9",
   inputText: "#0f172a",
-  gradientStart: "#4f46e5",
-  gradientEnd: "#ec4899"
+  gradientStart: "#06b6d4",
+  gradientEnd: "#ff2d55"
 };
 
 export const INITIAL_FORM = {
@@ -90,7 +90,7 @@ export const THEME_PRESETS = [
     name: "Modern (Curved)",
     layout: "modern",
     colorCombinations: [
-      { primary: "#4F46E5", background: "#F8FAFC", accent: "#6366F1" },
+      { primary: "#06B6D4", background: "#F0FDFF", accent: "#FFB703" },
       { primary: "#10B981", background: "#F0FDF4", accent: "#34D399" },
       { primary: "#F43F5E", background: "#FFF1F2", accent: "#FB7185" },
       { primary: "#F59E0B", background: "#FFFBEB", accent: "#FBBF24" },

@@ -31,9 +31,9 @@ export default function Home() {
 
 function BackgroundEffects() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10 bg-slate-50">
-      <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-brand-indigo/10 blur-[120px] animate-slow-spin" />
-      <div className="absolute top-[20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-brand-purple/10 blur-[150px] animate-slow-spin" style={{ animationDirection: 'reverse', animationDuration: '25s' }} />
+    <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10 bg-[linear-gradient(145deg,#e0fbff_0%,#fff7d6_50%,#ffe8f0_100%)]">
+      <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-brand-indigo/25 blur-[120px] animate-slow-spin" />
+      <div className="absolute top-[20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-brand-purple/20 blur-[150px] animate-slow-spin" style={{ animationDirection: 'reverse', animationDuration: '25s' }} />
       <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 0h40v40H0z' fill='none'/%3E%3Cpath d='M0 0h40v40H0z' fill='none' stroke='rgba(0,0,0,1)' stroke-width='1'/%3E%3C/svg%3E\")", maskImage: "linear-gradient(to bottom, white, transparent)" }} />
     </div>
   );

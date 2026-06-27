@@ -1,25 +1,17 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
 import { X, ChevronLeft, ChevronRight, Share2, CreditCard, Sparkles, Smartphone, MoveVertical } from "lucide-react";
 
-export default function FloatingNav({ data, primaryColor = "#4f46e5" }) {
+export default function FloatingNav({ data, primaryColor = "#06b6d4" }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isJoystickActive, setIsJoystickActive] = useState(false);
-  const [qrIndex, setQrIndex] = useState(0);
+  const preferredQrIndex = data?.theme?.defaultQr === 'payment' ? 1 : 0;
+  const [qrIndex, setQrIndex] = useState(null);
   const scrollInterval = useRef(null);
   const joystickRef = useRef(null);
-
-  // Initialize qrIndex based on preference
-  useEffect(() => {
-    if (data?.theme?.defaultQr === 'payment') {
-      setQrIndex(1);
-    } else {
-      setQrIndex(0);
-    }
-  }, [data?.theme?.defaultQr]);
 
   // 🕹️ JOYSTICK SCROLL LOGIC
   const handleJoystickMove = (event, info) => {
@@ -69,7 +61,8 @@ export default function FloatingNav({ data, primaryColor = "#4f46e5" }) {
     }
   ];
 
-  const currentQr = qrs[qrIndex];
+  const activeQrIndex = qrIndex ?? preferredQrIndex;
+  const currentQr = qrs[activeQrIndex];
 
   return (
     <>
@@ -155,7 +148,13 @@ export default function FloatingNav({ data, primaryColor = "#4f46e5" }) {
                   
                   {/* Left Button */}
                   <button 
-                    onClick={(e) => { e.stopPropagation(); setQrIndex(prev => (prev === 0 ? qrs.length - 1 : prev - 1)); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setQrIndex(prev => {
+                        const currentIndex = prev ?? preferredQrIndex;
+                        return currentIndex === 0 ? qrs.length - 1 : currentIndex - 1;
+                      });
+                    }}
                     className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-slate-400 hover:text-slate-900 z-20 transition-all opacity-0 group-hover:opacity-100"
                   >
                     <ChevronLeft className="w-6 h-6" />
@@ -183,7 +182,13 @@ export default function FloatingNav({ data, primaryColor = "#4f46e5" }) {
 
                   {/* Right Button */}
                   <button 
-                    onClick={(e) => { e.stopPropagation(); setQrIndex(prev => (prev === qrs.length - 1 ? 0 : prev + 1)); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setQrIndex(prev => {
+                        const currentIndex = prev ?? preferredQrIndex;
+                        return currentIndex === qrs.length - 1 ? 0 : currentIndex + 1;
+                      });
+                    }}
                     className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-slate-400 hover:text-slate-900 z-20 transition-all opacity-0 group-hover:opacity-100"
                   >
                     <ChevronRight className="w-6 h-6" />
@@ -195,7 +200,7 @@ export default function FloatingNav({ data, primaryColor = "#4f46e5" }) {
                   {qrs.map((_, i) => (
                     <div 
                       key={i} 
-                      className={`h-1.5 transition-all duration-300 rounded-full ${qrIndex === i ? 'w-8 bg-slate-900' : 'w-2 bg-slate-200'}`}
+                      className={`h-1.5 transition-all duration-300 rounded-full ${activeQrIndex === i ? 'w-8 bg-slate-900' : 'w-2 bg-slate-200'}`}
                     />
                   ))}
                 </div>

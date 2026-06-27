@@ -7,7 +7,7 @@ import ShareActions from "./ShareActions";
 
 export default function BottomNav({ 
   data, 
-  primaryColor = "#4f46e5", 
+  primaryColor = "#06b6d4", 
   showWhatsAppInput: propShowWhatsAppInput, 
   setShowWhatsAppInput: propSetShowWhatsAppInput,
   layout = "modern",
@@ -133,7 +133,7 @@ export default function BottomNav({
   if (showWhatsAppInput) {
     const cardUrl = getCardUrl();
     const theme = data?.theme || {};
-    const primaryColorResolved = theme.primary || primaryColor || "#4f46e5";
+    const primaryColorResolved = theme.primary || primaryColor || "#06b6d4";
     const qrLogo = theme.qrLogo || "none";
     
     // Custom distinct theme styling logic inside the drawer

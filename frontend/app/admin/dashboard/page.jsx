@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { auth, db } from "../../../lib/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -358,14 +359,22 @@ export default function Dashboard() {
                       onClick={() => setActiveTab(tab.id)}
                       aria-current={isActive ? "page" : undefined}
                       title={tab.label}
-                      className={`group flex min-h-[48px] flex-row items-center justify-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-300 ${
+                      className={`group relative flex min-h-[48px] flex-row items-center justify-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold transition-colors duration-200 cursor-pointer border-0 ${
                         isActive
-                          ? "bg-brand-indigo text-white shadow-sm"
+                          ? "text-white"
                           : "text-slate-550 hover:bg-slate-50 hover:text-slate-900"
                       }`}
                     >
-                      <TabIcon className={`h-4 w-4 shrink-0 ${isActive ? "text-white" : "text-slate-400 group-hover:text-slate-700"}`} />
-                      <span className="truncate">{tab.shortLabel || tab.label}</span>
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeTabPill"
+                          className="absolute inset-0 bg-brand-indigo rounded-full"
+                          style={{ zIndex: 1 }}
+                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                        />
+                      )}
+                      <TabIcon className={`h-4 w-4 shrink-0 relative ${isActive ? "text-white" : "text-slate-400 group-hover:text-slate-700"}`} style={{ zIndex: 2 }} />
+                      <span className="truncate relative" style={{ zIndex: 2 }}>{tab.shortLabel || tab.label}</span>
                     </button>
                   );
                 })}

@@ -34,7 +34,7 @@ const LinkedInBrandIcon = ({ className }) => (
   </svg>
 );
 
-export default function ShareActions({ data, layout = "modern", primaryColor = "#06b6d4" }) {
+export default function ShareActions({ data, layout = "modern", primaryColor = "#00C2FF" }) {
   const [copied, setCopied] = useState(false);
 
   const getCardUrl = () => {

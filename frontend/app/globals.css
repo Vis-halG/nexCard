@@ -1,31 +1,31 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #f0fdff;
-  --color-foreground: #17212b;
-  --color-brand-indigo: #06b6d4;
-  --color-brand-purple: #ff2d55;
-  --color-brand-accent: #ffb703;
+  --color-background: #f7feff;
+  --color-foreground: #102033;
+  --color-brand-indigo: #00c2ff;
+  --color-brand-purple: #ff3d71;
+  --color-brand-accent: #ffe156;
+  --color-brand-lime: #7ee787;
   --color-glass: rgba(255, 255, 255, 0.78);
-  --color-glass-border: rgba(125, 211, 252, 0.42);
+  --color-glass-border: rgba(0, 194, 255, 0.32);
 
-  /* Keep legacy indigo utility names, but render them as bright NexCard cyan. */
+  /* Keep legacy indigo utility names, but render them as bright NexCard blue. */
   --color-indigo-50: #ecfeff;
   --color-indigo-100: #cffafe;
   --color-indigo-200: #a5f3fc;
-  --color-indigo-300: #67e8f9;
-  --color-indigo-400: #22d3ee;
-  --color-indigo-500: #06b6d4;
-  --color-indigo-600: #00a6d6;
-  --color-indigo-700: #0284c7;
-  --color-indigo-800: #0369a1;
-  --color-indigo-900: #075985;
+  --color-indigo-300: #7ddfff;
+  --color-indigo-400: #28ccff;
+  --color-indigo-500: #00c2ff;
+  --color-indigo-600: #009ee8;
+  --color-indigo-700: #0078c7;
+  --color-indigo-800: #095f9f;
+  --color-indigo-900: #0f4c81;
 }
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(6, 182, 212, 0.18), transparent 32rem),
-    radial-gradient(circle at top right, rgba(255, 45, 85, 0.12), transparent 30rem),
+    linear-gradient(135deg, rgba(0, 194, 255, 0.14) 0%, rgba(126, 231, 135, 0.12) 36%, rgba(255, 61, 113, 0.10) 68%, rgba(255, 225, 86, 0.14) 100%),
     linear-gradient(180deg, #ffffff 0%, var(--color-background) 100%);
   color: var(--color-foreground);
   font-family: Arial, Helvetica, sans-serif;
@@ -52,12 +52,12 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbdad6;
+  background: linear-gradient(180deg, #00c2ff, #ff3d71);
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #9fbbb4;
+  background: linear-gradient(180deg, #009ee8, #e11d5a);
 }
 
 /* Hide scrollbar utility */

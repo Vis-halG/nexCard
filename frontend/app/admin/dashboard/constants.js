@@ -1,6 +1,6 @@
 export const DEFAULT_THEME = {
-  primary: "#06b6d4",
-  background: "#f0fdff",
+  primary: "#00C2FF",
+  background: "#F7FEFF",
   layout: "modern",
   font: "font-sans",
   radius: "1rem",
@@ -23,12 +23,12 @@ export const DEFAULT_THEME = {
   textPrimary: "#0f172a",
   textSecondary: "#64748b",
   cardText: "#1e293b",
-  btnBg: "#06b6d4",
+  btnBg: "#00C2FF",
   btnText: "#ffffff",
-  inputBg: "#f1f5f9",
-  inputText: "#0f172a",
-  gradientStart: "#06b6d4",
-  gradientEnd: "#ff2d55"
+  inputBg: "#F1FCFF",
+  inputText: "#102033",
+  gradientStart: "#00C2FF",
+  gradientEnd: "#FF3D71"
 };
 
 export const INITIAL_FORM = {
@@ -90,55 +90,55 @@ export const THEME_PRESETS = [
     name: "Modern (Curved)",
     layout: "modern",
     colorCombinations: [
-      { primary: "#06B6D4", background: "#F0FDFF", accent: "#FFB703" },
-      { primary: "#10B981", background: "#F0FDF4", accent: "#34D399" },
-      { primary: "#F43F5E", background: "#FFF1F2", accent: "#FB7185" },
-      { primary: "#F59E0B", background: "#FFFBEB", accent: "#FBBF24" },
-      { primary: "#7C3AED", background: "#F5F3FF", accent: "#A78BFA" }
+      { primary: "#00C2FF", background: "#F7FEFF", accent: "#FFE156" },
+      { primary: "#14F195", background: "#F3FFF9", accent: "#00C2FF" },
+      { primary: "#FF3D71", background: "#FFF6FA", accent: "#FFE156" },
+      { primary: "#FFB000", background: "#FFFBEB", accent: "#00C2FF" },
+      { primary: "#7C3AED", background: "#F8F5FF", accent: "#14F195" }
     ]
   },
   {
     name: "Classic Corporate",
     layout: "classic",
     colorCombinations: [
-      { primary: "#1D4ED8", background: "#EFF6FF", accent: "#3B82F6" },
-      { primary: "#0F172A", background: "#F8FAFC", accent: "#475569" },
-      { primary: "#800020", background: "#FFFDF9", accent: "#A24857" },
-      { primary: "#14532D", background: "#F0FDF4", accent: "#16A34A" },
-      { primary: "#0E7490", background: "#ECFEFF", accent: "#06B6D4" }
+      { primary: "#0078C7", background: "#F2FAFF", accent: "#00C2FF" },
+      { primary: "#102033", background: "#F8FAFC", accent: "#FF3D71" },
+      { primary: "#0F766E", background: "#F0FDFA", accent: "#14F195" },
+      { primary: "#C026D3", background: "#FDF4FF", accent: "#FFB000" },
+      { primary: "#E11D48", background: "#FFF1F2", accent: "#00C2FF" }
     ]
   },
   {
     name: "Swiss Minimal",
     layout: "minimal",
     colorCombinations: [
-      { primary: "#334155", background: "#FFFFFF", accent: "#475569" },
-      { primary: "#000000", background: "#FFFFFF", accent: "#000000" },
-      { primary: "#3F6212", background: "#F9FAF8", accent: "#4D7C0F" },
-      { primary: "#44403C", background: "#FAF8F5", accent: "#57534E" },
-      { primary: "#991B1B", background: "#FFFDFD", accent: "#B91C1C" }
+      { primary: "#00C2FF", background: "#FFFFFF", accent: "#FF3D71" },
+      { primary: "#111827", background: "#FFFFFF", accent: "#FFE156" },
+      { primary: "#14F195", background: "#FBFFFD", accent: "#102033" },
+      { primary: "#FFB000", background: "#FFFDF7", accent: "#00C2FF" },
+      { primary: "#FF3D71", background: "#FFF9FB", accent: "#111827" }
     ]
   },
   {
     name: "Rose Glass",
     layout: "glass",
     colorCombinations: [
-      { primary: "#B76E79", background: "#FFF7F3", accent: "#EAB8A6" },
-      { primary: "#0D9488", background: "#F0FDFA", accent: "#5EEAD4" },
-      { primary: "#8B5CF6", background: "#FAF5FF", accent: "#C084FC" },
-      { primary: "#059669", background: "#F0FDF4", accent: "#6EE7B7" },
-      { primary: "#EA580C", background: "#FFF7ED", accent: "#FDBA74" }
+      { primary: "#FF3D71", background: "#FFF6FA", accent: "#FFE156" },
+      { primary: "#00C2FF", background: "#F5FDFF", accent: "#14F195" },
+      { primary: "#8B5CF6", background: "#FAF7FF", accent: "#FF3D71" },
+      { primary: "#14B8A6", background: "#F0FDFA", accent: "#FFE156" },
+      { primary: "#FF7A00", background: "#FFF7ED", accent: "#00C2FF" }
     ]
   },
   {
     name: "Bold Luxe",
     layout: "bold",
     colorCombinations: [
-      { primary: "#0EA5A4", background: "#F7FBF8", accent: "#F4B860" },
-      { primary: "#C2410C", background: "#FFF7ED", accent: "#F97316" },
-      { primary: "#6366F1", background: "#FAF5FF", accent: "#EC4899" },
-      { primary: "#15803D", background: "#F0FDF4", accent: "#22C55E" },
-      { primary: "#B45309", background: "#FFFBEB", accent: "#F59E0B" }
+      { primary: "#00A6D6", background: "#F7FEFF", accent: "#FFE156" },
+      { primary: "#FF6B00", background: "#FFF7ED", accent: "#FF3D71" },
+      { primary: "#4F46E5", background: "#F8F5FF", accent: "#14F195" },
+      { primary: "#16A34A", background: "#F0FDF4", accent: "#00C2FF" },
+      { primary: "#FFB000", background: "#FFFBEB", accent: "#102033" }
     ]
   },
   {

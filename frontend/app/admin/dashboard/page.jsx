@@ -294,7 +294,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen lg:h-screen bg-[linear-gradient(180deg,#e0fbff_0%,#fff7d6_52%,#ffe8f0_100%)] font-sans flex flex-col lg:overflow-hidden">
+    <div className="min-h-screen lg:h-screen bg-[linear-gradient(135deg,#dffbff_0%,#f3fff7_35%,#fff2f7_70%,#fff8d9_100%)] font-sans flex flex-col lg:overflow-hidden">
       <DashboardHeader
         profileUrl={profileUrl}
         onLoadDemo={handleLoadDemo}
@@ -308,7 +308,7 @@ export default function Dashboard() {
             <div className="flex-1 lg:h-full lg:overflow-y-auto pr-0 lg:pr-4 space-y-5 pb-8 lg:pb-24 scroll-smooth custom-scrollbar">
             
             {user && (
-              <div className="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm relative overflow-hidden">
+              <div className="p-6 bg-white/86 backdrop-blur-xl border border-cyan-100 rounded-2xl shadow-[0_16px_48px_rgba(0,194,255,0.10)] relative overflow-hidden">
                 <div className="flex-1 w-full">
                   <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-2 block">Public Link</span>
                   {isEditingUsername ? (
@@ -360,7 +360,7 @@ export default function Dashboard() {
                       title={tab.label}
                       className={`group flex min-h-[58px] flex-col items-center justify-center gap-1 rounded-lg border px-2 py-2 text-[11px] font-bold leading-none transition-all sm:text-xs ${
                         isActive
-                          ? "border-indigo-600 bg-indigo-600 text-white shadow-[0_10px_24px_rgba(6,182,212,0.24)]"
+                          ? "border-transparent bg-[linear-gradient(135deg,#00c2ff_0%,#ff3d71_62%,#ffe156_100%)] text-white shadow-[0_10px_24px_rgba(0,194,255,0.24)]"
                           : "border-transparent text-slate-500 hover:bg-slate-50 hover:text-slate-900"
                       }`}
                     >
@@ -379,13 +379,13 @@ export default function Dashboard() {
             </nav>
 
             {uploading && (
-              <div className="bg-indigo-600 rounded-xl p-4 text-white flex items-center justify-between animate-in slide-in-from-top">
+              <div className="bg-[linear-gradient(135deg,#00c2ff_0%,#ff3d71_62%,#ffe156_100%)] rounded-xl p-4 text-white flex items-center justify-between animate-in slide-in-from-top shadow-[0_14px_34px_rgba(0,194,255,0.22)]">
                 <span className="text-sm font-bold">Uploading Assets...</span>
                 <span className="text-xs font-mono">{Math.round(uploadProgress)}%</span>
               </div>
             )}
 
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div className="bg-white/92 backdrop-blur-xl rounded-2xl shadow-[0_18px_54px_rgba(0,194,255,0.08)] border border-cyan-100 overflow-hidden">
           
           {activeTab === "profile" && (
             <div className="p-6 space-y-5">
@@ -1077,13 +1077,13 @@ export default function Dashboard() {
                     <div className="flex items-center gap-3">
                       <input 
                         type="color" 
-                        value={form.theme.btnBg || "#06b6d4"} 
+                        value={form.theme.btnBg || "#00C2FF"} 
                         onChange={(e) => handleNestedChange("theme", "btnBg", e.target.value)} 
                         className="w-10 h-10 rounded-xl cursor-pointer border-none p-0 bg-transparent"
                       />
                       <input 
                         type="text" 
-                        value={form.theme.btnBg || "#06b6d4"} 
+                        value={form.theme.btnBg || "#00C2FF"} 
                         onChange={(e) => handleNestedChange("theme", "btnBg", e.target.value)}
                         className="flex-1 p-2 bg-slate-50 border border-slate-100 rounded-lg font-mono text-xs uppercase text-slate-700 focus:outline-none"
                       />
@@ -1520,7 +1520,7 @@ export default function Dashboard() {
                               setForm(prev => ({ ...prev, theme: { ...prev.theme, primary: activeCombo.primary, background: activeCombo.background, layout: preset.layout } }));
                               setPreviewTheme(null);
                             }}
-                            className={`flex-1 py-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 ${isActive ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20' : 'bg-slate-900 text-white hover:bg-black'}`}
+                            className={`flex-1 py-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 ${isActive ? 'bg-[linear-gradient(135deg,#00c2ff_0%,#ff3d71_70%)] text-white shadow-md shadow-cyan-500/20' : 'bg-[linear-gradient(135deg,#102033_0%,#00c2ff_100%)] text-white hover:brightness-105'}`}
                           >
                             <Check className="w-3.5 h-3.5" /> {isActive ? "Applied" : "Apply"}
                           </button>
@@ -1586,7 +1586,7 @@ export default function Dashboard() {
 
 function DashboardSkeleton() {
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#e0fbff_0%,#fff7d6_52%,#ffe8f0_100%)] p-8 animate-pulse">
+    <div className="min-h-screen bg-[linear-gradient(135deg,#dffbff_0%,#f3fff7_35%,#fff2f7_70%,#fff8d9_100%)] p-8 animate-pulse">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div className="h-10 w-64 bg-slate-200 rounded-xl" />
@@ -1660,7 +1660,7 @@ function DashboardHeader({ profileUrl, onLoadDemo, onLogout, onSave }) {
           <button
             type="button"
             onClick={onSave}
-            className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 text-sm font-bold text-white shadow-[0_8px_20px_rgba(6,182,212,0.26)] transition-colors hover:bg-indigo-700"
+            className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg bg-[linear-gradient(135deg,#00c2ff_0%,#ff3d71_70%)] px-4 text-sm font-bold text-white shadow-[0_8px_20px_rgba(0,194,255,0.26)] transition hover:brightness-105"
           >
             <Check className="h-4 w-4" />
             <span>Save</span>
@@ -1687,7 +1687,7 @@ function LivePreviewPanel({ form, previewTheme }) {
   return (
     <div className="w-full lg:w-[400px] shrink-0 h-[600px] lg:h-full flex flex-col pb-2 mt-8 lg:mt-0">
       <div
-        className="relative group bg-white border border-slate-200 rounded-[1.75rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] overflow-hidden flex-1 min-h-0"
+        className="relative group bg-white border border-cyan-100 rounded-[1.75rem] shadow-[0_24px_64px_rgba(0,194,255,0.14)] overflow-hidden flex-1 min-h-0"
         style={{ transform: "translateZ(0)" }}
       >
         <div className="w-full h-full overflow-hidden relative">

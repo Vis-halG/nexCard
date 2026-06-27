@@ -93,8 +93,8 @@ export default function AdminPage() {
             uid,
             theme: {
               layout: "modern",
-              primary: "#06b6d4",
-              background: "#f0fdff"
+              primary: "#00C2FF",
+              background: "#F7FEFF"
             }
           });
 
@@ -154,8 +154,8 @@ export default function AdminPage() {
     if (!gHasTheme) {
       googleUserData.theme = {
         layout: "modern",
-        primary: "#06b6d4",
-        background: "#f0fdff"
+        primary: "#00C2FF",
+        background: "#F7FEFF"
       };
     }
 
@@ -216,17 +216,17 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(145deg,#e0fbff_0%,#fff7d6_48%,#ffe8f0_100%)] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[linear-gradient(135deg,#dffbff_0%,#f3fff7_36%,#fff2f7_70%,#fff8d9_100%)] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden font-sans">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-4xl"
       >
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden grid md:grid-cols-[1.1fr_0.9fr]">
+        <div className="bg-white/92 backdrop-blur-xl rounded-2xl shadow-[0_28px_80px_rgba(0,194,255,0.16)] border border-cyan-100 overflow-hidden grid md:grid-cols-[1.1fr_0.9fr]">
           <div className="p-6 sm:p-8">
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-200 shrink-0">
+              <div className="w-12 h-12 bg-gradient-to-br from-brand-indigo via-brand-purple to-brand-accent rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-200 shrink-0">
                 <ShieldCheck className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -278,7 +278,7 @@ export default function AdminPage() {
             <button
               onClick={handleAuth}
               disabled={loading}
-              className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-2"
+              className="w-full bg-[linear-gradient(135deg,#00c2ff_0%,#ff3d71_58%,#ffe156_100%)] hover:brightness-105 text-white font-bold py-3.5 rounded-xl transition-all shadow-[0_16px_36px_rgba(0,194,255,0.26)] active:scale-[0.98] flex items-center justify-center gap-2"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -298,13 +298,13 @@ export default function AdminPage() {
           </div>
           </div>
 
-          <div className="bg-[linear-gradient(145deg,#00a6d6_0%,#ff2d55_58%,#ffb703_100%)] text-white p-6 sm:p-8 flex flex-col justify-between gap-6">
+          <div className="bg-[linear-gradient(145deg,#00c2ff_0%,#ff3d71_58%,#ffe156_100%)] text-white p-6 sm:p-8 flex flex-col justify-between gap-6">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-indigo-100">
                 Secure Entry
               </div>
               <h3 className="mt-5 text-2xl font-black tracking-tight">Use Google for faster access</h3>
-              <p className="mt-3 text-sm leading-relaxed text-slate-300">
+              <p className="mt-3 text-sm leading-relaxed text-white/82">
                 Continue with your Google account and jump straight into your NexCard dashboard.
               </p>
             </div>

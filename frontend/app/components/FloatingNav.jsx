@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
 import { X, ChevronLeft, ChevronRight, Share2, CreditCard, Sparkles, Smartphone, MoveVertical } from "lucide-react";
 
-export default function FloatingNav({ data, primaryColor = "#06b6d4" }) {
+export default function FloatingNav({ data, primaryColor = "#00C2FF" }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isJoystickActive, setIsJoystickActive] = useState(false);
   const preferredQrIndex = data?.theme?.defaultQr === 'payment' ? 1 : 0;
@@ -212,7 +212,7 @@ export default function FloatingNav({ data, primaryColor = "#06b6d4" }) {
                             navigator.clipboard.writeText(typeof window !== 'undefined' ? window.location.href : '');
                             alert('Profile link copied!');
                         }}
-                        className="w-full py-4 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-[0.2em] text-[11px] hover:bg-black transition-all flex items-center justify-center gap-2"
+                        className="w-full py-4 rounded-2xl bg-[linear-gradient(135deg,#00c2ff_0%,#ff3d71_70%)] text-white font-black uppercase tracking-[0.2em] text-[11px] hover:brightness-105 transition-all flex items-center justify-center gap-2 shadow-[0_14px_34px_rgba(0,194,255,0.24)]"
                     >
                         <Share2 className="w-4 h-4" /> Copy Direct Link
                     </button>

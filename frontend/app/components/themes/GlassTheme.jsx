@@ -100,9 +100,9 @@ export default function GlassTheme({ data, inPreview = false }) {
   const visibleActions = hasMore ? actions.slice(0, 3) : actions;
   const remainingActions = hasMore ? actions.slice(3) : [];
 
-  const primaryColor = data?.theme?.primary || "#B76E79";
-  const savedBackground = data?.theme?.background || "#FFF7F3";
-  const backgroundColor = isDarkHex(savedBackground) ? "#FFF7F3" : savedBackground;
+  const primaryColor = data?.theme?.primary || "#FF3D71";
+  const savedBackground = data?.theme?.background || "#FFF6FA";
+  const backgroundColor = isDarkHex(savedBackground) ? "#FFF6FA" : savedBackground;
 
   const generateVcard = () => {
     const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${data?.name || "User"}\nTITLE:${data?.title || ""}\nTEL;TYPE=WORK,VOICE:${data?.phone || ""}\nEMAIL;TYPE=WORK:${data?.email || ""}\nURL:${data?.website || ""}\nADR;TYPE=WORK:;;${data?.address || ""};;;;\nEND:VCARD`;

@@ -96,7 +96,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
     window.location.href = `mailto:${data?.email || ''}?subject=Enquiry from ${name}&body=${msg}`;
   };
 
-  const primaryColor = data?.theme?.primary || "#1D4ED8";
+  const primaryColor = data?.theme?.primary || "#0078C7";
 
   const wrapperBg = "#F8FAFC";
 

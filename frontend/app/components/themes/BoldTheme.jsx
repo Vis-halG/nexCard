@@ -101,9 +101,9 @@ export default function BoldTheme({ data, inPreview = false }) {
   const visibleActions = hasMore ? actions.slice(0, 3) : actions;
   const remainingActions = hasMore ? actions.slice(3) : [];
 
-  const primaryColor = data?.theme?.primary || "#0EA5A4";
-  const savedBg = data?.theme?.background || "#F7FBF8";
-  const bgColor = isDarkHex(savedBg) ? "#F7FBF8" : savedBg;
+  const primaryColor = data?.theme?.primary || "#00A6D6";
+  const savedBg = data?.theme?.background || "#F7FEFF";
+  const bgColor = isDarkHex(savedBg) ? "#F7FEFF" : savedBg;
   const socials = Object.entries(data?.social || {}).filter(([, url]) => url);
   const pref = data?.preferences || {};
 

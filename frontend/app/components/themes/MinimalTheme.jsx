@@ -94,9 +94,11 @@ export default function MinimalTheme({ data, inPreview = false }) {
   };
 
   const theme = data?.theme || {};
-  const primaryColor = theme.primary || "#000000";
+  const primaryColor = theme.primary || "#00C2FF";
   const bgColor = theme.background || "#ffffff";
   const fontClass = theme.font || "font-sans";
+  const profileIdSeed = data?.username || data?.email || data?.name || "nexcard";
+  const profileId = Array.from(profileIdSeed).reduce((sum, char) => sum + char.charCodeAt(0), 0) % 9000 + 1000;
 
   return (
     <div
@@ -138,7 +140,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
               </div>
             )}
             <div className="text-right">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] border-2 border-black px-2 py-1 bg-black text-white" style={{ backgroundColor: primaryColor, borderColor: primaryColor }}>ID: {Math.floor(Math.random() * 9000) + 1000}</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] border-2 border-black px-2 py-1 bg-black text-white" style={{ backgroundColor: primaryColor, borderColor: primaryColor }}>ID: {profileId}</span>
             </div>
           </div>
 

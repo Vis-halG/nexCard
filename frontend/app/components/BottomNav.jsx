@@ -344,47 +344,6 @@ export default function BottomNav({
     );
   }
 
-  if (layout === "modern" || layout === "default") {
-    const isHomeActive = activeId === "home" || activeId === "about";
-    const isProfileActive = activeId === "social";
-    const isContactActive = activeId === "contact" || activeId === "share";
-
-    return (
-      <div 
-        className={`${inPreview ? "absolute" : "fixed"} bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-[380px] z-[100] d-flex align-items-center justify-content-between p-1 rounded-full shadow border-0`}
-        style={{ backgroundColor: primaryColor }}
-      >
-        <a
-          href="#home"
-          className={`flex-grow-1 text-center py-2.5 px-3 rounded-full text-xs font-bold transition-all text-decoration-none ${
-            isHomeActive ? "bg-white" : "text-white opacity-85 hover:opacity-100"
-          }`}
-          style={isHomeActive ? { color: primaryColor } : {}}
-        >
-          Home
-        </a>
-        <a
-          href="#social"
-          className={`flex-grow-1 text-center py-2.5 px-3 rounded-full text-xs font-bold transition-all text-decoration-none ${
-            isProfileActive ? "bg-white" : "text-white opacity-85 hover:opacity-100"
-          }`}
-          style={isProfileActive ? { color: primaryColor } : {}}
-        >
-          Profile
-        </a>
-        <a
-          href="#contact"
-          className={`flex-grow-1 text-center py-2.5 px-3 rounded-full text-xs font-bold transition-all text-decoration-none ${
-            isContactActive ? "bg-white" : "text-white opacity-85 hover:opacity-100"
-          }`}
-          style={isContactActive ? { color: primaryColor } : {}}
-        >
-          Contact
-        </a>
-      </div>
-    );
-  }
-
   return (
     <div 
       className={`${inPreview ? "absolute" : "fixed"} bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[100] flex justify-between items-end px-4 pt-2 pb-safe ${containerClass} ${fontClass}`}

@@ -159,7 +159,7 @@ export default function NeoTheme({ data, inPreview = false }) {
         <div className="absolute inset-0 z-0 opacity-20 pointer-events-none" style={{ backgroundImage: `linear-gradient(to right, ${primaryColor}44 1px, transparent 1px), linear-gradient(to bottom, ${primaryColor}44 1px, transparent 1px)`, backgroundSize: '24px 24px', backgroundPosition: 'center center' }}></div>
 
         {/* HEADER AREA */}
-        <div className={`relative z-10 p-6 ${inPreview ? "pt-4" : "pt-10"} flex flex-col items-center`}>
+        <div id="home" className={`relative z-10 p-6 ${inPreview ? "pt-4" : "pt-10"} flex flex-col items-center`}>
           
           {data?.coverImage && (
             <div className="w-full h-40 mb-10 relative overflow-hidden rounded-sm border border-zinc-800" style={neonBox}>

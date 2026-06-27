@@ -48,16 +48,19 @@ export default function BottomNav({
       let current = 'home';
       for (const section of sections) {
         const element = document.getElementById(section);
-        if (element && window.scrollY >= element.offsetTop - 300) {
-          current = section;
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 180) {
+            current = section;
+          }
         }
       }
       setActiveId(current);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, true);
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll, true);
   }, [showWhatsAppInput]);
 
 
@@ -77,6 +80,32 @@ export default function BottomNav({
     const encodedText = encodeURIComponent(shareText);
     const whatsappUrl = `https://wa.me/${countryCode}${sharePhone}?text=${encodedText}`;
     window.open(whatsappUrl, '_blank');
+  };
+
+  const handleNavClick = (e, targetId) => {
+    e.preventDefault();
+    setActiveId(targetId);
+
+    const container = inPreview 
+      ? (document.querySelector('.overflow-y-auto') || document.querySelector('[class*="overflow-y-auto"]')) 
+      : window;
+    const element = document.getElementById(targetId);
+    if (element) {
+      if (inPreview && container) {
+        const containerTop = container.getBoundingClientRect().top;
+        const elementTop = element.getBoundingClientRect().top;
+        const relativeTop = elementTop - containerTop + container.scrollTop;
+        container.scrollTo({
+          top: relativeTop - 12,
+          behavior: 'smooth'
+        });
+      } else {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    }
   };
 
   const navItems = [
@@ -113,7 +142,7 @@ export default function BottomNav({
     textClass = "text-[10px] font-semibold tracking-wide transition-all";
     wsContainerClass = "bg-white/60 backdrop-blur-xl border-t border-white/80 shadow-xl";
   } else if (layout === "frosted") {
-    containerClass = "bg-white/45 backdrop-blur-xl border border-white/40 shadow-[0_-8px_32px_rgba(31,38,135,0.06)] rounded-3xl";
+    containerClass = "bg-white/45 backdrop-blur-xl border-t border-white/40 shadow-[0_-8px_32px_rgba(31,38,135,0.06)] rounded-t-[2rem]";
     textClass = "text-[10px] font-bold uppercase tracking-wider transition-all";
     wsContainerClass = "bg-white/50 backdrop-blur-xl border border-white/50 shadow-xl rounded-t-3xl";
   } else if (layout === "bold") {
@@ -400,7 +429,7 @@ export default function BottomNav({
       </AnimatePresence>
 
       <div
-        className={`${inPreview ? "absolute" : "fixed"} bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[100] flex justify-between items-end px-4 pt-2 ${containerClass} ${fontClass}`}
+        className={`${inPreview ? "absolute" : "fixed"} bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[100] flex justify-between ${layout === 'neumorphism' || layout === 'frosted' ? 'items-center py-2.5' : 'items-end pt-2'} px-4 ${containerClass} ${fontClass}`}
         style={{
           ...customStyle,
           paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 8px)'
@@ -409,25 +438,45 @@ export default function BottomNav({
         {navItems.map((item) => {
           const isActive = activeId === item.id;
 
-          let itemColor = isActive ? primaryColor : '#94a3b8';
+          let itemColor = isActive ? primaryColorResolved : '#94a3b8';
           if (layout === 'neo') {
-            itemColor = isActive ? primaryColor : '#52525b';
+            itemColor = isActive ? primaryColorResolved : '#52525b';
           } else if (layout === 'minimal') {
             itemColor = isActive ? '#000000' : '#71717a';
+          } else if (layout === 'neumorphism') {
+            itemColor = isActive ? primaryColorResolved : '#64748b';
+          }
+
+          let itemClasses = `${itemContainerClass} outline-none focus:outline-none cursor-pointer`;
+          let itemBgStyle = {};
+          if (layout === 'neumorphism') {
+            itemClasses = "flex flex-col items-center justify-center rounded-2xl transition-all duration-300 cursor-pointer outline-none focus:outline-none px-3 py-2 w-[18%]";
+            if (isActive) {
+              itemBgStyle = {
+                boxShadow: "inset 2px 2px 5px rgba(165,177,198,0.35), inset -2px -2px 5px rgba(255,255,255,0.85)",
+                background: theme.background || "#E8ECF2"
+              };
+            } else {
+              itemBgStyle = {
+                background: "transparent"
+              };
+            }
           }
 
           return (
             <a
               key={item.id}
               href={`#${item.id}`}
-              className={`${itemContainerClass} outline-none focus:outline-none cursor-pointer`}
+              className={itemClasses}
+              style={itemBgStyle}
+              onClick={(e) => handleNavClick(e, item.id)}
             >
               <div
-                className={`${iconWrapperClass} ${isActive ? iconActiveOffsetClass : `group-hover:${iconActiveOffsetClass}`}`}
+                className={layout === 'neumorphism' ? "mb-1 flex items-center justify-center" : `${iconWrapperClass} ${isActive ? iconActiveOffsetClass : `group-hover:${iconActiveOffsetClass}`}`}
                 style={{ color: itemColor }}
               >
                 <item.icon
-                  size={22}
+                  size={20}
                   strokeWidth={layout === 'minimal' ? (isActive ? 3 : 2.5) : (isActive ? 2.5 : 2)}
                 />
               </div>

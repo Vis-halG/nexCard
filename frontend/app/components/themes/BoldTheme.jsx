@@ -280,7 +280,7 @@ export default function BoldTheme({ data, inPreview = false }) {
 
         <main className="space-y-5 px-6 pb-24">
           {pref.showAbout !== false && data?.about && (
-            <Panel title="Profile">
+            <Panel title="Profile" id="about">
               <p className="text-[15px] leading-7 text-slate-600">{data.about}</p>
             </Panel>
           )}
@@ -299,7 +299,7 @@ export default function BoldTheme({ data, inPreview = false }) {
           )}
 
           {pref.showSocial !== false && socials.length > 0 && (
-            <Panel title="Network">
+            <Panel title="Network" id="social">
               <div className="grid grid-cols-5 gap-3">
                 {socials.map(([network, url]) => (
                   <a key={network} href={url} target="_blank" rel="noreferrer" aria-label={network}
@@ -381,7 +381,7 @@ export default function BoldTheme({ data, inPreview = false }) {
             </Panel>
           )}
 
-          <Panel title="Inquiry">
+          <Panel title="Inquiry" id="contact">
             <form onSubmit={handleEnquiry} className="space-y-3">
               <input type="text" name="name" required placeholder="Full name" className="w-full rounded-2xl border border-slate-100 bg-slate-50 px-5 py-4 outline-none focus:bg-white focus:ring-2" />
               <input type="tel" name="phone" placeholder="Phone number" className="w-full rounded-2xl border border-slate-100 bg-slate-50 px-5 py-4 outline-none focus:bg-white focus:ring-2" />

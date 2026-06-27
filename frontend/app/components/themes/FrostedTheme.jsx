@@ -104,17 +104,31 @@ export default function FrostedTheme({ data, inPreview = false }) {
       }}
     >
       {/* 🔮 Background Mesh Blob Effects */}
-      <div className="absolute top-10 left-10 w-72 h-72 rounded-full blur-[80px] pointer-events-none opacity-40" style={{ background: `radial-gradient(circle, ${primaryColor} 0%, transparent 70%)` }}></div>
-      <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full blur-[100px] pointer-events-none opacity-30" style={{ background: `radial-gradient(circle, ${accentColor} 0%, transparent 70%)` }}></div>
+      <div className="absolute top-10 left-10 w-72 h-72 rounded-full blur-[80px] pointer-events-none opacity-40 blob-1" style={{ background: `radial-gradient(circle, ${primaryColor} 0%, transparent 70%)` }}></div>
+      <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full blur-[100px] pointer-events-none opacity-30 blob-2" style={{ background: `radial-gradient(circle, ${accentColor} 0%, transparent 70%)` }}></div>
 
       <div 
         className={inPreview
-          ? "w-full h-full overflow-y-auto scrollbar-none px-5 pt-5 pb-28 relative flex-1 z-10"
-          : `w-full max-w-[480px] min-h-screen px-5 py-8 pb-28 relative overflow-hidden z-10`
+          ? "w-full h-full overflow-y-auto scrollbar-none px-5 pt-4 pb-20 relative flex-1 z-10"
+          : `w-full max-w-[480px] min-h-screen px-5 pt-4 pb-20 relative overflow-hidden z-10`
         }
       >
         <style dangerouslySetInnerHTML={{__html: `
-          .frosted-btn:hover { color: ${primaryColor} !important; background-color: rgba(255, 255, 255, 0.9) !important; border-color: ${primaryColor}40 !important; }
+          @keyframes floatBlob1 {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -40px) scale(1.08); }
+            66% { transform: translate(-25px, 25px) scale(0.93); }
+            100% { transform: translate(0px, 0px) scale(1); }
+          }
+          @keyframes floatBlob2 {
+            0% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(-30px, 35px) scale(0.92); }
+            100% { transform: translate(0px, 0px) scale(1); }
+          }
+          .blob-1 { animation: floatBlob1 18s infinite ease-in-out; }
+          .blob-2 { animation: floatBlob2 22s infinite ease-in-out; }
+          .frosted-btn { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important; }
+          .frosted-btn:hover { color: ${primaryColor} !important; background-color: rgba(255, 255, 255, 0.9) !important; border-color: ${primaryColor}40 !important; transform: translateY(-2px) scale(1.02) !important; }
           .frosted-selection::selection { background-color: ${primaryColor}30 !important; color: inherit !important; }
         `}} />
 
@@ -126,13 +140,13 @@ export default function FrostedTheme({ data, inPreview = false }) {
             e.stopPropagation();
             setShowWhatsAppInput(true);
           }}
-          className="absolute top-12 right-8 z-40 w-10 h-10 rounded-full bg-white/40 hover:bg-white/70 border border-white/50 backdrop-blur-md flex items-center justify-center text-slate-700 shadow-sm cursor-pointer"
+          className="absolute top-4 right-4 z-40 w-10 h-10 rounded-full bg-white/40 hover:bg-white/70 border border-white/50 backdrop-blur-md flex items-center justify-center text-slate-700 shadow-sm cursor-pointer"
         >
           <Share2 size={18} />
         </button>
 
         {/* Profile Card Panel */}
-        <section id="home" className={`${cardClasses} relative overflow-hidden text-center mb-6 mt-14`}>
+        <section id="home" className={`${cardClasses} relative overflow-hidden text-center mb-6 mt-6`}>
           {/* Header Banner - Rectangular aspect */}
           <div
             className="absolute inset-x-0 top-0 h-40 opacity-80 bg-cover bg-center"
@@ -153,10 +167,7 @@ export default function FrostedTheme({ data, inPreview = false }) {
               />
             </div>
 
-            <div className="mb-4 inline-flex items-center gap-1.5 rounded-xl bg-white/70 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600 shadow-sm border border-white/50">
-              <Sparkles className="h-3.5 w-3.5" style={{ color: primaryColor }} />
-              Frosted Grid
-            </div>
+
 
             <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
               {data?.name || "Your Name"}
@@ -270,7 +281,7 @@ export default function FrostedTheme({ data, inPreview = false }) {
         {/* Section Blocks */}
         <main className="space-y-5">
           {pref.showAbout !== false && data?.about && (
-            <section className={cardClasses}>
+            <section id="about" className={cardClasses}>
               <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">About Me</h2>
               <p className="text-[14px] leading-7 text-slate-600">{data.about}</p>
             </section>
@@ -290,7 +301,7 @@ export default function FrostedTheme({ data, inPreview = false }) {
           )}
 
           {pref.showSocial !== false && socials.length > 0 && (
-            <section className={cardClasses}>
+            <section id="social" className={cardClasses}>
               <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Connect</h2>
               <div className="grid grid-cols-5 gap-3.5">
                 {socials.map(([network, url]) => (
@@ -364,7 +375,7 @@ export default function FrostedTheme({ data, inPreview = false }) {
           )}
 
           {pref.showContactForm !== false && (
-            <section className={cardClasses}>
+            <section id="contact" className={cardClasses}>
               <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Message Me</h2>
               <form onSubmit={handleEnquiry} className="space-y-3.5">
                 <input name="name" required placeholder="Full name" className="w-full rounded-2xl border border-white/60 bg-white/30 px-5 py-4 text-xs font-bold outline-none backdrop-blur-md shadow-inner focus:border-indigo-400" />
@@ -381,7 +392,7 @@ export default function FrostedTheme({ data, inPreview = false }) {
           {/* Share Section */}
           {pref.showShare !== false && (
             <div id="share" className={`scroll-mt-6 ${cardClasses} flex flex-col items-center`}>
-              <div className="flex flex-col sm:flex-row items-center gap-6 justify-center w-full">
+              <div className="flex flex-col items-center gap-6 justify-center w-full">
                 <div className="flex flex-col items-center">
                   <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-3">Connect QR</span>
                   <div className="rounded-[1.75rem] p-4 flex items-center justify-center w-[180px] h-[180px] bg-white border border-white shadow-inner">

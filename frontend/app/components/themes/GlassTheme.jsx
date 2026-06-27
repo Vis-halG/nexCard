@@ -168,10 +168,7 @@ export default function GlassTheme({ data, inPreview = false }) {
             {data?.coverImage && <div className="absolute inset-0 bg-black/20"></div>}
           </div>
           <div className="relative z-10 flex flex-col items-center pt-10">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/75 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.24em] text-slate-600 shadow-sm">
-              <Sparkles className="h-3.5 w-3.5" style={{ color: primaryColor }} />
-              Premium Glass
-            </div>
+
             <div className="h-36 w-36 rounded-full border-[6px] border-white bg-white shadow-[0_18px_45px_rgba(15,23,42,0.16)] overflow-hidden">
               <img
                 src={data?.image || "https://i.pravatar.cc/180"}
@@ -287,7 +284,7 @@ export default function GlassTheme({ data, inPreview = false }) {
 
         <main className="mt-5 space-y-5">
           {pref.showAbout !== false && data?.about && (
-            <Section title="About" className={cardClasses}>
+            <Section title="About" className={cardClasses} id="about">
               <p className="text-[15px] leading-7 text-slate-600">{data.about}</p>
             </Section>
           )}
@@ -305,7 +302,7 @@ export default function GlassTheme({ data, inPreview = false }) {
           )}
 
           {pref.showSocial !== false && socials.length > 0 && (
-            <Section title="Connect" className={cardClasses}>
+            <Section title="Connect" className={cardClasses} id="social">
               <div className="grid grid-cols-5 gap-3">
                 {socials.map(([network, url]) => (
                   <a key={network} href={url} target="_blank" rel="noreferrer" aria-label={network}
@@ -366,7 +363,7 @@ export default function GlassTheme({ data, inPreview = false }) {
           )}
 
           {pref.showContactForm !== false && (
-            <Section title="Contact" className={cardClasses}>
+            <Section title="Contact" className={cardClasses} id="contact">
               <form onSubmit={handleEnquiry} className="space-y-3">
                 <input name="name" required placeholder="Full name" className="w-full rounded-2xl border border-slate-100 bg-white/80 px-5 py-4 outline-none focus:ring-2" />
                 <input name="phone" type="tel" placeholder="Phone number" className="w-full rounded-2xl border border-slate-100 bg-white/80 px-5 py-4 outline-none focus:ring-2" />

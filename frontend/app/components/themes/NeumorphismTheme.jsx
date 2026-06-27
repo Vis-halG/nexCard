@@ -105,8 +105,8 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
     >
       <div 
         className={inPreview
-          ? "w-full h-full overflow-y-auto scrollbar-none px-5 pt-5 pb-28 relative flex-1"
-          : `w-full max-w-[480px] min-h-screen px-5 py-8 pb-28 relative overflow-hidden`
+          ? "w-full h-full overflow-y-auto scrollbar-none px-5 pt-4 pb-20 relative flex-1"
+          : `w-full max-w-[480px] min-h-screen px-5 pt-4 pb-20 relative overflow-hidden`
         }
       >
         {/* Style block for Neumorphic variables and custom shadows */}
@@ -118,13 +118,22 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
           .nm-inset {
             background: ${backgroundColor};
             box-shadow: inset 4px 4px 8px rgba(165, 177, 198, 0.35), inset -4px -4px 8px rgba(255, 255, 255, 0.8);
+            transition: all 0.25s ease-in-out;
+          }
+          .nm-inset:focus, .nm-inset:focus-within {
+            box-shadow: inset 2px 2px 4px rgba(165, 177, 198, 0.25), inset -2px -2px 4px rgba(255, 255, 255, 0.7);
+            border-color: ${primaryColor}60 !important;
+          }
+          .nm-btn {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
           }
           .nm-btn:hover {
             box-shadow: 4px 4px 8px rgba(165, 177, 198, 0.35), -4px -4px 8px rgba(255, 255, 255, 0.8);
-            transform: translateY(1px);
+            transform: translateY(-1.5px) scale(1.015);
           }
           .nm-btn:active {
             box-shadow: inset 3px 3px 6px rgba(165, 177, 198, 0.35), inset -3px -3px 6px rgba(255, 255, 255, 0.8);
+            transform: translateY(0.5px) scale(0.99);
           }
         `}} />
 
@@ -136,13 +145,13 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
             e.stopPropagation();
             setShowWhatsAppInput(true);
           }}
-          className="absolute top-12 right-8 z-40 w-10 h-10 rounded-full flex items-center justify-center text-slate-600 cursor-pointer border-0 transition-all nm-flat nm-btn"
+          className="absolute top-4 right-4 z-40 w-10 h-10 rounded-full flex items-center justify-center text-slate-600 cursor-pointer border-0 transition-all nm-flat nm-btn"
         >
           <Share2 size={18} />
         </button>
 
         {/* Cover Image Frame */}
-        <div className="relative overflow-hidden text-center nm-flat rounded-[2rem] p-6 mb-6 mt-14">
+        <div id="home" className="relative overflow-hidden text-center nm-flat rounded-[2rem] p-6 mb-6 mt-6">
           <div 
             className="w-full h-44 rounded-2xl overflow-hidden nm-inset relative"
             style={data?.coverImage ? {
@@ -166,10 +175,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
               />
             </div>
 
-            <div className="mt-4 mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em] text-slate-500 nm-inset">
-              <Sparkles className="h-3.5 w-3.5" style={{ color: primaryColor }} />
-              Soft Neumorphic
-            </div>
+
 
             <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
               {data?.name || "Your Name"}
@@ -279,7 +285,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
         {/* Section blocks */}
         <main className="space-y-6">
           {pref.showAbout !== false && data?.about && (
-            <section className="p-6 rounded-[2rem] nm-flat">
+            <section id="about" className="p-6 rounded-[2rem] nm-flat">
               <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">About</h2>
               <p className="text-sm leading-7 text-slate-600">{data.about}</p>
             </section>
@@ -299,7 +305,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
           )}
 
           {pref.showSocial !== false && socials.length > 0 && (
-            <section className="p-6 rounded-[2rem] nm-flat">
+            <section id="social" className="p-6 rounded-[2rem] nm-flat">
               <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Connect</h2>
               <div className="grid grid-cols-5 gap-3.5">
                 {socials.map(([network, url]) => (
@@ -373,7 +379,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
           )}
 
           {pref.showContactForm !== false && (
-            <section className="p-6 rounded-[2rem] nm-flat">
+            <section id="contact" className="p-6 rounded-[2rem] nm-flat">
               <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Message Me</h2>
               <form onSubmit={handleEnquiry} className="space-y-4">
                 <input name="name" required placeholder="Full name" className="w-full rounded-2xl px-5 py-4 text-xs font-bold outline-none border-0 transition-all nm-inset" />
@@ -390,7 +396,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
           {/* Share Section */}
           {pref.showShare !== false && (
             <div id="share" className="scroll-mt-6 p-6 rounded-[2rem] flex flex-col items-center nm-flat">
-              <div className="flex flex-col sm:flex-row items-center gap-6 justify-center w-full">
+              <div className="flex flex-col items-center gap-6 justify-center w-full">
                 <div className="flex flex-col items-center">
                   <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-3">Connect QR</span>
                   <div className="rounded-[1.75rem] p-4 flex items-center justify-center w-[180px] h-[180px] nm-inset bg-white">

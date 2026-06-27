@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Phone, Mail, Globe, MapPin, Download, MessageSquare, Calendar, Share2, Send, Eye, MoreHorizontal, Sparkles } from "lucide-react";
+import { Phone, Mail, Globe, MapPin, Download, MessageSquare, Calendar, Share2, Send, Eye, MoreHorizontal, Sparkles, ChevronRight } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import BottomNav from "../BottomNav";
 
@@ -11,7 +11,7 @@ const WhatsAppIcon = ({ className }) => (
   </svg>
 );
 
-export default function NeumorphismTheme({ data, inPreview = false }) {
+export default function FrostedTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
   const [showWhatsAppInput, setShowWhatsAppInput] = useState(false);
   const pref = data?.preferences || {};
@@ -22,7 +22,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
       id: "call",
       href: `tel:${data.phone}`,
       icon: (cls) => <Phone className={cls} />,
-      label: "Call"
+      label: "Call Now"
     });
     actions.push({
       id: "whatsapp",
@@ -38,7 +38,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
       id: "location",
       href: "#map",
       icon: (cls) => <MapPin className={cls} />,
-      label: "Location"
+      label: "Find Us"
     });
   }
   if (data?.email) {
@@ -46,7 +46,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
       id: "mail",
       href: `mailto:${data.email}`,
       icon: (cls) => <Mail className={cls} />,
-      label: "Mail"
+      label: "Email Me"
     });
   }
   if (data?.phone) {
@@ -54,7 +54,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
       id: "sms",
       href: `sms:${data.phone}`,
       icon: (cls) => <MessageSquare className={cls} />,
-      label: "SMS"
+      label: "Send SMS"
     });
   }
 
@@ -65,7 +65,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
   const theme = data?.theme || {};
   const primaryColor = theme.primary || "#00C2FF";
   const accentColor = theme.accent || "#FFE156";
-  const savedBackground = theme.background || "#E8ECF2";
+  const savedBackground = theme.background || "#F5F3FF";
   const backgroundColor = savedBackground;
 
   const generateVcard = () => {
@@ -90,42 +90,32 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
   };
 
   const socials = Object.entries(data?.social || {}).filter(([, url]) => url);
+  const cardClasses = "rounded-[2rem] border border-white/50 bg-white/45 p-6 shadow-[0_12px_40px_rgba(31,38,135,0.04)] backdrop-blur-xl transition-all duration-300";
 
   return (
     <div
       className={inPreview 
-        ? "h-full w-full relative overflow-hidden flex flex-col font-sans selection:bg-slate-300/40"
-        : "min-h-screen flex justify-center font-sans selection:bg-slate-300/40"
+        ? "h-full w-full relative overflow-hidden flex flex-col font-sans text-slate-800 frosted-selection"
+        : "min-h-screen flex justify-center font-sans text-slate-800 frosted-selection"
       }
       style={{
-        backgroundColor: backgroundColor,
-        color: "#27272a",
+        background: backgroundColor,
         scrollBehavior: inPreview ? undefined : "smooth",
       }}
     >
+      {/* 🔮 Background Mesh Blob Effects */}
+      <div className="absolute top-10 left-10 w-72 h-72 rounded-full blur-[80px] pointer-events-none opacity-40" style={{ background: `radial-gradient(circle, ${primaryColor} 0%, transparent 70%)` }}></div>
+      <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full blur-[100px] pointer-events-none opacity-30" style={{ background: `radial-gradient(circle, ${accentColor} 0%, transparent 70%)` }}></div>
+
       <div 
         className={inPreview
-          ? "w-full h-full overflow-y-auto scrollbar-none px-5 pt-5 pb-28 relative flex-1"
-          : `w-full max-w-[480px] min-h-screen px-5 py-8 pb-28 relative overflow-hidden`
+          ? "w-full h-full overflow-y-auto scrollbar-none px-5 pt-5 pb-28 relative flex-1 z-10"
+          : `w-full max-w-[480px] min-h-screen px-5 py-8 pb-28 relative overflow-hidden z-10`
         }
       >
-        {/* Style block for Neumorphic variables and custom shadows */}
         <style dangerouslySetInnerHTML={{__html: `
-          .nm-flat {
-            background: ${backgroundColor};
-            box-shadow: 7px 7px 14px rgba(165, 177, 198, 0.45), -7px -7px 14px rgba(255, 255, 255, 0.85);
-          }
-          .nm-inset {
-            background: ${backgroundColor};
-            box-shadow: inset 4px 4px 8px rgba(165, 177, 198, 0.35), inset -4px -4px 8px rgba(255, 255, 255, 0.8);
-          }
-          .nm-btn:hover {
-            box-shadow: 4px 4px 8px rgba(165, 177, 198, 0.35), -4px -4px 8px rgba(255, 255, 255, 0.8);
-            transform: translateY(1px);
-          }
-          .nm-btn:active {
-            box-shadow: inset 3px 3px 6px rgba(165, 177, 198, 0.35), inset -3px -3px 6px rgba(255, 255, 255, 0.8);
-          }
+          .frosted-btn:hover { color: ${primaryColor} !important; background-color: rgba(255, 255, 255, 0.9) !important; border-color: ${primaryColor}40 !important; }
+          .frosted-selection::selection { background-color: ${primaryColor}30 !important; color: inherit !important; }
         `}} />
 
         {/* Top Share Button */}
@@ -136,76 +126,76 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
             e.stopPropagation();
             setShowWhatsAppInput(true);
           }}
-          className="absolute top-12 right-8 z-40 w-10 h-10 rounded-full flex items-center justify-center text-slate-600 cursor-pointer border-0 transition-all nm-flat nm-btn"
+          className="absolute top-12 right-8 z-40 w-10 h-10 rounded-full bg-white/40 hover:bg-white/70 border border-white/50 backdrop-blur-md flex items-center justify-center text-slate-700 shadow-sm cursor-pointer"
         >
           <Share2 size={18} />
         </button>
 
-        {/* Cover Image Frame */}
-        <div className="relative overflow-hidden text-center nm-flat rounded-[2rem] p-6 mb-6 mt-14">
-          <div 
-            className="w-full h-44 rounded-2xl overflow-hidden nm-inset relative"
+        {/* Profile Card Panel */}
+        <section id="home" className={`${cardClasses} relative overflow-hidden text-center mb-6 mt-14`}>
+          {/* Header Banner - Rectangular aspect */}
+          <div
+            className="absolute inset-x-0 top-0 h-40 opacity-80 bg-cover bg-center"
             style={data?.coverImage ? {
-              backgroundImage: `url(${data.coverImage})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center"
+              backgroundImage: `url(${data.coverImage})`
             } : {
-              background: `linear-gradient(135deg, ${primaryColor} 0%, ${accentColor}dd 100%)`
+              background: `linear-gradient(135deg, ${primaryColor} 0%, ${accentColor}dd 100%)`,
             }}
-          >
-            {data?.coverImage && <div className="absolute inset-0 bg-black/10"></div>}
-          </div>
+          />
 
-          <div className="relative z-10 flex flex-col items-center -mt-20">
-            {/* Neumorphic Profile Photo Ring */}
-            <div className="h-36 w-36 rounded-full p-2.5 flex items-center justify-center nm-inset bg-white">
+          <div className="relative z-10 flex flex-col items-center pt-12">
+            {/* PROFILE PHOTO - Rounded Square Design */}
+            <div className="h-32 w-32 rounded-3xl border-[5px] border-white/90 bg-white/50 shadow-md overflow-hidden backdrop-blur-md mb-4">
               <img
                 src={data?.image || "https://i.pravatar.cc/180"}
                 alt={data?.name || "Profile"}
-                className="h-full w-full object-cover rounded-full shadow-inner"
+                className="h-full w-full object-cover"
               />
             </div>
 
-            <div className="mt-4 mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em] text-slate-500 nm-inset">
+            <div className="mb-4 inline-flex items-center gap-1.5 rounded-xl bg-white/70 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600 shadow-sm border border-white/50">
               <Sparkles className="h-3.5 w-3.5" style={{ color: primaryColor }} />
-              Soft Neumorphic
+              Frosted Grid
             </div>
 
             <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
               {data?.name || "Your Name"}
             </h1>
-            <p className="mt-1 text-xs font-black uppercase tracking-[0.24em] text-slate-500">
+            <p className="mt-1 text-xs font-black uppercase tracking-[0.2em] text-slate-500">
               {data?.title || "Professional Title"}
             </p>
-            {data?.company && <p className="mt-2 text-xs font-semibold text-slate-400">{data.company}</p>}
+            {data?.company && <p className="mt-1.5 text-xs font-semibold text-slate-400">{data.company}</p>}
 
-            {/* Quick Actions Panel */}
-            <div className="mt-6 grid w-full grid-cols-4 gap-4">
+            {/* Quick Actions Grid - Horizontal Pills Layout (COMPLETELY DIFFERENT!) */}
+            <div className="mt-6 grid grid-cols-2 gap-3 w-full">
               {visibleActions.map((act) => (
                 <a
                   key={act.id}
                   href={act.href}
                   target={act.target}
                   rel={act.rel}
-                  className="flex h-12 items-center justify-center rounded-2xl text-slate-600 transition-all border-0 nm-flat nm-btn"
+                  className="flex items-center justify-start gap-3 px-4 py-3.5 rounded-2xl border border-white/50 bg-white/50 text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 frosted-btn text-xs font-bold uppercase tracking-wider"
                   aria-label={act.label}
-                  style={{ color: act.id === 'whatsapp' ? '#25D366' : primaryColor }}
                 >
-                  {act.id === 'whatsapp'
-                    ? act.icon("w-5 h-5 fill-current")
-                    : act.icon("w-5 h-5 stroke-current")
-                  }
+                  <span style={{ color: primaryColor }}>
+                    {act.id === 'whatsapp'
+                      ? act.icon("w-4.5 h-4.5 fill-current")
+                      : act.icon("w-4.5 h-4.5 stroke-current")
+                    }
+                  </span>
+                  <span>{act.label}</span>
                 </a>
               ))}
 
               {hasMore ? (
                 <button
                   onClick={() => setShowMore(!showMore)}
-                  className="flex h-12 items-center justify-center rounded-2xl transition-all border-0 nm-flat nm-btn text-slate-600"
-                  style={showMore ? { color: primaryColor } : {}}
+                  className="flex items-center justify-center gap-2 px-4 py-3.5 rounded-2xl border border-white/50 bg-white/50 text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 frosted-btn text-xs font-bold uppercase tracking-wider"
+                  style={showMore ? { color: primaryColor, backgroundColor: "rgba(255, 255, 255, 0.85)" } : {}}
                   aria-label="More"
                 >
-                  <MoreHorizontal className="w-5 h-5" />
+                  <MoreHorizontal className="w-4 h-4" />
+                  <span>{showMore ? "Less" : "More"}</span>
                 </button>
               ) : (
                 actions.slice(3, 4).map((act) => (
@@ -214,49 +204,50 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
                     href={act.href}
                     target={act.target}
                     rel={act.rel}
-                    className="flex h-12 items-center justify-center rounded-2xl text-slate-600 transition-all border-0 nm-flat nm-btn"
+                    className="flex items-center justify-start gap-3 px-4 py-3.5 rounded-2xl border border-white/50 bg-white/50 text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 frosted-btn text-xs font-bold uppercase tracking-wider"
                     aria-label={act.label}
-                    style={{ color: primaryColor }}
                   >
-                    {act.id === 'whatsapp'
-                      ? act.icon("w-5 h-5 fill-current")
-                      : act.icon("w-5 h-5 stroke-current")
-                    }
+                    <span style={{ color: primaryColor }}>
+                      {act.icon("w-4.5 h-4.5 stroke-current")}
+                    </span>
+                    <span>{act.label}</span>
                   </a>
                 ))
               )}
             </div>
 
             {hasMore && showMore && (
-              <div className="mt-4 grid w-full grid-cols-4 gap-4 animate-in slide-in-from-top duration-300">
+              <div className="mt-3 grid grid-cols-2 gap-3 w-full animate-in fade-in slide-in-from-top-2 duration-300">
                 {remainingActions.map((act) => (
                   <a
                     key={act.id}
                     href={act.href}
                     target={act.target}
                     rel={act.rel}
-                    className="flex h-12 items-center justify-center rounded-2xl text-slate-600 transition-all border-0 nm-flat nm-btn"
+                    className="flex items-center justify-start gap-3 px-4 py-3.5 rounded-2xl border border-white/50 bg-white/50 text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 frosted-btn text-xs font-bold uppercase tracking-wider"
                     aria-label={act.label}
-                    style={{ color: primaryColor }}
                   >
-                    {act.id === 'whatsapp'
-                      ? act.icon("w-5 h-5 fill-current")
-                      : act.icon("w-5 h-5 stroke-current")
-                    }
+                    <span style={{ color: primaryColor }}>
+                      {act.id === 'whatsapp'
+                        ? act.icon("w-4.5 h-4.5 fill-current")
+                        : act.icon("w-4.5 h-4.5 stroke-current")
+                      }
+                    </span>
+                    <span>{act.label}</span>
                   </a>
                 ))}
               </div>
             )}
           </div>
-        </div>
+        </section>
 
         {/* Save Contact & Appointment Booker */}
         {pref.showSaveContact !== false && (
-          <div className="mt-6 mb-6 space-y-4">
+          <div className="mt-5 mb-5 space-y-3">
             <button
               onClick={generateVcard}
-              className="flex w-full items-center justify-center gap-3 rounded-[1.75rem] py-4 text-xs font-black uppercase tracking-[0.22em] text-white transition-all border-0 nm-flat"
-              style={{ background: `linear-gradient(135deg, ${primaryColor}, ${accentColor}dd)`, boxShadow: `6px 6px 15px rgba(165,177,198,0.3), -6px -6px 15px rgba(255,255,255,0.7)` }}
+              className="flex w-full items-center justify-center gap-3 rounded-2xl py-4 text-xs font-black uppercase tracking-[0.2em] text-white shadow-md transition-all hover:-translate-y-0.5"
+              style={{ background: `linear-gradient(135deg, ${primaryColor}, ${accentColor}dd)`, boxShadow: `0 10px 25px ${primaryColor}25` }}
             >
               <Download className="h-4 w-4" />
               Save Contact
@@ -267,7 +258,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
                 href={data.calendarUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="flex w-full items-center justify-center gap-3 rounded-[1.75rem] py-4 text-xs font-black uppercase tracking-[0.18em] text-slate-700 transition-all border-0 nm-flat nm-btn"
+                className="flex w-full items-center justify-center gap-3 rounded-2xl border border-white/60 bg-white/40 px-6 py-4 text-xs font-bold uppercase tracking-[0.18em] text-slate-700 shadow-sm backdrop-blur-md hover:-translate-y-0.5 frosted-btn"
               >
                 <Calendar className="h-4 w-4" style={{ color: primaryColor }} />
                 Book Appointment
@@ -276,21 +267,21 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
           </div>
         )}
 
-        {/* Section blocks */}
-        <main className="space-y-6">
+        {/* Section Blocks */}
+        <main className="space-y-5">
           {pref.showAbout !== false && data?.about && (
-            <section className="p-6 rounded-[2rem] nm-flat">
-              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">About</h2>
-              <p className="text-sm leading-7 text-slate-600">{data.about}</p>
+            <section className={cardClasses}>
+              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">About Me</h2>
+              <p className="text-[14px] leading-7 text-slate-600">{data.about}</p>
             </section>
           )}
 
           {pref.showServices !== false && data?.services?.length > 0 && (
-            <section className="p-6 rounded-[2rem] nm-flat">
-              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Specialities</h2>
-              <div className="flex flex-wrap gap-2.5">
+            <section className={cardClasses}>
+              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Specialities</h2>
+              <div className="flex flex-wrap gap-2">
                 {data.services.map((service, index) => (
-                  <span key={index} className="rounded-full px-4.5 py-2 text-xs font-bold text-slate-700 border-0 nm-inset">
+                  <span key={index} className="rounded-xl border border-white/60 bg-white/30 px-4 py-2 text-xs font-bold text-slate-755 shadow-sm backdrop-blur-md">
                     {service}
                   </span>
                 ))}
@@ -299,12 +290,12 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
           )}
 
           {pref.showSocial !== false && socials.length > 0 && (
-            <section className="p-6 rounded-[2rem] nm-flat">
-              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Connect</h2>
+            <section className={cardClasses}>
+              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Connect</h2>
               <div className="grid grid-cols-5 gap-3.5">
                 {socials.map(([network, url]) => (
                   <a key={network} href={url} target="_blank" rel="noreferrer" aria-label={network}
-                    className="aspect-square w-full max-w-12 justify-self-center rounded-2xl flex items-center justify-center text-slate-500 transition-all border-0 nm-flat nm-btn">
+                    className="aspect-square w-full max-w-12 justify-self-center rounded-2xl border border-white/60 bg-white/35 flex items-center justify-center text-slate-500 shadow-sm transition-all duration-350 hover:-translate-y-0.5 frosted-btn">
                     <Globe className="w-5 h-5" style={{ color: primaryColor }} />
                   </a>
                 ))}
@@ -314,13 +305,13 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
 
           {/* Gallery Section */}
           {pref.showGallery !== false && data?.gallery?.length > 0 && (
-            <section className="p-6 rounded-[2rem] nm-flat">
-              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Gallery</h2>
-              <div className="grid grid-cols-2 gap-4">
+            <section className={cardClasses}>
+              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Gallery</h2>
+              <div className="grid grid-cols-2 gap-3.5">
                 {data.gallery.map((img, index) =>
                   img ? (
-                    <div key={index} className="aspect-square rounded-2xl p-1.5 nm-inset">
-                      <img src={img} alt={`Gallery ${index + 1}`} className="w-full h-full object-cover rounded-xl" />
+                    <div key={index} className="aspect-square rounded-2xl overflow-hidden border border-white/60 shadow-sm relative group">
+                      <img src={img} alt={`Gallery ${index + 1}`} className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105" />
                     </div>
                   ) : null
                 )}
@@ -328,16 +319,16 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
             </section>
           )}
 
-          {/* Custom Links Section */}
+          {/* Featured Links Section */}
           {pref.showCustomLinks !== false && data?.customLinks?.length > 0 && (
-            <section className="p-6 rounded-[2rem] nm-flat">
-              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Featured Links</h2>
-              <div className="space-y-4">
+            <section className={cardClasses}>
+              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Featured Links</h2>
+              <div className="space-y-3">
                 {data.customLinks.map((link, index) => (
                   <a key={index} href={link.url} target="_blank" rel="noreferrer" 
-                    className="flex items-center justify-between rounded-2xl px-5 py-4 font-bold text-slate-800 transition-all border-0 nm-flat nm-btn">
-                    <span className="text-xs uppercase tracking-wide" style={{ color: primaryColor }}>{link.title}</span>
-                    <Globe className="h-4 w-4 text-slate-450" />
+                    className="flex items-center justify-between rounded-2xl border border-white/60 bg-white/35 px-5 py-4 font-bold text-slate-800 shadow-sm transition-all duration-300 hover:-translate-y-0.5 frosted-btn">
+                    <span className="text-xs uppercase tracking-wider" style={{ color: primaryColor }}>{link.title}</span>
+                    <ChevronRight className="h-4.5 w-4.5 text-slate-400" />
                   </a>
                 ))}
               </div>
@@ -346,23 +337,23 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
 
           {/* Payments Section */}
           {pref.showPayment !== false && (data?.payment?.upi || data?.payment?.bankDetails || data?.payment?.qrCode || data?.payment?.link) && (
-            <section className="p-6 rounded-[2rem] nm-flat">
-              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Payments</h2>
+            <section className={cardClasses}>
+              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Payments</h2>
               <div className="space-y-4">
                 {data.payment.upi && (
-                  <div className="flex items-center justify-between gap-4 rounded-2xl px-5 py-4 nm-inset">
-                    <span className="font-bold text-[10px] uppercase text-slate-400">UPI ID</span>
+                  <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/60 bg-white/35 px-4.5 py-3.5 shadow-sm">
+                    <span className="font-bold text-[9px] uppercase tracking-wider text-slate-400">UPI ID</span>
                     <span className="text-right font-mono text-xs font-bold text-slate-800">{data.payment.upi}</span>
                   </div>
                 )}
                 {data.payment.bankDetails && (
-                  <div className="rounded-2xl p-4 font-mono text-xs leading-6 text-slate-650 whitespace-pre-line nm-inset">
+                  <div className="rounded-2xl border border-white/60 bg-white/20 p-4.5 font-mono text-[11px] leading-6 text-slate-600 whitespace-pre-line shadow-inner">
                     {data.payment.bankDetails}
                   </div>
                 )}
                 {data.payment.link && (
                   <a href={data.payment.link} target="_blank" rel="noreferrer" 
-                    className="flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-xs font-black uppercase tracking-wider text-white border-0 transition-all nm-flat nm-btn"
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-xs font-black uppercase tracking-wider text-white shadow-md transition-all hover:-translate-y-0.5"
                     style={{ backgroundColor: primaryColor }}
                   >
                     Pay Online
@@ -373,13 +364,13 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
           )}
 
           {pref.showContactForm !== false && (
-            <section className="p-6 rounded-[2rem] nm-flat">
-              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Message Me</h2>
-              <form onSubmit={handleEnquiry} className="space-y-4">
-                <input name="name" required placeholder="Full name" className="w-full rounded-2xl px-5 py-4 text-xs font-bold outline-none border-0 transition-all nm-inset" />
-                <input name="phone" type="tel" placeholder="Phone number" className="w-full rounded-2xl px-5 py-4 text-xs font-bold outline-none border-0 transition-all nm-inset" />
-                <textarea name="message" required rows="4" placeholder="Message" className="w-full resize-none rounded-2xl px-5 py-4 text-xs font-bold outline-none border-0 transition-all nm-inset" />
-                <button type="submit" className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-xs font-black uppercase tracking-[0.2em] text-white border-0 transition-all nm-flat nm-btn" style={{ backgroundColor: primaryColor, color: "#ffffff" }}>
+            <section className={cardClasses}>
+              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Message Me</h2>
+              <form onSubmit={handleEnquiry} className="space-y-3.5">
+                <input name="name" required placeholder="Full name" className="w-full rounded-2xl border border-white/60 bg-white/30 px-5 py-4 text-xs font-bold outline-none backdrop-blur-md shadow-inner focus:border-indigo-400" />
+                <input name="phone" type="tel" placeholder="Phone number" className="w-full rounded-2xl border border-white/60 bg-white/30 px-5 py-4 text-xs font-bold outline-none backdrop-blur-md shadow-inner focus:border-indigo-400" />
+                <textarea name="message" required rows="4" placeholder="Message" className="w-full resize-none rounded-2xl border border-white/60 bg-white/30 px-5 py-4 text-xs font-bold outline-none backdrop-blur-md shadow-inner focus:border-indigo-400" />
+                <button type="submit" className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-xs font-black uppercase tracking-wider text-white shadow-md transition-all hover:-translate-y-0.5" style={{ backgroundColor: primaryColor, color: "#ffffff" }}>
                   <Send className="h-4 w-4" />
                   Send Message
                 </button>
@@ -389,11 +380,11 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
 
           {/* Share Section */}
           {pref.showShare !== false && (
-            <div id="share" className="scroll-mt-6 p-6 rounded-[2rem] flex flex-col items-center nm-flat">
+            <div id="share" className={`scroll-mt-6 ${cardClasses} flex flex-col items-center`}>
               <div className="flex flex-col sm:flex-row items-center gap-6 justify-center w-full">
                 <div className="flex flex-col items-center">
                   <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-3">Connect QR</span>
-                  <div className="rounded-[1.75rem] p-4 flex items-center justify-center w-[180px] h-[180px] nm-inset bg-white">
+                  <div className="rounded-[1.75rem] p-4 flex items-center justify-center w-[180px] h-[180px] bg-white border border-white shadow-inner">
                     <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={148} level="H" fgColor="#111827" />
                   </div>
                 </div>
@@ -401,7 +392,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
                 {(data?.payment?.qrCode || data?.payment?.upi) && (
                   <div className="flex flex-col items-center">
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-3">Pay QR</span>
-                    <div className="rounded-[1.75rem] p-4 flex items-center justify-center w-[180px] h-[180px] nm-inset bg-white">
+                    <div className="rounded-[1.75rem] p-4 flex items-center justify-center w-[180px] h-[180px] bg-white border border-white shadow-inner">
                       {data.payment.qrCode ? (
                         <img src={data.payment.qrCode} alt="Payment QR" className="w-full h-full object-contain rounded-xl" />
                       ) : (
@@ -433,7 +424,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
       </div>
 
       {/* 📱 MOBILE APP BOTTOM NAVIGATION */}
-      <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} layout="neumorphism" inPreview={inPreview} />
+      <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} layout="frosted" inPreview={inPreview} />
     </div>
   );
 }

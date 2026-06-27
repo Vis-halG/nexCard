@@ -189,14 +189,12 @@ export default function Dashboard() {
       uid: user.uid,
       username: form.username || "vishalgupta25980790"
     });
-    setForm(prev => ({
-      ...prev,
+    setForm({
       ...demoData,
-      image: prev.image || demoData.image,
-      social: { ...demoData.social, ...prev.social },
-      payment: { ...demoData.payment, ...prev.payment },
-      theme: { ...demoData.theme, ...prev.theme }
-    }));
+      email: form.email || demoData.email,
+      username: form.username || demoData.username,
+      uid: user.uid
+    });
   };
 
   const handleLogout = async () => {

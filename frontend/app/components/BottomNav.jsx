@@ -112,6 +112,10 @@ export default function BottomNav({
     containerClass = "bg-white/50 backdrop-blur-xl border-t border-white/60 shadow-[0_-8px_32px_rgba(0,0,0,0.06)]";
     textClass = "text-[10px] font-semibold tracking-wide transition-all";
     wsContainerClass = "bg-white/60 backdrop-blur-xl border-t border-white/80 shadow-xl";
+  } else if (layout === "frosted") {
+    containerClass = "bg-white/45 backdrop-blur-xl border border-white/40 shadow-[0_-8px_32px_rgba(31,38,135,0.06)] rounded-3xl";
+    textClass = "text-[10px] font-bold uppercase tracking-wider transition-all";
+    wsContainerClass = "bg-white/50 backdrop-blur-xl border border-white/50 shadow-xl rounded-t-3xl";
   } else if (layout === "bold") {
     containerClass = "bg-white/95 backdrop-blur-md border-t border-slate-100 shadow-[0_-12px_30px_rgba(15,23,42,0.05)]";
     textClass = "text-[9px] font-extrabold uppercase tracking-widest transition-all";
@@ -245,6 +249,18 @@ export default function BottomNav({
       color: '#ffffff',
       boxShadow: "4px 4px 10px rgba(165, 177, 198, 0.3), -4px -4px 10px rgba(255, 255, 255, 0.7)"
     };
+  }
+  else if (layout === "frosted") {
+    drawerBg = "rgba(255, 255, 255, 0.45)";
+    drawerClasses += " backdrop-blur-xl border border-white/50 shadow-[0_-12px_40px_rgba(31,38,135,0.06)] rounded-t-[2.5rem]";
+    closeBtnClasses += " bg-white/30 hover:bg-white/60 border border-white/40 text-slate-700 rounded-full";
+    qrFrameClasses += " bg-white/40 backdrop-blur-md rounded-2xl border border-white/50 shadow-inner";
+    inputContainerClasses += " bg-white/20 border border-white/50 backdrop-blur-md rounded-2xl";
+    inputSelectClasses += " text-slate-750";
+    inputFieldClasses += " text-slate-800 placeholder-slate-450";
+    inputSeparatorClasses += " bg-white/50";
+    sendBtnClasses += " border border-white/50 backdrop-blur-md rounded-2xl hover:bg-white/60 shadow-sm";
+    sendBtnStyles = { backgroundColor: 'rgba(255,255,255,0.3)', color: primaryColorResolved };
   }
   else {
     // modern / default

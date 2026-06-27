@@ -154,7 +154,7 @@ export const THEME_PRESETS = [
   },
   {
     name: "Frosted Glass",
-    layout: "glass",
+    layout: "frosted",
     colorCombinations: [
       { primary: "#8B5CF6", background: "#F5F3FF", accent: "#EC4899" },
       { primary: "#06B6D4", background: "#ECFEFF", accent: "#3B82F6" },

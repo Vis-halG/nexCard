@@ -162,5 +162,16 @@ export const THEME_PRESETS = [
       { primary: "#EC4899", background: "#FDF2F8", accent: "#8B5CF6" },
       { primary: "#3B82F6", background: "#EFF6FF", accent: "#10B981" }
     ]
+  },
+  {
+    name: "Soft Neumorphic",
+    layout: "neumorphism",
+    colorCombinations: [
+      { primary: "#0078FF", background: "#E8ECF2", accent: "#FF2E93" },
+      { primary: "#7928CA", background: "#EAE6F8", accent: "#FF007F" },
+      { primary: "#00DF89", background: "#E4F3ED", accent: "#0078FF" },
+      { primary: "#FF5E36", background: "#F5EBE6", accent: "#FF2E93" },
+      { primary: "#1E293B", background: "#E2E8F0", accent: "#0078FF" }
+    ]
   }
 ];

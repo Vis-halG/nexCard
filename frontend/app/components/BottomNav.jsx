@@ -213,6 +213,39 @@ export default function BottomNav({
     sendBtnClasses += " rounded-xl shadow-sm hover:bg-blue-700";
     sendBtnStyles = { backgroundColor: primaryColorResolved, color: '#ffffff' };
   }
+  else if (layout === "neumorphism") {
+    const bgVal = theme.background || "#E8ECF2";
+    const accentVal = theme.accent || "#FFE156";
+    drawerBg = bgVal;
+    drawerClasses += " border-t-0 rounded-t-[2.5rem] shadow-none";
+    drawerStyles.boxShadow = "0 -15px 35px rgba(165, 177, 198, 0.35)";
+    
+    closeBtnClasses += " text-slate-700 transition-all border-0 shadow-sm";
+    closeBtnClasses = closeBtnClasses.replace("bg-slate-50", "").replace("hover:bg-slate-100", "");
+    closeBtnClasses += " rounded-full";
+    drawerStyles.background = bgVal;
+
+    qrFrameClasses += " border-0 transition-all";
+    qrFrameStyles = {
+      boxShadow: "inset 4px 4px 8px rgba(165, 177, 198, 0.35), inset -4px -4px 8px rgba(255, 255, 255, 0.8)",
+      background: bgVal,
+      borderRadius: "1.75rem"
+    };
+
+    inputContainerClasses = "flex-1 flex items-center px-3 h-11 transition-all rounded-2xl border-0";
+    inputContainerClasses += " shadow-[inset_3px_3px_6px_rgba(165,177,198,0.3),_inset_-3px_-3px_6px_rgba(255,255,255,0.8)]";
+    
+    inputSelectClasses += " text-slate-800";
+    inputFieldClasses += " text-slate-800 placeholder-slate-400";
+    inputSeparatorClasses += " bg-slate-300";
+    
+    sendBtnClasses += " rounded-2xl border-0 transition-all active:scale-95";
+    sendBtnStyles = {
+      background: `linear-gradient(135deg, ${primaryColorResolved}, ${accentVal}dd)`,
+      color: '#ffffff',
+      boxShadow: "4px 4px 10px rgba(165, 177, 198, 0.3), -4px -4px 10px rgba(255, 255, 255, 0.7)"
+    };
+  }
   else {
     // modern / default
     drawerClasses += " bg-white border-t border-slate-200/60 shadow-[0_-12px_40px_rgba(0,0,0,0.1)] rounded-t-[2.5rem]";

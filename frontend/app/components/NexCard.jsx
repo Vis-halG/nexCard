@@ -4,6 +4,7 @@ import MinimalTheme from "./themes/MinimalTheme";
 import GlassTheme from "./themes/GlassTheme";
 import BoldTheme from "./themes/BoldTheme";
 import NeoTheme from "./themes/NeoTheme";
+import NeumorphismTheme from "./themes/NeumorphismTheme";
 
 export default function NexCard({ data, inPreview = false }) {
   const layout = data?.theme?.layout || "modern";
@@ -19,6 +20,8 @@ export default function NexCard({ data, inPreview = false }) {
       return <BoldTheme data={data} inPreview={inPreview} />;
     case "neo":
       return <NeoTheme data={data} inPreview={inPreview} />;
+    case "neumorphism":
+      return <NeumorphismTheme data={data} inPreview={inPreview} />;
     case "modern":
     default:
       return <ModernTheme data={data} inPreview={inPreview} />;

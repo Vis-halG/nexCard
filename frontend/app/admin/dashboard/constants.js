@@ -151,5 +151,16 @@ export const THEME_PRESETS = [
       { primary: "#FFD700", background: "#080700", accent: "#FF8C00" },
       { primary: "#00E5FF", background: "#000A0A", accent: "#0066FF" }
     ]
+  },
+  {
+    name: "Frosted Glass",
+    layout: "glass",
+    colorCombinations: [
+      { primary: "#8B5CF6", background: "#F5F3FF", accent: "#EC4899" },
+      { primary: "#06B6D4", background: "#ECFEFF", accent: "#3B82F6" },
+      { primary: "#10B981", background: "#ECFDF5", accent: "#F59E0B" },
+      { primary: "#EC4899", background: "#FDF2F8", accent: "#8B5CF6" },
+      { primary: "#3B82F6", background: "#EFF6FF", accent: "#10B981" }
+    ]
   }
 ];

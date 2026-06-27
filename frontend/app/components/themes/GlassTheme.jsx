@@ -101,6 +101,7 @@ export default function GlassTheme({ data, inPreview = false }) {
   const remainingActions = hasMore ? actions.slice(3) : [];
 
   const primaryColor = data?.theme?.primary || "#FF3D71";
+  const accentColor = data?.theme?.accent || "#FFE156";
   const savedBackground = data?.theme?.background || "#FFF6FA";
   const backgroundColor = isDarkHex(savedBackground) ? "#FFF6FA" : savedBackground;
 
@@ -128,17 +129,17 @@ export default function GlassTheme({ data, inPreview = false }) {
   const socials = Object.entries(data?.social || {}).filter(([, url]) => url);
   const pref = data?.preferences || {};
   const cardClasses =
-    "rounded-[1.75rem] border border-white/80 bg-white/72 p-6 shadow-[0_24px_70px_rgba(183,110,121,0.12)] backdrop-blur-2xl";
+    "rounded-[1.75rem] border border-white/80 bg-white/72 p-6 shadow-xl shadow-slate-200/40 backdrop-blur-2xl";
 
   return (
     <div
       className={inPreview 
-        ? "h-full w-full relative overflow-hidden flex flex-col font-sans text-slate-800 selection:bg-rose-200 selection:text-slate-900"
-        : "min-h-screen flex justify-center font-sans text-slate-800 selection:bg-rose-200 selection:text-slate-900"
+        ? "h-full w-full relative overflow-hidden flex flex-col font-sans text-slate-800 glass-selection"
+        : "min-h-screen flex justify-center font-sans text-slate-800 glass-selection"
       }
       style={{
         background:
-          `radial-gradient(circle at top left, ${primaryColor}26, transparent 34%), radial-gradient(circle at bottom right, #f9c6b944, transparent 32%), ${backgroundColor}`,
+          `radial-gradient(circle at top left, ${primaryColor}26, transparent 36%), radial-gradient(circle at bottom right, ${accentColor}26, transparent 36%), ${backgroundColor}`,
         scrollBehavior: inPreview ? undefined : "smooth",
       }}
     >
@@ -148,6 +149,10 @@ export default function GlassTheme({ data, inPreview = false }) {
           : `w-full max-w-[480px] min-h-screen px-5 py-8 pb-28 relative overflow-hidden`
         }
       >
+        <style dangerouslySetInnerHTML={{__html: `
+          .glass-btn:hover { color: ${primaryColor} !important; background-color: rgba(255, 255, 255, 0.95) !important; border-color: ${primaryColor}44 !important; }
+          .glass-selection::selection { background-color: ${primaryColor}33 !important; color: inherit !important; }
+        `}} />
         <button 
           onClick={() => setShowWhatsAppInput(true)} 
           className="absolute top-12 right-8 z-40 w-10 h-10 rounded-full bg-white/60 hover:bg-white/80 border border-white/80 backdrop-blur-md flex items-center justify-center text-slate-700 shadow-md cursor-pointer"
@@ -162,7 +167,7 @@ export default function GlassTheme({ data, inPreview = false }) {
             style={data?.coverImage ? {
               backgroundImage: `url(${data.coverImage})`
             } : {
-              background: `linear-gradient(135deg, ${primaryColor} 0%, #f7b7a3 100%)`,
+              background: `linear-gradient(135deg, ${primaryColor} 0%, ${accentColor}dd 100%)`,
             }}
           >
             {data?.coverImage && <div className="absolute inset-0 bg-black/20"></div>}
@@ -194,7 +199,7 @@ export default function GlassTheme({ data, inPreview = false }) {
                   href={act.href}
                   target={act.target}
                   rel={act.rel}
-                  className="flex h-14 items-center justify-center rounded-2xl border border-white/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:text-rose-500 hover:bg-white/95"
+                  className="flex h-14 items-center justify-center rounded-2xl border border-white/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 glass-btn"
                   aria-label={act.label}
                 >
                   {act.id === 'whatsapp'
@@ -207,9 +212,8 @@ export default function GlassTheme({ data, inPreview = false }) {
               {hasMore ? (
                 <button
                   onClick={() => setShowMore(!showMore)}
-                  className={`flex h-14 items-center justify-center rounded-2xl border border-white/80 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:text-rose-500 ${
-                    showMore ? 'bg-white/90 text-rose-500 border-rose-200' : 'bg-white/70 text-slate-600'
-                  }`}
+                  className="flex h-14 items-center justify-center rounded-2xl border border-white/80 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 glass-btn bg-white/70 text-slate-600"
+                  style={showMore ? { color: primaryColor, backgroundColor: "rgba(255, 255, 255, 0.9)", borderColor: `${primaryColor}44` } : {}}
                   aria-label="More"
                 >
                   <MoreHorizontal className="w-5 h-5" />
@@ -221,7 +225,7 @@ export default function GlassTheme({ data, inPreview = false }) {
                     href={act.href}
                     target={act.target}
                     rel={act.rel}
-                    className="flex h-14 items-center justify-center rounded-2xl border border-white/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:text-rose-500 hover:bg-white/95"
+                    className="flex h-14 items-center justify-center rounded-2xl border border-white/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 glass-btn"
                     aria-label={act.label}
                   >
                     {act.id === 'whatsapp'
@@ -245,7 +249,7 @@ export default function GlassTheme({ data, inPreview = false }) {
                     href={act.href}
                     target={act.target}
                     rel={act.rel}
-                    className="flex h-14 items-center justify-center rounded-2xl border border-white/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:text-rose-500 hover:bg-white/95"
+                    className="flex h-14 items-center justify-center rounded-2xl border border-white/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 glass-btn"
                     aria-label={act.label}
                   >
                     {act.id === 'whatsapp'
@@ -263,28 +267,28 @@ export default function GlassTheme({ data, inPreview = false }) {
         </section>
 
         {pref.showSaveContact !== false && (
-<div className="mt-5 grid gap-3">
-          <button
-            onClick={generateVcard}
-            className="flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-sm font-black uppercase tracking-[0.2em] text-white shadow-[0_18px_35px_rgba(183,110,121,0.28)] transition hover:-translate-y-0.5"
-            style={{ background: `linear-gradient(135deg, ${primaryColor}, #d89b86)` }}
-          >
-            <Download className="h-4 w-4" />
-            Save Contact
-          </button>
-          {data?.calendarUrl && (
-            <a
-              href={data.calendarUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="flex w-full items-center justify-center gap-3 rounded-2xl border border-white/80 bg-white/70 px-6 py-4 text-sm font-bold uppercase tracking-[0.18em] text-slate-700 shadow-sm backdrop-blur-xl"
+          <div className="mt-5 grid gap-3">
+            <button
+              onClick={generateVcard}
+              className="flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5"
+              style={{ background: `linear-gradient(135deg, ${primaryColor}, ${accentColor}dd)`, boxShadow: `0 18px 35px ${primaryColor}38` }}
             >
-              <Calendar className="h-4 w-4" />
-              Book Appointment
-            </a>
-          )}
-        </div>
-)}
+              <Download className="h-4 w-4" />
+              Save Contact
+            </button>
+            {data?.calendarUrl && (
+              <a
+                href={data.calendarUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex w-full items-center justify-center gap-3 rounded-2xl border border-white/80 bg-white/70 px-6 py-4 text-sm font-bold uppercase tracking-[0.18em] text-slate-700 shadow-sm backdrop-blur-xl"
+              >
+                <Calendar className="h-4 w-4" />
+                Book Appointment
+              </a>
+            )}
+          </div>
+        )}
 
         <main className="mt-5 space-y-5">
           {pref.showAbout !== false && data?.about && (
@@ -297,7 +301,7 @@ export default function GlassTheme({ data, inPreview = false }) {
             <Section title="Specialities" className={cardClasses}>
               <div className="flex flex-wrap gap-2">
                 {data.services.map((service, index) => (
-                  <span key={index} className="rounded-full border border-rose-100 bg-rose-50/70 px-4 py-2 text-sm font-bold text-slate-700">
+                  <span key={index} className="rounded-full px-4 py-2 text-sm font-bold text-slate-700 border" style={{ backgroundColor: `${primaryColor}12`, borderColor: `${primaryColor}22` }}>
                     {service}
                   </span>
                 ))}

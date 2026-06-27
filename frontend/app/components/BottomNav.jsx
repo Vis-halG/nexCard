@@ -6,10 +6,10 @@ import { QRCodeSVG } from "qrcode.react";
 import { motion, AnimatePresence } from "framer-motion";
 import ShareActions from "./ShareActions";
 
-export default function BottomNav({ 
-  data, 
-  primaryColor = "#00C2FF", 
-  showWhatsAppInput: propShowWhatsAppInput, 
+export default function BottomNav({
+  data,
+  primaryColor = "#00C2FF",
+  showWhatsAppInput: propShowWhatsAppInput,
   setShowWhatsAppInput: propSetShowWhatsAppInput,
   layout = "modern",
   inPreview = false
@@ -20,17 +20,6 @@ export default function BottomNav({
   const setShowWhatsAppInput = propSetShowWhatsAppInput !== undefined ? propSetShowWhatsAppInput : setLocalShowWhatsAppInput;
   const [sharePhone, setSharePhone] = useState("");
   const phoneInputRef = useRef(null);
-
-  useEffect(() => {
-    if (showWhatsAppInput) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [showWhatsAppInput]);
 
   const detectCountryCode = () => {
     try {
@@ -46,7 +35,7 @@ export default function BottomNav({
       if (tz.includes("Tokyo") || tz.includes("Asia/Tokyo")) return "81";
       if (tz.includes("Riyadh") || tz.includes("Asia/Riyadh")) return "966";
       if (tz.includes("Cairo") || tz.includes("Africa/Cairo")) return "20";
-    } catch (e) {}
+    } catch (e) { }
     return "91"; // Default fallback
   };
 
@@ -112,7 +101,7 @@ export default function BottomNav({
   let iconActiveOffsetClass = "-translate-y-1";
   let textClass = "text-[10px] font-medium tracking-wide transition-all duration-300";
   let customStyle = {};
-  
+
   let wsContainerClass = "bg-white/95 backdrop-blur-xl border-t border-slate-200/60 shadow-[0_-12px_40px_rgba(0,0,0,0.1)]";
   let wsSendBtnRadius = "14px";
   let fontClass = "font-sans";
@@ -122,7 +111,7 @@ export default function BottomNav({
     textClass = "text-[9px] font-bold tracking-[0.1em] transition-all uppercase";
   } else if (layout === "minimal") {
     containerClass = "bg-white border-t-4 border-black border-x-4 shadow-none";
-    iconActiveOffsetClass = ""; 
+    iconActiveOffsetClass = "";
     textClass = "text-[9px] font-black uppercase tracking-wider transition-all";
     wsContainerClass = "bg-white border-t-4 border-black border-x-4 shadow-none";
     wsSendBtnRadius = "0px";
@@ -146,12 +135,12 @@ export default function BottomNav({
   const theme = data?.theme || {};
   const primaryColorResolved = theme.primary || primaryColor || "#00C2FF";
   const qrLogo = theme.qrLogo || "none";
-  
+
   // Custom distinct theme styling logic inside the drawer
   let drawerBg = theme.cardBg || "#ffffff";
   let textPrimaryColor = theme.textPrimary || "#0f172a";
   let textSecondaryColor = theme.textSecondary || "#64748b";
-  
+
   let drawerClasses = `${inPreview ? "absolute" : "fixed"} bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[120] px-5 pt-5 pb-6 flex flex-col justify-center pb-safe border-t`;
   let closeBtnClasses = "w-8 h-8 flex items-center justify-center transition-all shrink-0 active:scale-95";
   let qrContainerClasses = "flex flex-col items-center mb-6";
@@ -161,7 +150,7 @@ export default function BottomNav({
   let inputFieldClasses = "w-full bg-transparent border-none text-[13px] font-semibold placeholder-slate-450 outline-none h-full";
   let inputSeparatorClasses = "w-[1px] h-5 mx-2.5";
   let sendBtnClasses = "w-11 h-11 flex items-center justify-center transition-all shrink-0";
-  
+
   let drawerStyles = { ...customStyle, maxHeight: '95%', overflowY: 'auto' };
   let sendBtnStyles = {};
   let qrFrameStyles = {};
@@ -180,7 +169,7 @@ export default function BottomNav({
     inputSeparatorClasses += " bg-black";
     sendBtnClasses += " border-2 border-black rounded-none shadow-[3px_3px_0_0_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none";
     sendBtnStyles = { backgroundColor: '#ffffff', color: '#000000' };
-  } 
+  }
   else if (layout === "neo") {
     drawerBg = "#050505";
     textPrimaryColor = "#ffffff";
@@ -196,7 +185,7 @@ export default function BottomNav({
     sendBtnClasses += " border border-emerald-400 rounded-none shadow-[0_0_10px_rgba(0,255,204,0.2)] hover:bg-emerald-400/10";
     sendBtnStyles = { backgroundColor: 'black', color: primaryColorResolved, borderColor: primaryColorResolved };
     selectOptionStyle = { color: "#ffffff", backgroundColor: "#000000" };
-  } 
+  }
   else if (layout === "glass") {
     drawerBg = "rgba(255, 255, 255, 0.72)";
     drawerClasses += " backdrop-blur-2xl border-t border-white/60 shadow-[0_-12px_40px_rgba(0,0,0,0.06)] rounded-t-[2.5rem]";
@@ -208,7 +197,7 @@ export default function BottomNav({
     inputSeparatorClasses += " bg-white/60";
     sendBtnClasses += " border border-white/60 backdrop-blur-md rounded-2xl hover:bg-white/60 shadow-sm";
     sendBtnStyles = { backgroundColor: 'rgba(255,255,255,0.4)', color: primaryColorResolved };
-  } 
+  }
   else if (layout === "bold") {
     drawerClasses += " bg-white border-t-2 border-slate-900 shadow-2xl rounded-t-[2.5rem]";
     closeBtnClasses += " bg-slate-50 hover:bg-slate-100 border-2 border-slate-900 rounded-xl text-slate-900";
@@ -248,22 +237,35 @@ export default function BottomNav({
     <>
       <AnimatePresence>
         {showWhatsAppInput && (
-          <motion.div
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 220 }}
-            className={drawerClasses}
-            style={{
-              ...drawerStyles,
-              backgroundColor: drawerBg,
-              paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 12px)'
-            }}
-          >
+          <>
+            {/* Backdrop Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => {
+                setShowWhatsAppInput(false);
+                setSharePhone("");
+              }}
+              className={`${inPreview ? "absolute" : "fixed"} inset-0 bg-black/45 z-[115] backdrop-blur-sm cursor-pointer`}
+            />
+
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 220 }}
+              className={drawerClasses}
+              style={{
+                ...drawerStyles,
+                backgroundColor: drawerBg,
+                paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 12px)'
+              }}
+            >
             {/* Header */}
             <div className="w-full flex items-center justify-between mb-4">
               <span className="text-sm font-bold tracking-tight uppercase" style={{ color: textPrimaryColor }}>Share Card</span>
-              <button 
+              <button
                 onClick={() => {
                   setShowWhatsAppInput(false);
                   setSharePhone("");
@@ -277,12 +279,12 @@ export default function BottomNav({
             {/* QR Code Container */}
             <div className={qrContainerClasses}>
               <div className={qrFrameClasses} style={qrFrameStyles}>
-                <QRCodeSVG 
-                  value={cardUrl || 'https://nexcard.app'} 
-                  size={130} 
-                  level="Q" 
-                  className="rounded-lg" 
-                  fgColor="#0f172a" 
+                <QRCodeSVG
+                  value={cardUrl || 'https://nexcard.app'}
+                  size={130}
+                  level="Q"
+                  className="rounded-lg"
+                  fgColor="#0f172a"
                   {...(qrLogo === 'avatar' && data?.image ? {
                     imageSettings: {
                       src: data.image,
@@ -309,8 +311,8 @@ export default function BottomNav({
               <div className="w-full flex items-center gap-3 h-11">
                 <div className={inputContainerClasses}>
                   <div className="relative flex items-center">
-                    <select 
-                      value={countryCode} 
+                    <select
+                      value={countryCode}
                       onChange={(e) => setCountryCode(e.target.value)}
                       className={inputSelectClasses}
                       style={inputSelectClasses.includes('text-white') ? { color: '#ffffff' } : {}}
@@ -330,7 +332,7 @@ export default function BottomNav({
                     <div className={`absolute right-0.5 top-1/2 -translate-y-1/2 pointer-events-none text-[8px] font-bold leading-none ${layout === 'neo' ? 'text-zinc-500' : 'text-slate-400'}`}>▼</div>
                   </div>
                   <div className={inputSeparatorClasses}></div>
-                  <input 
+                  <input
                     ref={phoneInputRef}
                     type="tel"
                     placeholder="WhatsApp number to share..."
@@ -340,7 +342,7 @@ export default function BottomNav({
                   />
                 </div>
 
-                <button 
+                <button
                   onClick={handleWhatsAppSend}
                   className={sendBtnClasses}
                   style={sendBtnStyles}
@@ -351,13 +353,12 @@ export default function BottomNav({
               </div>
             </div>
           </motion.div>
+          </>
         )}
       </AnimatePresence>
 
-      <div 
-        className={`${inPreview ? "absolute" : "fixed"} bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[100] flex justify-between items-end px-4 pt-2 transition-all duration-300 ${
-          showWhatsAppInput ? "translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
-        } ${containerClass} ${fontClass}`}
+      <div
+        className={`${inPreview ? "absolute" : "fixed"} bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[100] flex justify-between items-end px-4 pt-2 ${containerClass} ${fontClass}`}
         style={{
           ...customStyle,
           paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 8px)'
@@ -365,12 +366,12 @@ export default function BottomNav({
       >
         {navItems.map((item) => {
           const isActive = activeId === item.id;
-          
+
           let itemColor = isActive ? primaryColor : '#94a3b8';
           if (layout === 'neo') {
-            itemColor = isActive ? primaryColor : '#52525b'; 
+            itemColor = isActive ? primaryColor : '#52525b';
           } else if (layout === 'minimal') {
-            itemColor = isActive ? '#000000' : '#71717a'; 
+            itemColor = isActive ? '#000000' : '#71717a';
           }
 
           return (
@@ -379,18 +380,18 @@ export default function BottomNav({
               href={`#${item.id}`}
               className={`${itemContainerClass} outline-none focus:outline-none cursor-pointer`}
             >
-              <div 
-                className={`${iconWrapperClass} ${isActive ? iconActiveOffsetClass : `group-hover:${iconActiveOffsetClass}`}`} 
+              <div
+                className={`${iconWrapperClass} ${isActive ? iconActiveOffsetClass : `group-hover:${iconActiveOffsetClass}`}`}
                 style={{ color: itemColor }}
               >
-                <item.icon 
-                  size={22} 
-                  strokeWidth={layout === 'minimal' ? (isActive ? 3 : 2.5) : (isActive ? 2.5 : 2)} 
+                <item.icon
+                  size={22}
+                  strokeWidth={layout === 'minimal' ? (isActive ? 3 : 2.5) : (isActive ? 2.5 : 2)}
                 />
               </div>
-              
-              <span 
-                className={textClass} 
+
+              <span
+                className={textClass}
                 style={{ color: itemColor }}
               >
                 {item.label}

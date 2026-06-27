@@ -246,7 +246,12 @@ export default function ModernTheme({ data, inPreview = false }) {
         style={{ background: bgGradientStyle || bgColor }}
       >
         <button
-          onClick={() => setShowWhatsAppInput(true)}
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setShowWhatsAppInput(true);
+          }}
           className="absolute top-4 right-4 z-40 w-10 h-10 rounded-full bg-white/70 hover:bg-white backdrop-blur-md border border-slate-200/50 flex items-center justify-center text-slate-700 shadow-md cursor-pointer"
         >
           <Share2 size={18} />

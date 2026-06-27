@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { auth, db } from "../../../lib/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { Camera, Trash2, Plus, GripVertical, ExternalLink, Copy, Eye, Check, QrCode, Upload, X, Palette, Layout, Box, Sparkles, RotateCcw, LogOut } from "lucide-react";
+import { Camera, Trash2, Plus, GripVertical, ExternalLink, Copy, Eye, Check, QrCode, Upload, X, Palette, Layout, Box, Sparkles, RotateCcw, LogOut, User, Briefcase, MapPin, MessageSquare, Download, Globe, Share2 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import NexCard from "../../components/NexCard";
 import { DEMO_EMAIL, createDemoProfile } from "../../demoProfile";
@@ -1499,6 +1499,46 @@ export default function Dashboard() {
                 })}
               </div>
               <p className="text-sm text-slate-500 mt-4 text-center bg-slate-50 p-3 rounded-xl border border-slate-200">Clicking a preset will automatically update your Custom Design settings.</p>
+            </div>
+          )}
+
+          {activeTab === "visibility" && (
+            <div className="p-6 space-y-6">
+              <div className="flex items-center justify-between border-b pb-4">
+                <h2 className="font-bold text-xl text-slate-800">Section Visibility</h2>
+                <p className="text-sm text-slate-500">Toggle which sections appear on your card</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {[
+                  { id: 'showAbout', label: 'About Section', icon: <User className="w-4 h-4 text-slate-500" /> },
+                  { id: 'showServices', label: 'Specialties / Services', icon: <Briefcase className="w-4 h-4 text-slate-500" /> },
+                  { id: 'showSocial', label: 'Social Links', icon: <Globe className="w-4 h-4 text-slate-500" /> },
+                  { id: 'showGallery', label: 'Image Gallery', icon: <Camera className="w-4 h-4 text-slate-500" /> },
+                  { id: 'showVideos', label: 'Videos', icon: <Box className="w-4 h-4 text-slate-500" /> },
+                  { id: 'showCustomLinks', label: 'Custom Links', icon: <ExternalLink className="w-4 h-4 text-slate-500" /> },
+                  { id: 'showPayment', label: 'Payment / UPI', icon: <QrCode className="w-4 h-4 text-slate-500" /> },
+                  { id: 'showLocation', label: 'Location Map', icon: <MapPin className="w-4 h-4 text-slate-500" /> },
+                  { id: 'showContactForm', label: 'Contact Form', icon: <MessageSquare className="w-4 h-4 text-slate-500" /> },
+                  { id: 'showShare', label: 'Share Buttons', icon: <Share2 className="w-4 h-4 text-slate-500" /> },
+                  { id: 'showSaveContact', label: 'Save Contact Button', icon: <Download className="w-4 h-4 text-slate-500" /> }
+                ].map((item) => {
+                  const isChecked = form.preferences?.[item.id] !== false;
+                  return (
+                    <div key={item.id} className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl hover:border-indigo-200 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-slate-50 rounded-lg">{item.icon}</div>
+                        <span className="font-semibold text-slate-700 text-sm">{item.label}</span>
+                      </div>
+                      <button
+                        onClick={() => setForm(prev => ({ ...prev, preferences: { ...prev.preferences, [item.id]: !isChecked } }))}
+                        className={`w-12 h-6 rounded-full transition-colors relative flex items-center ${isChecked ? 'bg-indigo-600' : 'bg-slate-300'}`}
+                      >
+                        <span className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-all shadow-sm ${isChecked ? 'left-7' : 'left-1'}`} />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>

@@ -105,6 +105,7 @@ export default function BoldTheme({ data, inPreview = false }) {
   const savedBg = data?.theme?.background || "#F7FBF8";
   const bgColor = isDarkHex(savedBg) ? "#F7FBF8" : savedBg;
   const socials = Object.entries(data?.social || {}).filter(([, url]) => url);
+  const pref = data?.preferences || {};
 
   const generateVcard = () => {
     const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${data?.name || "User"}\nTITLE:${data?.title || ""}\nTEL;TYPE=WORK,VOICE:${data?.phone || ""}\nEMAIL;TYPE=WORK:${data?.email || ""}\nURL:${data?.website || ""}\nADR;TYPE=WORK:;;${data?.address || ""};;;;\nEND:VCARD`;
@@ -278,13 +279,13 @@ export default function BoldTheme({ data, inPreview = false }) {
         </section>
 
         <main className="space-y-5 px-6 pb-24">
-          {data?.about && (
+          {pref.showAbout !== false && data?.about && (
             <Panel title="Profile">
               <p className="text-[15px] leading-7 text-slate-600">{data.about}</p>
             </Panel>
           )}
 
-          {data?.services?.length > 0 && (
+          {pref.showServices !== false && data?.services?.length > 0 && (
             <Panel title="Specialities">
               <div className="grid gap-3">
                 {data.services.map((service, index) => (
@@ -297,7 +298,7 @@ export default function BoldTheme({ data, inPreview = false }) {
             </Panel>
           )}
 
-          {socials.length > 0 && (
+          {pref.showSocial !== false && socials.length > 0 && (
             <Panel title="Network">
               <div className="grid grid-cols-5 gap-3">
                 {socials.map(([network, url]) => (
@@ -310,7 +311,7 @@ export default function BoldTheme({ data, inPreview = false }) {
             </Panel>
           )}
 
-          {data?.gallery?.length > 0 && (
+          {pref.showGallery !== false && data?.gallery?.length > 0 && (
             <Panel title="Portfolio">
               <div className="grid grid-cols-2 gap-3">
                 {data.gallery.map((img, index) =>
@@ -322,7 +323,7 @@ export default function BoldTheme({ data, inPreview = false }) {
             </Panel>
           )}
 
-          {data?.videos?.length > 0 && (
+          {pref.showVideos !== false && data?.videos?.length > 0 && (
             <Panel title="Media">
               <div className="space-y-4">
                 {data.videos.map((video, index) => (
@@ -339,7 +340,7 @@ export default function BoldTheme({ data, inPreview = false }) {
             </Panel>
           )}
 
-          {data?.customLinks?.length > 0 && (
+          {pref.showCustomLinks !== false && data?.customLinks?.length > 0 && (
             <Panel title="Resources">
               <div className="space-y-3">
                 {data.customLinks.map((link, index) => (
@@ -352,7 +353,7 @@ export default function BoldTheme({ data, inPreview = false }) {
             </Panel>
           )}
 
-          {data?.payment && (
+          {pref.showPayment !== false && data?.payment && (
             <Panel title="Payments">
               <div className="space-y-3">
                 {data.payment.upi && <InfoRow label="UPI" value={data.payment.upi} />}
@@ -363,7 +364,7 @@ export default function BoldTheme({ data, inPreview = false }) {
             </Panel>
           )}
 
-          {data?.address && (
+          {pref.showLocation !== false && data?.address && (
             <Panel title="Location" id="map">
               <p className="mb-4 text-sm leading-6 text-slate-600">{data.address}</p>
               <div className="h-56 overflow-hidden rounded-2xl bg-slate-100">
@@ -394,7 +395,8 @@ export default function BoldTheme({ data, inPreview = false }) {
 
 
 
-          <div id="share" className={`scroll-mt-6 rounded-[2rem] border border-slate-100 bg-white p-6 text-center shadow-[0_18px_55px_rgba(15,23,42,0.08)] flex flex-col items-center`}>
+          {pref.showShare !== false && (
+<div id="share" className={`scroll-mt-6 rounded-[2rem] border border-slate-100 bg-white p-6 text-center shadow-[0_18px_55px_rgba(15,23,42,0.08)] flex flex-col items-center`}>
             {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (
               <div className="flex flex-col items-center gap-6 w-full">
                 <div className="flex flex-col items-center gap-6 w-full">
@@ -456,7 +458,8 @@ export default function BoldTheme({ data, inPreview = false }) {
               </>
             )}
           </div>
-        </main>
+        
+)}</main>
       </div>
       {/* 📱 MOBILE APP BOTTOM NAVIGATION */}
       <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} layout="bold" inPreview={inPreview} />

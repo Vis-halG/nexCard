@@ -265,7 +265,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
         <div className="px-8 py-12 space-y-16">
 
           {/* ABOUT */}
-          {data?.about && (
+          {pref.showAbout !== false && data?.about && (
             <div id="about" className="scroll-mt-24">
               <h2 className="text-2xl font-serif text-slate-900 mb-6 flex flex-col gap-2">
                 Biography
@@ -276,7 +276,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
           )}
 
           {/* SERVICES */}
-          {data?.services?.length > 0 && (
+          {pref.showServices !== false && data?.services?.length > 0 && (
             <div className="scroll-mt-24">
               <h2 className="text-2xl font-serif text-slate-900 mb-6 flex flex-col gap-2">
                 Specialities
@@ -334,7 +334,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
           </div>
 
           {/* GALLERY */}
-          {data?.gallery?.length > 0 && (
+          {pref.showGallery !== false && data?.gallery?.length > 0 && (
             <div id="portfolio" className="scroll-mt-24">
               <h2 className="text-2xl font-serif text-slate-900 mb-6 flex flex-col gap-2">
                 Portfolio
@@ -352,7 +352,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
           )}
 
           {/* VIDEOS */}
-          {data?.videos?.length > 0 && (
+          {pref.showVideos !== false && data?.videos?.length > 0 && (
             <div className="scroll-mt-24">
               <h2 className="text-2xl font-serif text-slate-900 mb-6 flex flex-col gap-2">
                 Media Presentations
@@ -369,7 +369,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
           )}
 
           {/* CUSTOM LINKS */}
-          {data?.customLinks?.length > 0 && (
+          {pref.showCustomLinks !== false && data?.customLinks?.length > 0 && (
             <div className="scroll-mt-24">
               <h2 className="text-2xl font-serif text-slate-900 mb-6 flex flex-col gap-2">
                 Resources
@@ -386,7 +386,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
           )}
 
           {/* PAYMENTS */}
-          {data?.payment && (
+          {pref.showPayment !== false && data?.payment && (
             <div className="scroll-mt-24">
               <h2 className="text-2xl font-serif text-slate-900 mb-6 flex flex-col gap-2">
                 Payment Integration
@@ -413,7 +413,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
           )}
 
           {/* LOCATION */}
-          {data?.address && (
+          {pref.showLocation !== false && data?.address && (
             <div id="map" className="scroll-mt-24">
               <h2 className="text-2xl font-serif text-slate-900 mb-6 flex flex-col gap-2">
                 Office Location

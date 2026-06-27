@@ -126,6 +126,7 @@ export default function GlassTheme({ data, inPreview = false }) {
   };
 
   const socials = Object.entries(data?.social || {}).filter(([, url]) => url);
+  const pref = data?.preferences || {};
   const cardClasses =
     "rounded-[1.75rem] border border-white/80 bg-white/72 p-6 shadow-[0_24px_70px_rgba(183,110,121,0.12)] backdrop-blur-2xl";
 
@@ -261,7 +262,8 @@ export default function GlassTheme({ data, inPreview = false }) {
           </div>
         </section>
 
-        <div className="mt-5 grid gap-3">
+        {pref.showSaveContact !== false && (
+<div className="mt-5 grid gap-3">
           <button
             onClick={generateVcard}
             className="flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-sm font-black uppercase tracking-[0.2em] text-white shadow-[0_18px_35px_rgba(183,110,121,0.28)] transition hover:-translate-y-0.5"
@@ -282,15 +284,16 @@ export default function GlassTheme({ data, inPreview = false }) {
             </a>
           )}
         </div>
+)}
 
         <main className="mt-5 space-y-5">
-          {data?.about && (
+          {pref.showAbout !== false && data?.about && (
             <Section title="About" className={cardClasses}>
               <p className="text-[15px] leading-7 text-slate-600">{data.about}</p>
             </Section>
           )}
 
-          {data?.services?.length > 0 && (
+          {pref.showServices !== false && data?.services?.length > 0 && (
             <Section title="Specialities" className={cardClasses}>
               <div className="flex flex-wrap gap-2">
                 {data.services.map((service, index) => (
@@ -302,7 +305,7 @@ export default function GlassTheme({ data, inPreview = false }) {
             </Section>
           )}
 
-          {socials.length > 0 && (
+          {pref.showSocial !== false && socials.length > 0 && (
             <Section title="Connect" className={cardClasses}>
               <div className="grid grid-cols-5 gap-3">
                 {socials.map(([network, url]) => (
@@ -315,7 +318,7 @@ export default function GlassTheme({ data, inPreview = false }) {
             </Section>
           )}
 
-          {data?.gallery?.length > 0 && (
+          {pref.showGallery !== false && data?.gallery?.length > 0 && (
             <Section title="Gallery" className={cardClasses}>
               <div className="grid grid-cols-2 gap-3">
                 {data.gallery.map((img, index) =>
@@ -327,7 +330,7 @@ export default function GlassTheme({ data, inPreview = false }) {
             </Section>
           )}
 
-          {data?.customLinks?.length > 0 && (
+          {pref.showCustomLinks !== false && data?.customLinks?.length > 0 && (
             <Section title="Links" className={cardClasses}>
               <div className="space-y-3">
                 {data.customLinks.map((link, index) => (
@@ -340,13 +343,13 @@ export default function GlassTheme({ data, inPreview = false }) {
             </Section>
           )}
 
-          {data?.payment && (
+          {pref.showPayment !== false && data?.payment && (
             <Section title="Payments" className={cardClasses}>
               <InfoRows data={data} />
             </Section>
           )}
 
-          {data?.address && (
+          {pref.showLocation !== false && data?.address && (
             <Section title="Location" className={cardClasses} id="map">
               <p className="mb-4 text-sm leading-6 text-slate-600">{data.address}</p>
               <div className="h-56 overflow-hidden rounded-2xl border border-white bg-slate-100 shadow-inner">
@@ -363,7 +366,8 @@ export default function GlassTheme({ data, inPreview = false }) {
             </Section>
           )}
 
-          <Section title="Contact" className={cardClasses}>
+          {pref.showContactForm !== false && (
+            <Section title="Contact" className={cardClasses}>
             <form onSubmit={handleEnquiry} className="space-y-3">
               <input name="name" required placeholder="Full name" className="w-full rounded-2xl border border-slate-100 bg-white/80 px-5 py-4 outline-none focus:ring-2" />
               <input name="phone" type="tel" placeholder="Phone number" className="w-full rounded-2xl border border-slate-100 bg-white/80 px-5 py-4 outline-none focus:ring-2" />
@@ -374,10 +378,12 @@ export default function GlassTheme({ data, inPreview = false }) {
               </button>
             </form>
           </Section>
+          )}
 
 
 
-          <div id="share" className={`scroll-mt-6 ${cardClasses} flex flex-col items-center`}>
+          {pref.showShare !== false && (
+<div id="share" className={`scroll-mt-6 ${cardClasses} flex flex-col items-center`}>
             {data?.payment?.upi || data?.payment?.qrCode || data?.payment?.link ? (
               <div className="flex flex-col items-center gap-6 w-full">
                 <div className="flex flex-col items-center gap-6 w-full">
@@ -439,7 +445,8 @@ export default function GlassTheme({ data, inPreview = false }) {
               </>
             )}
           </div>
-        </main>
+        
+)}</main>
       </div>
       {/* 📱 MOBILE APP BOTTOM NAVIGATION */}
       <BottomNav data={data} primaryColor={primaryColor} showWhatsAppInput={showWhatsAppInput} setShowWhatsAppInput={setShowWhatsAppInput} layout="glass" inPreview={inPreview} />

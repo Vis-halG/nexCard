@@ -452,7 +452,7 @@ export default function ModernTheme({ data, inPreview = false }) {
         <div className="space-y-8 px-8 pt-6">
 
           {/* 🌟 ABOUT SECTION */}
-          {data?.about && (
+          {pref.showAbout !== false && data?.about && (
             <div id="about" className="scroll-mt-6">
               <h2 className="text-[20px] font-bold mb-4 tracking-tight" style={{ color: textPrimary }}>About</h2>
               <p className={`${bioFontSizeClass} leading-relaxed font-normal`} style={{ color: textSecondary }}>{data.about}</p>
@@ -460,7 +460,7 @@ export default function ModernTheme({ data, inPreview = false }) {
           )}
 
           {/* 🛠 SPECIALTIES */}
-          {data?.services?.length > 0 && (
+          {pref.showServices !== false && data?.services?.length > 0 && (
             <div className="scroll-mt-6">
               <h2 className="text-[20px] font-bold mb-4 tracking-tight" style={{ color: textPrimary }}>Specialities</h2>
               <div className="flex flex-wrap gap-2.5">
@@ -551,7 +551,7 @@ export default function ModernTheme({ data, inPreview = false }) {
           )}
 
           {/* 🖼 IMAGE GALLERY */}
-          {data?.gallery?.length > 0 && (
+          {pref.showGallery !== false && data?.gallery?.length > 0 && (
             <div className="scroll-mt-6">
               <h2 className="text-[20px] font-bold text-slate-900 mb-4 tracking-tight">Gallery</h2>
               <div className="grid grid-cols-2 gap-8">
@@ -566,7 +566,7 @@ export default function ModernTheme({ data, inPreview = false }) {
           )}
 
           {/* 🎬 VIDEO EMBEDDING */}
-          {data?.videos?.length > 0 && (
+          {pref.showVideos !== false && data?.videos?.length > 0 && (
             <div className="scroll-mt-6">
               <h2 className="text-[20px] font-bold text-slate-900 mb-4 tracking-tight">Videos</h2>
               <div className="flex flex-col gap-8">
@@ -580,7 +580,7 @@ export default function ModernTheme({ data, inPreview = false }) {
           )}
 
           {/* 🔗 MODERN CUSTOM LINKS */}
-          {data?.customLinks?.length > 0 && (
+          {pref.showCustomLinks !== false && data?.customLinks?.length > 0 && (
             <div className="scroll-mt-6">
               <h2 className="text-[20px] font-bold mb-4 tracking-tight" style={{ color: textPrimary }}>Important Links</h2>
               <div className="flex flex-col gap-8">
@@ -597,7 +597,7 @@ export default function ModernTheme({ data, inPreview = false }) {
           )}
 
           {/* 💳 PAYMENT INTEGRATION (Sleek UI) */}
-          {data?.payment && (
+          {pref.showPayment !== false && data?.payment && (
             <div className="scroll-mt-6">
               <h2 className="text-[20px] font-bold mb-4 tracking-tight" style={{ color: textPrimary }}>Payments</h2>
               <div className="flex flex-col gap-8">
@@ -619,7 +619,7 @@ export default function ModernTheme({ data, inPreview = false }) {
           )}
 
           {/* 🗺 ADDRESS & MAP (Edge to Edge Radius) */}
-          {data?.address && (
+          {pref.showLocation !== false && data?.address && (
             <div id="map" className="scroll-mt-6">
               <h2 className="text-[20px] font-bold mb-4 tracking-tight" style={{ color: textPrimary }}>Location</h2>
               <p className="text-[15px] leading-relaxed mb-5 font-normal" style={{ color: textSecondary }}>{data.address}</p>

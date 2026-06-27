@@ -309,7 +309,7 @@ export default function NeoTheme({ data, inPreview = false }) {
           </div>
 
           {/* ABOUT LOG */}
-          {data?.about && (
+          {pref.showAbout !== false && data?.about && (
             <div id="about" className="border border-zinc-800 bg-black/60 p-5 relative">
                <div className="absolute top-0 left-4 -translate-y-1/2 px-2 bg-black text-[9px] uppercase tracking-widest text-zinc-500 border border-zinc-800">Decrypted_Log</div>
                <p className="text-xs leading-relaxed text-zinc-400">
@@ -319,7 +319,7 @@ export default function NeoTheme({ data, inPreview = false }) {
           )}
 
           {/* MODULES / EXPERTISE */}
-          {data?.services?.length > 0 && (
+          {pref.showServices !== false && data?.services?.length > 0 && (
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <Cpu size={14} style={{ color: primaryColor }} />
@@ -359,7 +359,7 @@ export default function NeoTheme({ data, inPreview = false }) {
           )}
 
           {/* VISUAL DATA (GALLERY) */}
-          {data?.gallery?.length > 0 && (
+          {pref.showGallery !== false && data?.gallery?.length > 0 && (
             <div>
                <div className="flex items-center gap-3 mb-4">
                 <Zap size={14} style={{ color: primaryColor }} />
@@ -379,7 +379,7 @@ export default function NeoTheme({ data, inPreview = false }) {
           )}
 
           {/* EXTERNAL LINKS */}
-          {data?.customLinks?.length > 0 && (
+          {pref.showCustomLinks !== false && data?.customLinks?.length > 0 && (
             <div>
               <div className="flex flex-col gap-2">
                 {data.customLinks.map((link, i) => (
@@ -393,7 +393,7 @@ export default function NeoTheme({ data, inPreview = false }) {
           )}
 
           {/* PAYMENT PROTOCOL */}
-          {data?.payment && (
+          {pref.showPayment !== false && data?.payment && (
             <div>
               <div className="flex items-center gap-3 mb-4 mt-4">
                 <ShieldAlert size={14} style={{ color: primaryColor }} />

@@ -229,7 +229,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
         <div className="flex-1 flex flex-col pb-32 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed">
 
           {/* ABOUT */}
-          {data?.about && (
+          {pref.showAbout !== false && data?.about && (
             <div id="about" className="p-8 border-b-4 border-black bg-white">
               <span className="text-xs font-black uppercase tracking-widest text-black bg-yellow-300 px-2 py-1 inline-block mb-6 shadow-[4px_4px_0_0_#000] border-2 border-black">Overview</span>
               <p className="text-base leading-relaxed text-black font-medium">
@@ -251,7 +251,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
           </div>
 
           {/* SERVICES / EXPERTISE */}
-          {data?.services?.length > 0 && (
+          {pref.showServices !== false && data?.services?.length > 0 && (
             <div className="p-8 border-b-4 border-black bg-white">
               <span className="text-xs font-black uppercase tracking-widest text-black bg-cyan-300 px-2 py-1 inline-block mb-6 shadow-[4px_4px_0_0_#000] border-2 border-black">Specialities</span>
               <div className="flex flex-col gap-0 divide-y-2 divide-black border-2 border-black">
@@ -282,7 +282,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
           )}
 
           {/* GALLERY - EDGE TO EDGE */}
-          {data?.gallery?.length > 0 && (
+          {pref.showGallery !== false && data?.gallery?.length > 0 && (
             <div className="w-full border-b-4 border-black bg-white">
               <div className="p-8 pb-4">
                 <span className="text-xs font-black uppercase tracking-widest text-black bg-green-300 px-2 py-1 inline-block shadow-[4px_4px_0_0_#000] border-2 border-black">Gallery</span>
@@ -299,7 +299,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
           )}
 
           {/* VIDEOS */}
-          {data?.videos?.length > 0 && (
+          {pref.showVideos !== false && data?.videos?.length > 0 && (
             <div className="w-full border-b-4 border-black bg-white">
               <div className="p-8 pb-4">
                 <span className="text-xs font-black uppercase tracking-widest text-black bg-orange-300 px-2 py-1 inline-block shadow-[4px_4px_0_0_#000] border-2 border-black">Media</span>
@@ -316,7 +316,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
           )}
 
           {/* PAYMENT */}
-          {data?.payment && (
+          {pref.showPayment !== false && data?.payment && (
             <div className="p-8 border-b-4 border-black bg-[#f4f4f5]">
               <span className="text-xs font-black uppercase tracking-widest text-black bg-purple-300 px-2 py-1 inline-block mb-6 shadow-[4px_4px_0_0_#000] border-2 border-black">Payment</span>
               <div className="border-4 border-black bg-white p-6 shadow-[8px_8px_0_0_#000]">

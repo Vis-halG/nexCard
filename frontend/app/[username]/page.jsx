@@ -73,8 +73,8 @@ export default function Page({ params }) {
   // 🦴 SKELETON LOADING UI
   if (loading) {
     return (
-      <div className="min-h-screen bg-[linear-gradient(135deg,#dffbff_0%,#f3fff7_35%,#fff2f7_70%,#fff8d9_100%)] flex items-center justify-center p-4 sm:p-8">
-        <div className="w-full max-w-[430px] h-[90vh] max-h-[850px] bg-white rounded-[3rem] shadow-[0_28px_80px_rgba(0,194,255,0.16)] overflow-hidden flex flex-col relative border-8 border-white p-6 space-y-8 animate-pulse">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-8">
+        <div className="w-full max-w-[430px] h-[90vh] max-h-[850px] bg-white rounded-2xl shadow border border-slate-200 overflow-hidden flex flex-col relative p-6 space-y-8 animate-pulse">
           <div className="flex flex-col items-center space-y-4 pt-8">
             <div className="w-28 h-28 rounded-full bg-slate-100" />
             <div className="w-48 h-8 bg-slate-100 rounded-full" />
@@ -98,15 +98,15 @@ export default function Page({ params }) {
   // ❌ ERROR / NOT FOUND
   if (!data) {
     return (
-      <div className="min-h-screen bg-[linear-gradient(135deg,#dffbff_0%,#f3fff7_35%,#fff2f7_70%,#fff8d9_100%)] flex flex-col items-center justify-center p-6 text-center">
-        <div className="w-20 h-20 bg-white rounded-3xl shadow-[0_16px_44px_rgba(0,194,255,0.14)] border border-cyan-100 flex items-center justify-center mb-6">
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-20 h-20 bg-white rounded-2xl shadow-sm border border-slate-200 flex items-center justify-center mb-6">
           <span className="text-4xl">🔍</span>
         </div>
         <h1 className="text-2xl font-bold text-slate-900 mb-2">NexCard Not Found</h1>
         <p className="text-slate-500 max-w-xs mb-8">
           The username <span className="font-bold text-slate-900">&quot;{username}&quot;</span> doesn&apos;t seem to exist yet.
         </p>
-        <Link href="/" className="bg-[linear-gradient(135deg,#00c2ff_0%,#ff3d71_70%)] text-white px-8 py-3 rounded-2xl font-bold shadow-lg shadow-cyan-200 hover:scale-105 transition-transform">
+        <Link href="/" className="bg-brand-indigo hover:bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold shadow-sm transition-colors cursor-pointer border-0">
           Back to Home
         </Link>
       </div>

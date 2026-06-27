@@ -1,34 +1,32 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #f7feff;
-  --color-foreground: #102033;
-  --color-brand-indigo: #00c2ff;
-  --color-brand-purple: #ff3d71;
-  --color-brand-accent: #ffe156;
-  --color-brand-lime: #7ee787;
-  --color-glass: rgba(255, 255, 255, 0.78);
-  --color-glass-border: rgba(0, 194, 255, 0.32);
+  --color-background: #f8f9fa;
+  --color-foreground: #212529;
+  --color-brand-indigo: #0d6efd;
+  --color-brand-purple: #6f42c1;
+  --color-brand-accent: #ffc107;
+  --color-brand-lime: #198754;
+  --color-glass: rgba(255, 255, 255, 0.95);
+  --color-glass-border: #dee2e6;
 
-  /* Keep legacy indigo utility names, but render them as bright NexCard blue. */
-  --color-indigo-50: #ecfeff;
-  --color-indigo-100: #cffafe;
-  --color-indigo-200: #a5f3fc;
-  --color-indigo-300: #7ddfff;
-  --color-indigo-400: #28ccff;
-  --color-indigo-500: #00c2ff;
-  --color-indigo-600: #009ee8;
-  --color-indigo-700: #0078c7;
-  --color-indigo-800: #095f9f;
-  --color-indigo-900: #0f4c81;
+  /* Keep legacy indigo utility names, but render them as Bootstrap blue shades. */
+  --color-indigo-50: #f0f7ff;
+  --color-indigo-100: #e0effe;
+  --color-indigo-200: #bae0fd;
+  --color-indigo-300: #7cc2fc;
+  --color-indigo-400: #38a5f8;
+  --color-indigo-500: #0d6efd;
+  --color-indigo-600: #0b5ed7;
+  --color-indigo-700: #0a58ca;
+  --color-indigo-800: #084298;
+  --color-indigo-900: #052c65;
 }
 
 body {
-  background:
-    linear-gradient(135deg, rgba(0, 194, 255, 0.14) 0%, rgba(126, 231, 135, 0.12) 36%, rgba(255, 61, 113, 0.10) 68%, rgba(255, 225, 86, 0.14) 100%),
-    linear-gradient(180deg, #ffffff 0%, var(--color-background) 100%);
+  background-color: var(--color-background);
   color: var(--color-foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   overflow-x: hidden;
 }
 
@@ -52,12 +50,12 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #00c2ff, #ff3d71);
+  background: #dee2e6;
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #009ee8, #e11d5a);
+  background: #ced4da;
 }
 
 /* Hide scrollbar utility */
@@ -68,4 +66,3 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-

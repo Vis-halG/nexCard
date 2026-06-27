@@ -1,9 +1,9 @@
 export const DEFAULT_THEME = {
-  primary: "#00C2FF",
-  background: "#F7FEFF",
-  layout: "modern",
+  primary: "#0d6efd",
+  background: "#ffffff",
+  layout: "minimal",
   font: "font-sans",
-  radius: "1rem",
+  radius: "0.375rem",
   cardStyle: "standard",
   avatarStyle: "circle",
   bgEffect: "none",
@@ -15,20 +15,20 @@ export const DEFAULT_THEME = {
   avatarBorder: "thick",
   socialStyle: "colored",
   qrLogo: "none",
-  actionAnimation: "float",
+  actionAnimation: "none",
   bioFontSize: "standard",
   cardBorderPattern: "none",
   formAesthetic: "flat",
   cardBg: "#ffffff",
-  textPrimary: "#0f172a",
-  textSecondary: "#64748b",
-  cardText: "#1e293b",
-  btnBg: "#00C2FF",
+  textPrimary: "#212529",
+  textSecondary: "#6c757d",
+  cardText: "#212529",
+  btnBg: "#0d6efd",
   btnText: "#ffffff",
-  inputBg: "#F1FCFF",
-  inputText: "#102033",
-  gradientStart: "#00C2FF",
-  gradientEnd: "#FF3D71"
+  inputBg: "#ffffff",
+  inputText: "#212529",
+  gradientStart: "#0d6efd",
+  gradientEnd: "#6c757d"
 };
 
 export const INITIAL_FORM = {

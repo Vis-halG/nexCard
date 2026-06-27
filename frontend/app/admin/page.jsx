@@ -216,17 +216,17 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(135deg,#dffbff_0%,#f3fff7_36%,#fff2f7_70%,#fff8d9_100%)] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-6 relative overflow-hidden font-sans">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-4xl"
       >
-        <div className="bg-white/92 backdrop-blur-xl rounded-2xl shadow-[0_28px_80px_rgba(0,194,255,0.16)] border border-cyan-100 overflow-hidden grid md:grid-cols-[1.1fr_0.9fr]">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden grid md:grid-cols-[1.1fr_0.9fr]">
           <div className="p-6 sm:p-8">
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-brand-indigo via-brand-purple to-brand-accent rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-200 shrink-0">
+              <div className="w-12 h-12 bg-brand-indigo rounded-lg flex items-center justify-center shadow-sm shrink-0">
                 <ShieldCheck className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -243,7 +243,7 @@ export default function AdminPage() {
                 <input
                   type="email"
                   placeholder="name@example.com"
-                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all"
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-indigo focus:outline-none transition-all"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -257,7 +257,7 @@ export default function AdminPage() {
                   <button
                     onClick={handleResetPassword}
                     disabled={resetLoading}
-                    className="text-[10px] font-bold text-indigo-500 hover:text-indigo-600 uppercase tracking-wider transition-colors disabled:opacity-50"
+                    className="text-[10px] font-bold text-brand-indigo hover:text-indigo-600 uppercase tracking-wider transition-colors disabled:opacity-50"
                   >
                     {resetLoading ? "Sending..." : "Forgot Password?"}
                   </button>
@@ -268,7 +268,7 @@ export default function AdminPage() {
                 <input
                   type="password"
                   placeholder="Password"
-                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all"
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-indigo focus:outline-none transition-all"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -278,7 +278,7 @@ export default function AdminPage() {
             <button
               onClick={handleAuth}
               disabled={loading}
-              className="w-full bg-[linear-gradient(135deg,#00c2ff_0%,#ff3d71_58%,#ffe156_100%)] hover:brightness-105 text-white font-bold py-3.5 rounded-xl transition-all shadow-[0_16px_36px_rgba(0,194,255,0.26)] active:scale-[0.98] flex items-center justify-center gap-2"
+              className="w-full bg-brand-indigo hover:bg-indigo-600 text-white font-bold py-3 rounded-lg transition-colors shadow-sm active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer border-0"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -292,19 +292,19 @@ export default function AdminPage() {
           </div>
 
           <div className="mt-5">
-            <button onClick={() => setIsLogin(!isLogin)} className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
+            <button onClick={() => setIsLogin(!isLogin)} className="text-sm font-semibold text-brand-indigo hover:text-indigo-600 transition-colors cursor-pointer border-0 bg-transparent">
               {isLogin ? "New to NexCard? Register here" : "Already have an account? Sign in"}
             </button>
           </div>
           </div>
 
-          <div className="bg-[linear-gradient(145deg,#00c2ff_0%,#ff3d71_58%,#ffe156_100%)] text-white p-6 sm:p-8 flex flex-col justify-between gap-6">
+          <div className="bg-slate-800 text-white p-6 sm:p-8 flex flex-col justify-between gap-6">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-indigo-100">
+              <div className="inline-flex items-center gap-2 rounded bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-slate-300">
                 Secure Entry
               </div>
               <h3 className="mt-5 text-2xl font-black tracking-tight">Use Google for faster access</h3>
-              <p className="mt-3 text-sm leading-relaxed text-white/82">
+              <p className="mt-3 text-sm leading-relaxed text-slate-300">
                 Continue with your Google account and jump straight into your NexCard dashboard.
               </p>
             </div>
@@ -312,7 +312,7 @@ export default function AdminPage() {
             <button
               onClick={handleGoogleLogin}
               disabled={googleLoading}
-              className="w-full bg-white hover:bg-slate-100 text-slate-900 font-bold py-3.5 rounded-xl border border-white/10 transition-all flex justify-center items-center gap-3 shadow-lg active:scale-[0.98] disabled:opacity-70"
+              className="w-full bg-white hover:bg-slate-100 text-slate-900 font-bold py-3.5 rounded-lg border border-white/10 transition-all flex justify-center items-center gap-3 shadow active:scale-[0.98] disabled:opacity-70 cursor-pointer"
             >
               {googleLoading ? (
                 <div className="w-5 h-5 border-2 border-slate-300 border-t-indigo-600 rounded-full animate-spin" />

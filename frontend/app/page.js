@@ -7,7 +7,7 @@ import { QrCode, IdCard, ImageIcon, ArrowRight, Sparkles, Share2, Palette } from
 
 const FEATURES = [
   "Digital Smartcards.",
-  "Instant Qr Sharing.",
+  "Instant QR Sharing.",
   "Digital Portfolios.",
   "Global Connection."
 ];
@@ -31,9 +31,8 @@ export default function Home() {
 
 function BackgroundEffects() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10 bg-[linear-gradient(135deg,#dffbff_0%,#f3fff7_35%,#fff2f7_70%,#fff8d9_100%)]">
-      <div className="absolute inset-0 opacity-70 bg-[conic-gradient(from_140deg_at_50%_35%,rgba(0,194,255,0.26),rgba(126,231,135,0.18),rgba(255,61,113,0.18),rgba(255,225,86,0.22),rgba(0,194,255,0.26))]" />
-      <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 0h40v40H0z' fill='none'/%3E%3Cpath d='M0 0h40v40H0z' fill='none' stroke='rgba(0,0,0,1)' stroke-width='1'/%3E%3C/svg%3E\")", maskImage: "linear-gradient(to bottom, white, transparent)" }} />
+    <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10 bg-[#f8f9fa]">
+      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 0h40v40H0z' fill='none'/%3E%3Cpath d='M0 0h40v40H0z' fill='none' stroke='rgba(0,0,0,1)' stroke-width='1'/%3E%3C/svg%3E\")", maskImage: "linear-gradient(to bottom, white, transparent)" }} />
     </div>
   );
 }
@@ -41,14 +40,14 @@ function BackgroundEffects() {
 function Navbar() {
   return (
     <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
-      <nav className="w-full max-w-7xl bg-white/78 backdrop-blur-xl border border-cyan-100 shadow-[0_14px_40px_rgba(0,194,255,0.12)] transition-all duration-300 rounded-full pointer-events-auto">
+      <nav className="w-full max-w-7xl bg-white border border-slate-200 shadow-sm transition-all duration-300 rounded-lg pointer-events-auto">
         <div className="px-4 py-3 sm:px-6 flex justify-between items-center transition-all">
-          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-brand-indigo to-brand-purple">
+          <h1 className="text-xl sm:text-2xl font-black tracking-tighter text-brand-indigo">
             NexCard
           </h1>
           <a
             href="mailto:contact@nexcard.com"
-            className="group relative inline-flex items-center justify-center px-4 py-2 sm:px-6 sm:py-2.5 text-xs sm:text-sm font-medium text-brand-indigo transition-all duration-300 bg-brand-indigo/10 rounded-full hover:bg-brand-indigo hover:text-white ring-1 ring-inset ring-brand-indigo/20 focus:outline-none"
+            className="group relative inline-flex items-center justify-center px-4 py-2 sm:px-5 sm:py-2 text-xs sm:text-sm font-medium text-brand-indigo transition-all duration-150 bg-transparent hover:bg-brand-indigo hover:text-white border border-brand-indigo rounded-md focus:outline-none"
           >
             Contact Us
           </a>
@@ -61,15 +60,13 @@ function Navbar() {
 function HeroSection() {
   return (
     <section className="text-left sm:text-center mb-24 md:mb-40 pt-4 md:pt-0 relative px-2 sm:px-0">
-      <div className="absolute inset-x-0 top-0 h-[300px] bg-gradient-to-b from-white/65 via-cyan-50/55 to-transparent -z-10"></div>
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-white/80 backdrop-blur-md border border-slate-200/60 text-brand-indigo text-[11px] md:text-sm font-bold mb-6 md:mb-8 shadow-[0_2px_10px_rgb(0,0,0,0.02)] uppercase tracking-widest"
+        className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-1.5 rounded bg-blue-50 border border-blue-200 text-brand-indigo text-[11px] md:text-xs font-bold mb-6 md:mb-8 uppercase tracking-widest"
       >
-        <Sparkles className="w-3.5 h-3.5 text-brand-purple" />
+        <Sparkles className="w-3.5 h-3.5 text-brand-indigo" />
         The Future of Networking
       </motion.div>
 
@@ -103,10 +100,10 @@ function HeroSection() {
         <div className="relative group w-full sm:w-auto">
           <Link
             href="/admin"
-            className="flex items-center justify-center w-full sm:w-auto px-10 py-4 md:py-4 text-base md:text-lg font-bold text-white transition-all duration-300 bg-[linear-gradient(135deg,#00c2ff_0%,#ff3d71_58%,#ffe156_100%)] rounded-full hover:brightness-105 hover:scale-[1.02] shadow-[0_18px_44px_rgba(0,194,255,0.28)] border border-white/60 focus:outline-none"
+            className="flex items-center justify-center w-full sm:w-auto px-8 py-3.5 text-base md:text-lg font-bold text-white transition-all duration-150 bg-brand-indigo hover:bg-indigo-600 rounded-md shadow-sm focus:outline-none"
           >
             Create Your Card
-            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300 text-white" />
+            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-150 text-white" />
           </Link>
         </div>
       </motion.div>
@@ -176,7 +173,7 @@ function PixelatedText() {
     <AnimatePresence mode="popLayout">
       <motion.span
         layout
-        className={`inline-block pb-2 transition-all duration-300 text-transparent bg-clip-text bg-gradient-to-r from-brand-indigo via-brand-purple to-brand-indigo ${isAnimating ? "blur-[2px] opacity-50 scale-[0.99]" : "blur-0 opacity-100 scale-100"
+        className={`inline-block pb-2 transition-all duration-300 text-brand-indigo ${isAnimating ? "blur-[2px] opacity-50 scale-[0.99]" : "blur-0 opacity-100 scale-100"
           }`}
       >
         {displayText}
@@ -190,15 +187,15 @@ function BentoFeatures() {
     <section className="mb-40">
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-4 tracking-tight">Everything you need to stand out</h2>
-        <p className="text-slate-600 text-lg font-light">Powerful features wrapped in a beautiful, immersive interface.</p>
+        <p className="text-slate-600 text-lg font-light">Powerful features wrapped in a clean, professional interface.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-auto sm:auto-rows-[300px]">
-        {/* Large Feature 1 */}
-        <div className="md:col-span-2 group relative bg-white/78 backdrop-blur-xl p-6 sm:p-8 rounded-3xl sm:rounded-[2rem] border border-cyan-100 shadow-[0_16px_50px_rgba(0,194,255,0.08)] hover:shadow-xl hover:border-brand-indigo/30 transition-all duration-500 overflow-hidden cursor-default">
-          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-indigo via-brand-lime to-brand-accent"></div>
+        {/* Feature 1 */}
+        <div className="md:col-span-2 group relative bg-white p-6 sm:p-8 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden cursor-default">
+          <div className="absolute inset-x-0 top-0 h-1 bg-brand-indigo"></div>
           <div className="relative z-10 h-full flex flex-col justify-between">
-            <div className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-brand-indigo mb-6 group-hover:scale-110 transition-transform duration-500 shadow-sm">
+            <div className="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center text-brand-indigo mb-6 group-hover:scale-105 transition-transform duration-300 shadow-sm border border-blue-100">
               <IdCard className="w-7 h-7" />
             </div>
             <div>
@@ -208,11 +205,11 @@ function BentoFeatures() {
           </div>
         </div>
 
-        {/* Square Feature 2 */}
-        <div className="group relative bg-white/78 backdrop-blur-xl p-6 sm:p-8 rounded-3xl sm:rounded-[2rem] border border-rose-100 shadow-[0_16px_50px_rgba(255,61,113,0.08)] hover:shadow-xl hover:border-brand-purple/30 transition-all duration-500 overflow-hidden cursor-default">
-          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-purple to-brand-accent"></div>
+        {/* Feature 2 */}
+        <div className="group relative bg-white p-6 sm:p-8 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden cursor-default">
+          <div className="absolute inset-x-0 top-0 h-1 bg-brand-purple"></div>
           <div className="relative z-10 h-full flex flex-col justify-between">
-            <div className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-brand-purple mb-6 group-hover:scale-110 transition-transform duration-500 shadow-sm">
+            <div className="w-14 h-14 bg-purple-50 rounded-lg flex items-center justify-center text-brand-purple mb-6 group-hover:scale-105 transition-transform duration-300 shadow-sm border border-purple-100">
               <QrCode className="w-7 h-7" />
             </div>
             <div>
@@ -222,11 +219,11 @@ function BentoFeatures() {
           </div>
         </div>
 
-        {/* Square Feature 3 */}
-        <div className="group relative bg-white/78 backdrop-blur-xl p-6 sm:p-8 rounded-3xl sm:rounded-[2rem] border border-amber-100 shadow-[0_16px_50px_rgba(255,225,86,0.10)] hover:shadow-xl transition-all duration-500 overflow-hidden cursor-default">
-          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-accent to-brand-purple"></div>
+        {/* Feature 3 */}
+        <div className="group relative bg-white p-6 sm:p-8 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden cursor-default">
+          <div className="absolute inset-x-0 top-0 h-1 bg-brand-accent"></div>
           <div className="relative z-10 h-full flex flex-col justify-between">
-            <div className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-pink-500 mb-6 group-hover:scale-110 transition-transform duration-500 shadow-sm">
+            <div className="w-14 h-14 bg-amber-50 rounded-lg flex items-center justify-center text-brand-accent mb-6 group-hover:scale-105 transition-transform duration-300 shadow-sm border border-amber-100">
               <ImageIcon className="w-7 h-7" />
             </div>
             <div>
@@ -236,11 +233,11 @@ function BentoFeatures() {
           </div>
         </div>
 
-        {/* Horizontal Feature 4 */}
-        <div className="md:col-span-2 group relative bg-white/78 backdrop-blur-xl p-6 sm:p-8 rounded-3xl sm:rounded-[2rem] border border-cyan-100 shadow-[0_16px_50px_rgba(0,194,255,0.08)] hover:shadow-xl hover:border-blue-500/30 transition-all duration-500 overflow-hidden cursor-default flex items-center">
-          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-indigo via-brand-purple to-brand-lime"></div>
+        {/* Feature 4 */}
+        <div className="md:col-span-2 group relative bg-white p-6 sm:p-8 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden cursor-default flex items-center">
+          <div className="absolute inset-x-0 top-0 h-1 bg-brand-indigo"></div>
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-8 w-full">
-            <div className="w-16 h-16 shrink-0 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform duration-500 shadow-sm">
+            <div className="w-16 h-16 shrink-0 bg-blue-50 rounded-lg flex items-center justify-center text-brand-indigo group-hover:scale-105 transition-transform duration-300 shadow-sm border border-blue-100">
               <Share2 className="w-8 h-8" />
             </div>
             <div>
@@ -264,7 +261,7 @@ function HowItWorks() {
 
       <div className="grid md:grid-cols-3 gap-12 relative">
         {/* Connecting Line */}
-        <div className="hidden md:block absolute top-[45px] left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-slate-200 to-transparent -z-10"></div>
+        <div className="hidden md:block absolute top-[45px] left-[15%] right-[15%] h-[1px] bg-slate-200 -z-10"></div>
 
         <StepCard
           step="1"
@@ -293,11 +290,11 @@ function StepCard({ step, title, desc, icon }) {
   return (
     <div className="flex flex-col items-center text-center group">
       <div className="w-24 h-24 mb-6 relative flex items-center justify-center">
-        <div className="absolute inset-3 rounded-full bg-gradient-to-br from-brand-indigo/12 via-brand-lime/10 to-brand-purple/12"></div>
-        <div className="relative z-10 w-16 h-16 bg-white border border-cyan-100 rounded-full flex items-center justify-center text-slate-900 font-bold text-xl shadow-[0_10px_24px_rgba(0,194,255,0.10)] group-hover:border-brand-indigo/30 transition-colors duration-300">
+        <div className="absolute inset-3 rounded-full bg-blue-50"></div>
+        <div className="relative z-10 w-16 h-16 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-900 font-bold text-xl shadow-sm group-hover:border-brand-indigo transition-colors duration-300">
           {step}
         </div>
-        <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-white border border-slate-100 rounded-full flex items-center justify-center text-brand-indigo shadow-md group-hover:scale-110 transition-transform duration-300">
+        <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center text-brand-indigo shadow-sm group-hover:scale-105 transition-transform duration-300">
           {icon}
         </div>
       </div>
@@ -309,10 +306,10 @@ function StepCard({ step, title, desc, icon }) {
 
 function Footer() {
   return (
-    <footer className="mt-20 border-t border-slate-200/60 bg-white/40 backdrop-blur-sm relative z-10">
+    <footer className="mt-20 border-t border-slate-200 bg-white/80 backdrop-blur-sm relative z-10">
       <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="text-center md:text-left">
-          <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-indigo to-brand-purple">NexCard</h2>
+          <h2 className="text-2xl font-bold text-brand-indigo">NexCard</h2>
           <p className="text-sm text-slate-500 mt-2">The future of professional networking.</p>
         </div>
         <div className="flex gap-6">

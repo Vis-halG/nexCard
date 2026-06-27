@@ -76,13 +76,13 @@ export const DEFAULT_COLOR_INDEXES = {
 };
 
 export const DASHBOARD_TABS = [
-  { id: "profile", label: "Profile Info" },
-  { id: "business", label: "Business & Contacts" },
-  { id: "social", label: "Social Links" },
-  { id: "media", label: "Media & Arrays" },
-  { id: "themes", label: "Theme Presets" },
-  { id: "design", label: "Design Settings" },
-  { id: "visibility", label: "Section Visibility" }
+  { id: "profile", label: "Profile Info", shortLabel: "Profile" },
+  { id: "business", label: "Business & Contacts", shortLabel: "Contacts" },
+  { id: "social", label: "Social Links", shortLabel: "Social" },
+  { id: "media", label: "Media & Arrays", shortLabel: "Media" },
+  { id: "themes", label: "Theme Presets", shortLabel: "Themes" },
+  { id: "design", label: "Design Settings", shortLabel: "Design" },
+  { id: "visibility", label: "Section Visibility", shortLabel: "Visibility" }
 ];
 
 export const THEME_PRESETS = [

@@ -24,6 +24,7 @@ export default function ModernTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
   const [showWhatsAppInput, setShowWhatsAppInput] = useState(false);
   const [hoveredId, setHoveredId] = useState(null);
+  const pref = data?.preferences || {};
 
   const actions = [];
   if (data?.phone) {

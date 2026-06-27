@@ -24,6 +24,7 @@ const WhatsAppIcon = ({ className }) => (
 export default function NeoTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
   const [showWhatsAppInput, setShowWhatsAppInput] = useState(false);
+  const pref = data?.preferences || {};
 
   const actions = [];
   if (data?.phone) {

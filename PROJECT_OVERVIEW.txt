@@ -1,0 +1,1430 @@
+NexCard Project Overview
+Generated: 2026-06-23
+
+1. Project Summary
+
+NexCard is a digital smartcard / digital visiting card application. It lets a user create an account, manage a public profile from an admin dashboard, customize the design of the card, and publish the card at a public username URL such as /username.
+
+The public card can show profile details, contact actions, social links, services, gallery images, videos, custom links, payment details, QR codes, map location, and an enquiry form. The card supports multiple visual themes.
+
+The repository is organized as a monorepo:
+
+- frontend: Next.js app with React, Tailwind CSS, Firebase Auth, Firestore, and Firebase Storage initialization.
+- backend: Express API placeholder server.
+
+2. Tech Stack
+
+Frontend:
+- Next.js 16.2.1 using the App Router.
+- React 19.2.4.
+- Tailwind CSS v4 via @tailwindcss/postcss.
+- Firebase 12.11.0 for Auth, Firestore, and Storage initialization.
+- Framer Motion for landing-page animation and some floating UI animation.
+- lucide-react for icons.
+- qrcode.react for QR code generation.
+
+Backend:
+- Express 4.
+- cors.
+- dotenv.
+
+Runtime:
+- Root package.json requests Node 22.x.
+
+3. Root-Level Files
+
+AGENTS.md:
+- Contains project-specific instruction that this Next.js version may differ from older assumptions and that local docs in node_modules/next/dist/docs should be checked before code changes.
+
+README.md:
+- Basic monorepo explanation and run instructions.
+
+package.json:
+- Defines workspaces for frontend and backend.
+- Scripts:
+  - npm run dev: runs frontend dev server.
+  - npm run dev:all: runs all workspace dev scripts if present.
+  - npm run build: builds frontend.
+  - npm run lint: runs frontend lint.
+
+vercel.json:
+- Present for deployment configuration, though the main frontend config is inside frontend.
+
+test.html:
+- Standalone HTML file, likely an old visual/prototype artifact. It is not part of the Next.js app routing.
+
+PROJECT_OVERVIEW.txt:
+- This file.
+
+4. Frontend Structure
+
+frontend/app:
+- App Router entrypoint.
+- layout.js defines the root HTML/body wrapper and app metadata.
+- globals.css imports Tailwind and defines global color tokens, body styles, slow-spin animation, custom scrollbar utilities, and scrollbar hiding utility.
+- page.js is the marketing/landing page.
+- admin/page.jsx is login/signup/admin entry.
+- admin/dashboard/page.jsx is the card editor dashboard.
+- admin/dashboard/constants.js contains dashboard defaults and theme preset data.
+- [username]/page.jsx is the public profile route.
+- demoProfile.js contains demo seed data for a known demo account.
+
+frontend/app/components:
+- NexCard.jsx selects the visual theme renderer.
+- ShareActions.jsx handles copy/share/social-share buttons.
+- BottomNav.jsx handles public card bottom navigation and WhatsApp direct-share drawer.
+- FloatingNav.jsx is a floating QR/scroll joystick component, currently present but not obviously used in the active card themes.
+- DemoCard.jsx is a small marketing/demo card component.
+- Skeleton.jsx exists as a shared skeleton component.
+- themes/ contains six public card theme renderers.
+
+frontend/lib/firebase.js:
+- Initializes Firebase with the flexcard-ff8ec Firebase project.
+- Exports auth, db, and storage.
+
+5. Backend Structure
+
+backend/index.js:
+- Minimal Express app.
+- Enables CORS and JSON body parsing.
+- GET / returns "NexCard Backend API is running..."
+- Starts on PORT from environment or 5000.
+
+backend/package.json:
+- Scripts:
+  - npm run dev: prints a placeholder message and starts index.js.
+  - npm start: starts index.js.
+
+Current backend role:
+- The app currently relies on Firebase directly from the frontend for auth and data.
+- The backend is a placeholder and does not currently handle card data, auth, payments, uploads, or lead capture.
+
+6. Application Routes and User Flows
+
+Route: /
+
+Purpose:
+- Marketing landing page for NexCard.
+
+Main sections:
+- Fixed glass-style navbar with NexCard brand and contact mail link.
+- Hero section with animated pixelated rotating value text.
+- CTA to /admin.
+- Bento feature cards describing digital smart card, QR sharing, gallery, and networking.
+- How-it-works section with three steps:
+  - Create profile.
+  - Customize design.
+  - Share instantly.
+- Footer with contact and privacy placeholder link.
+
+Notable implementation:
+- Uses Framer Motion for entrance and text animation.
+- Uses Tailwind utility-heavy design.
+- Uses local FEATURES constant for rotating text.
+
+Route: /admin
+
+Purpose:
+- Authentication entry for admins/users.
+
+Supported auth flows:
+- Email/password sign in.
+- Email/password signup.
+- Google sign-in via popup, with redirect fallback.
+- Password reset email.
+
+Signup flow:
+1. User enters email/password.
+2. App derives a username from the email prefix.
+3. It checks Firestore collection usernames/{username}.
+4. If taken, it appends random digits.
+5. Creates Firebase Auth user.
+6. Writes username mapping to usernames/{cleanUsername}.
+7. Writes basic user document to users/{uid}.
+8. Redirects to /admin/dashboard.
+
+Google login flow:
+1. Attempts signInWithPopup.
+2. If popup is blocked/cancelled/closed, falls back to signInWithRedirect.
+3. processUserLogin derives username from email.
+4. Ensures username mapping exists or creates suffixed username if needed.
+5. Merges Google profile data into users/{uid}.
+6. Adds default theme only if the user does not already have one.
+7. Redirects to /admin/dashboard.
+
+Password reset:
+- Requires email field to be filled.
+- Calls sendPasswordResetEmail(auth, email).
+
+Route: /admin/dashboard
+
+Purpose:
+- Authenticated card editor and live preview.
+
+Auth/data flow:
+1. onAuthStateChanged checks Firebase Auth state.
+2. If no user, redirects to /admin.
+3. If user exists, reads users/{uid}.
+4. For the demo email, if demoReady is missing, it creates demo profile data and merges it into Firestore.
+5. Merges Firestore data into local form state.
+6. Dashboard allows editing and saving back to users/{uid}.
+
+Dashboard state:
+- user, loading, uploading, uploadProgress.
+- form object containing all profile, contact, media, payment, and theme fields.
+- activeTab.
+- previewTheme for temporary theme preview.
+- selectedColorIndexes for theme preset color variants.
+- username editing state.
+
+Dashboard tabs:
+- Profile Info.
+- Business & Contacts.
+- Social Links.
+- Media & Arrays.
+- Theme Presets.
+- Design Settings.
+
+Profile Info features:
+- Cover/banner image URL upload.
+- Profile image upload.
+- Full name.
+- Job title.
+- Company.
+- Bio/about text.
+
+Business & Contacts features:
+- Phone.
+- Email.
+- Address.
+- Website.
+- Calendar/booking URL.
+- Google reviews URL.
+- Payment fields:
+  - UPI ID.
+  - Payment link.
+  - Bank details.
+  - Payment QR image.
+
+Social Links features:
+- Instagram.
+- LinkedIn.
+- Twitter/X.
+- Facebook.
+- YouTube.
+
+Media & Arrays features:
+- Services/specialities list.
+- Gallery image URLs.
+- Custom links with title and URL.
+- Video embed URLs.
+
+Theme Presets features:
+- Six layout presets:
+  - modern.
+  - classic.
+  - minimal.
+  - glass.
+  - bold.
+  - neo.
+- Each preset has multiple color combinations.
+- User can preview a preset temporarily or apply it to form.theme.
+
+Design Settings features:
+- Background gradients.
+- Text alignment.
+- Granular colors:
+  - card background.
+  - primary text.
+  - secondary text.
+  - card text.
+  - button background.
+  - button text.
+  - input background.
+  - input text.
+  - custom gradient start/end.
+- Card surface style.
+- Radius.
+- Shadow depth.
+- Border/outlines.
+- Avatar shape and border.
+- Social button style.
+- Quick-action hover animation.
+- Default QR behavior.
+- QR logo behavior.
+- Lead form style.
+
+Saving:
+- handleSave writes the full form plus uid to users/{uid}.
+
+Username editing:
+- User can edit username.
+- Cleaned by lowercase and removing non-alphanumeric chars.
+- Requires at least 3 characters.
+- Checks usernames/{clean}.
+- Deletes old username mapping via dynamic import of deleteDoc.
+- Writes new username mapping and merges username into users/{uid}.
+
+Image upload:
+- Uses ImgBB API directly from dashboard code.
+- Sets upload progress manually to 30 and 80.
+- Supports:
+  - gallery image at index.
+  - profile image.
+  - cover image.
+  - payment QR code.
+
+Important note:
+- Firebase Storage is initialized in lib/firebase.js, but current dashboard upload path uses ImgBB instead of Firebase Storage.
+
+Dashboard cleanup currently present:
+- DEFAULT_THEME, INITIAL_FORM, DEFAULT_COLOR_INDEXES, DASHBOARD_TABS, and THEME_PRESETS are extracted into admin/dashboard/constants.js.
+- DashboardSkeleton, DashboardHeader, and LivePreviewPanel are extracted into separate local components inside page.jsx.
+
+Route: /[username]
+
+Purpose:
+- Public card route.
+
+Flow:
+1. Uses Next 16 style use(params) to unwrap dynamic params in a client component.
+2. Cleans username by lowercase, trim, and removing non-alphanumeric chars.
+3. Fast lookup in Firestore usernames/{cleanUsername}.
+4. If mapping missing, fallback query users where username equals cleanUsername.
+5. Reads users/{uid}.
+6. If username is the demo username and demoReady is missing, merges demo data locally.
+7. Renders NexCard with profile data.
+
+Not-found behavior:
+- If user/profile is not found, shows "NexCard Not Found" and a Back to Home link.
+
+Loading behavior:
+- Shows a card-like skeleton while Firestore lookup is in progress.
+
+7. Data Model
+
+Firestore collections inferred from code:
+
+users/{uid}
+- uid.
+- username.
+- email.
+- name.
+- title.
+- company.
+- phone.
+- about.
+- image.
+- coverImage.
+- address.
+- website.
+- calendarUrl.
+- googleReviewsUrl.
+- social:
+  - instagram.
+  - linkedin.
+  - twitter.
+  - facebook.
+  - youtube.
+- payment:
+  - upi.
+  - link.
+  - bankDetails.
+  - qrCode.
+- services: array of strings.
+- gallery: array of image URLs.
+- customLinks: array of { title, url }.
+- videos: array of video/embed URLs.
+- theme:
+  - primary.
+  - background.
+  - layout.
+  - font.
+  - radius.
+  - cardStyle.
+  - avatarStyle.
+  - bgEffect.
+  - defaultQr.
+  - bgGradient.
+  - textAlign.
+  - shadowDepth.
+  - bannerSize.
+  - avatarBorder.
+  - socialStyle.
+  - qrLogo.
+  - actionAnimation.
+  - bioFontSize.
+  - cardBorderPattern.
+  - formAesthetic.
+  - cardBg.
+  - textPrimary.
+  - textSecondary.
+  - cardText.
+  - btnBg.
+  - btnText.
+  - inputBg.
+  - inputText.
+  - gradientStart.
+  - gradientEnd.
+- demoReady for demo profiles.
+
+usernames/{username}
+- uid.
+
+8. Public Card Rendering
+
+NexCard.jsx:
+- Reads data.theme.layout.
+- Routes rendering to:
+  - ModernTheme.
+  - ClassicTheme.
+  - MinimalTheme.
+  - GlassTheme.
+  - BoldTheme.
+  - NeoTheme.
+- Defaults to ModernTheme.
+
+Shared public card features across themes:
+- Profile hero with avatar and optional cover image.
+- Name, title, company.
+- Contact actions:
+  - call.
+  - WhatsApp.
+  - location.
+  - mail.
+  - SMS.
+  - expandable "more" behavior if actions exceed visible count.
+- Save contact as vCard.
+- Optional booking/calendar link.
+- About section.
+- Services/specialities.
+- Social links.
+- Gallery.
+- Video embeds.
+- Custom links.
+- Payment details.
+- UPI QR generation.
+- Optional custom payment QR image.
+- Address with Google Maps embed and navigation link.
+- Enquiry/contact form that opens mailto.
+- Share QR.
+- Bottom mobile navigation.
+
+Theme-specific intent:
+- ModernTheme: polished rounded modern card, configurable gradients/colors/layout details, richest design-setting support.
+- ClassicTheme: corporate/editorial style.
+- MinimalTheme: black-and-white brutalist/minimal style.
+- GlassTheme: glassmorphism visual treatment.
+- BoldTheme: heavier high-contrast visual treatment.
+- NeoTheme: dark/cyber/neon style.
+
+BottomNav.jsx:
+- Fixed or absolute bottom navigation depending on preview mode.
+- Tracks active section on scroll.
+- Supports layout-specific styling.
+- Opens a "Share Card" drawer.
+- Drawer includes:
+  - QR code.
+  - ShareActions row.
+  - Direct WhatsApp send field.
+  - Country code select.
+- Country code defaults based on browser timezone, with fallback to India +91.
+
+ShareActions.jsx:
+- Generates current card URL from data.username or window.location.href.
+- Copy link.
+- WhatsApp share.
+- Telegram share.
+- Twitter/X share.
+- Facebook share.
+- LinkedIn share.
+- Email share.
+- SMS share.
+- Native Web Share API fallback.
+- Adapts icon wrapper style by card layout.
+
+FloatingNav.jsx:
+- A draggable floating share/QR button.
+- Dragging vertically creates joystick-like scroll behavior.
+- Tapping opens a QR carousel modal.
+- QR carousel can switch between profile QR and payment QR.
+- Uses Framer Motion.
+- This component appears available but is not clearly wired into the active theme renderers checked.
+
+9. Demo Profile
+
+demoProfile.js:
+- Exports DEMO_EMAIL and createDemoProfile.
+- Demo email: vishalgupta25980@gmail.com.
+- Demo profile includes realistic name, title, company, phone, about text, images, address, website, calendar, reviews URL, social links, payment data, services, gallery, videos, custom links, and full theme config.
+
+Demo handling:
+- Dashboard auto-populates the demo account if demoReady is missing.
+- Public username route also locally overlays demo data for username vishalgupta25980 if demoReady is missing.
+
+10. Styling
+
+Global styling:
+- Tailwind CSS imported in globals.css.
+- @theme inline defines:
+  - background.
+  - foreground.
+  - brand-purple.
+  - brand-indigo.
+  - glass.
+  - glass-border.
+- Body background uses slate-50-like color and Arial/Helvetica.
+- Custom slow-spin animation.
+- Custom dashboard scrollbar.
+- scrollbar-none utility.
+
+Component styling:
+- Most UI is built with Tailwind utility classes directly in JSX.
+- Public themes contain significant inline conditional class logic and inline style objects for runtime theme customization.
+
+11. Build and Tooling
+
+Build command:
+- From root: npm run build.
+- From frontend: npm.cmd run build.
+
+Observed build status:
+- Build passes successfully.
+
+Observed warnings:
+- next.config.mjs contains eslint config, but Next 16 reports eslint config in next.config.mjs is no longer supported.
+- next.config.mjs has unrecognized eslint key.
+- Next/Turbopack warns that it inferred workspace root from C:\Users\visha\package-lock.json and detected multiple lockfiles:
+  - C:\Users\visha\Desktop\nexCard\frontend\package-lock.json.
+  - C:\Users\visha\Desktop\nexCard\package-lock.json.
+- typescript.ignoreBuildErrors is true, so type errors would not fail builds.
+
+12. Deployment
+
+Likely deployment target:
+- Vercel, based on vercel.json and Next.js app.
+
+Deployment considerations:
+- Frontend is the real app.
+- Backend is separate Express app and may need separate hosting if it becomes active.
+- Firebase config is currently hardcoded in frontend/lib/firebase.js.
+- ImgBB API key is hardcoded in dashboard page code.
+- Firestore security rules are not in this repo, but they are critical for production.
+
+13. Known Risks and Improvement Areas
+
+Security / privacy:
+- ImgBB API key is hardcoded client-side in dashboard code. This should be moved to a backend/API route or replaced with Firebase Storage rules if uploads must be controlled.
+- Firebase project config is client-side, which is normal for Firebase, but Firestore/Auth/Storage rules must be strict.
+- Public card data is loaded directly from Firestore. Security rules should allow only intended public fields for public profiles.
+- Dashboard writes the full form object to users/{uid}; validation is mostly client-side.
+- Username reservation and deletion happen client-side and may need transaction/rules support to avoid race conditions.
+
+Data integrity:
+- Username cleanup removes all non-a-z0-9 characters. This is consistent across signup, dashboard, and public lookup.
+- Signup checks username once and appends random digits if taken. There is still a possible collision if the suffixed username exists.
+- Updating usernames deletes old mapping before/around writing new mapping. A safer approach would use a transaction or callable backend function.
+- The public page has fallback query against users collection if username mapping is missing, which is useful but may be slower and requires an index/rules.
+
+Architecture:
+- Dashboard page is still large even after initial cleanup. It would benefit from further extraction:
+  - ProfileTab component.
+  - BusinessTab component.
+  - SocialTab component.
+  - MediaTab component.
+  - ThemePresetsTab component.
+  - DesignSettingsTab component.
+  - UploadField component.
+  - OptionGrid/OptionButton components.
+- Theme components have repeated logic for actions, vCard generation, enquiry form, social icons, QR/payment rendering, gallery, videos, and maps. Shared utilities/components would reduce duplication.
+- BottomNav has a lot of layout-specific styling logic in one component. A mapping object or per-layout style module would make it easier to maintain.
+
+UX:
+- Many user feedback actions use alert(). A toast system would feel smoother.
+- The enquiry form opens mailto instead of storing/sending leads.
+- Profile views are hardcoded in ModernTheme.
+- Upload progress is simulated/manual rather than based on actual network progress.
+- Public card uses img tags instead of Next Image, which may be fine for external URLs but loses optimization.
+
+Compatibility:
+- There is mojibake/encoding corruption in several comments and strings. Examples include emoji/comment text and copyright symbols. This should be cleaned to UTF-8 or plain ASCII.
+- The project intentionally uses Next 16 APIs, including use(params) on the public dynamic route.
+
+Backend:
+- Backend currently does not provide useful API features.
+- Potential backend responsibilities:
+  - Secure uploads.
+  - Lead capture.
+  - username reservation transactions.
+  - analytics/profile views.
+  - payment webhook handling.
+  - email notifications.
+
+Testing:
+- No explicit tests are present.
+- Recommended tests:
+  - Auth signup username generation.
+  - Public username lookup.
+  - Dashboard save payload.
+  - Theme selection routing in NexCard.
+  - vCard generation.
+  - Share URL generation.
+  - Basic render smoke tests for all themes.
+
+14. Suggested Next Refactor Plan
+
+Phase 1: Dashboard maintainability
+- Extract each tab into its own component.
+- Move repeated form input markup into Field, TextAreaField, UploadBox, ArrayEditor, and SectionHeader components.
+- Move reset logic into helper map instead of if/else chain.
+- Move ImgBB upload API details out of component.
+
+Phase 2: Public card maintainability
+- Create shared hooks/utilities:
+  - buildActions(data).
+  - generateVcard(data).
+  - submitEnquiry(data).
+  - getCardUrl(data).
+  - buildPaymentQrValue(data).
+- Create shared sections:
+  - ProfileHero.
+  - QuickActions.
+  - ServicesSection.
+  - SocialSection.
+  - GallerySection.
+  - VideoSection.
+  - PaymentSection.
+  - LocationSection.
+  - ContactFormSection.
+  - ShareQrSection.
+- Keep each theme focused on layout and styling.
+
+Phase 3: Production hardening
+- Move image upload to Firebase Storage or a backend route.
+- Add Firestore rules and document them in the repo.
+- Add analytics/view-count storage.
+- Add lead capture instead of mailto-only enquiry.
+- Remove deprecated Next config keys.
+- Resolve multiple lockfile/workspace-root warnings.
+- Add tests.
+
+15. Current Local Worktree Notes
+
+At the time this file was created, the local worktree includes:
+- Modified frontend/app/admin/dashboard/page.jsx from code-structure cleanup.
+- New frontend/app/admin/dashboard/constants.js.
+
+These changes are structural only and are intended not to change visual design or user behavior.
+
+16. Detailed File-by-File Review
+
+Root files:
+
+AGENTS.md
+- Project instruction file for coding agents.
+- Important instruction: this project uses a newer/different Next.js version, so code changes should consult node_modules/next/dist/docs before assuming older Next.js APIs or conventions.
+
+README.md
+- Provides simple monorepo description.
+- Does not currently document Firebase setup, Firestore collections, dashboard features, public card data model, upload provider, deployment warnings, or security rules.
+- Recommended improvement: replace or expand it using the relevant parts of this overview.
+
+package.json
+- Defines npm workspaces:
+  - frontend.
+  - backend.
+- Root dependencies duplicate many frontend dependencies. Because frontend/package.json also contains these dependencies, dependency ownership is slightly unclear.
+- Root scripts delegate most work to the frontend workspace.
+- engines.node is set to 22.x.
+
+package-lock.json and frontend/package-lock.json
+- Multiple lockfiles are present.
+- Next/Turbopack warns about workspace root inference because another package-lock exists above/around the project. This can affect caching, module resolution, and Turbopack root selection.
+
+vercel.json
+- Present but very small.
+- Needs review before production deployment to ensure frontend workspace build settings are correct.
+
+test.html
+- Appears unrelated to the active app.
+- Could be archived or removed if obsolete.
+
+frontend/package.json
+- Frontend scripts:
+  - dev: next dev.
+  - build: next build.
+  - start: next start.
+  - lint: eslint.
+- Dependencies are the core frontend runtime.
+
+frontend/next.config.mjs
+- Enables reactCompiler.
+- Sets typescript.ignoreBuildErrors = true.
+- Sets eslint.ignoreDuringBuilds = true, but Next 16 reports the eslint key is no longer supported in next.config.mjs.
+- This means production builds currently ignore TypeScript errors and may not enforce lint failures.
+
+frontend/postcss.config.mjs
+- Tailwind v4 PostCSS setup.
+
+frontend/eslint.config.mjs
+- ESLint configuration for frontend.
+- Should be checked if linting is intended to be part of CI.
+
+frontend/jsconfig.json
+- JavaScript project config, likely path/module resolution support.
+
+frontend/populate.mjs
+- Present but not reviewed in depth in the earlier scan. Should be checked before using; likely a data seeding utility.
+
+frontend/public/contact.vcf
+- Static vCard file.
+- Public themes also generate vCards dynamically, so this static file may be unused.
+
+frontend/lib/firebase.js
+- Initializes Firebase app.
+- Exports:
+  - auth from getAuth(app).
+  - db from getFirestore(app).
+  - storage from getStorage(app).
+- Firebase config is hardcoded. This is common for Firebase client apps, but all security must be enforced through Firebase rules.
+- storage is exported but current dashboard image upload uses ImgBB, not Firebase Storage.
+
+frontend/app/layout.js
+- Root layout.
+- Uses Next font helpers for Geist and Geist Mono.
+- Imports globals.css.
+- Metadata:
+  - title: nexCard.
+  - description: Digital Smartcard built with nexCard.
+- Body wraps all routes and uses min-h-full flex flex-col.
+
+frontend/app/globals.css
+- Imports Tailwind.
+- Defines Tailwind theme variables.
+- Defines global body background, text color, font, and overflow-x hidden.
+- Defines slow-spin animation used on the landing page.
+- Defines custom-scrollbar for dashboard scroll areas.
+- Defines scrollbar-none utility.
+
+frontend/app/page.js
+- Marketing homepage.
+- Uses client-side rendering.
+- Main functions/components:
+  - Home.
+  - BackgroundEffects.
+  - Navbar.
+  - HeroSection.
+  - PixelatedText.
+  - BentoFeatures.
+  - HowItWorks.
+  - StepCard.
+  - Footer.
+- Uses Framer Motion and AnimatePresence.
+- PixelatedText rotates through FEATURES every 4 seconds and scrambles/reveals characters with requestAnimationFrame.
+- CTA directs users to /admin.
+- Contact link is mailto:contact@nexcard.com.
+
+frontend/app/admin/page.jsx
+- Authentication page.
+- Client component.
+- Handles:
+  - Email/password login.
+  - Email/password signup.
+  - Google popup login.
+  - Google redirect fallback.
+  - Redirect result handling.
+  - Password reset.
+  - Initial user document setup.
+  - Username reservation.
+- Main state:
+  - isLogin.
+  - email.
+  - password.
+  - loading.
+  - resetLoading.
+  - googleLoading.
+- Main functions:
+  - handleResetPassword.
+  - handleAuth.
+  - processUserLogin.
+  - handleGoogleLogin.
+- Firestore writes:
+  - usernames/{username} -> { uid }.
+  - users/{uid} -> user profile defaults.
+- Important behavior:
+  - Signup only checks the base username once. If a suffixed username also exists, there is no loop/transaction to guarantee uniqueness.
+  - Google login preserves existing theme if present.
+
+frontend/app/admin/dashboard/constants.js
+- Extracted constants used by dashboard.
+- DEFAULT_THEME:
+  - canonical full theme defaults.
+- INITIAL_FORM:
+  - canonical empty form.
+- DEFAULT_COLOR_INDEXES:
+  - selected palette indexes by layout.
+- DASHBOARD_TABS:
+  - tab IDs and labels.
+- THEME_PRESETS:
+  - layout presets and palette combinations.
+- This file is an important maintainability point because it keeps large static data out of the dashboard component.
+
+frontend/app/admin/dashboard/page.jsx
+- Main admin editor.
+- Client component.
+- Main responsibilities:
+  - Auth guard.
+  - Firestore profile loading.
+  - Demo profile initialization.
+  - Form state and editing handlers.
+  - ImgBB upload.
+  - Username editing.
+  - Tabbed editor UI.
+  - Live preview rendering.
+  - Save/logout/demo actions.
+- Extracted local components:
+  - DashboardSkeleton.
+  - DashboardHeader.
+  - LivePreviewPanel.
+- Still large. Best next cleanup is extracting each tab.
+
+frontend/app/[username]/page.jsx
+- Public profile route.
+- Client component.
+- Uses React use(params), matching Next 16 dynamic params behavior.
+- Fetches profile by username.
+- First checks usernames/{cleanUsername}, then falls back to query users where username == cleanUsername.
+- Renders NexCard.
+- Displays loading skeleton or not-found UI.
+- Uses demo fallback behavior for demo username.
+
+frontend/app/demoProfile.js
+- Demo account and demo data generator.
+- Used by dashboard and public page.
+- Contains comprehensive sample data covering most card features.
+
+frontend/app/components/NexCard.jsx
+- Theme router component.
+- Keeps route/page components independent of the theme implementation.
+- Uses data.theme.layout to choose visual renderer.
+
+frontend/app/components/ShareActions.jsx
+- Share utility row.
+- Contains custom brand SVG icons for WhatsApp, Telegram, Facebook, X/Twitter, LinkedIn.
+- Generates card URL using data.username when possible.
+- Supports:
+  - clipboard copy.
+  - WhatsApp share URL.
+  - Telegram share URL.
+  - X/Twitter intent URL.
+  - Facebook sharer URL.
+  - LinkedIn sharing URL.
+  - mailto share.
+  - sms share.
+  - navigator.share fallback.
+- Adapts styling based on layout.
+
+frontend/app/components/BottomNav.jsx
+- Bottom navigation and share drawer.
+- Tracks active page section by window scroll.
+- Has nav items:
+  - home/profile.
+  - about/services.
+  - social/network.
+  - contact.
+  - share/QR code.
+- Has layout-specific styling for modern, classic, minimal, glass, bold, and neo.
+- Share drawer:
+  - Shows QR code.
+  - Shows ShareActions row.
+  - Allows direct WhatsApp send to a typed phone number.
+  - Uses country code dropdown.
+  - Attempts timezone-based country code detection.
+- inPreview mode switches positioning from fixed to absolute.
+
+frontend/app/components/FloatingNav.jsx
+- Optional floating QR/share controller.
+- Drag interaction scrolls page like a joystick.
+- Tap opens QR modal.
+- QR modal supports profile QR and payment QR.
+- Uses Framer Motion.
+- Currently not clearly used by main themes, so it may be experimental or pending integration.
+
+frontend/app/components/DemoCard.jsx
+- Static illustrative card component.
+- Good for marketing/demo usage, but not currently central to profile rendering.
+
+frontend/app/components/Skeleton.jsx
+- Shared skeleton component exists, but dashboard and public page also implement their own skeleton UIs.
+- Could be consolidated.
+
+frontend/app/components/themes/*.jsx
+- Six theme implementations.
+- Each theme implements a complete public card experience.
+- There is repeated behavior across themes, including:
+  - action array construction.
+  - vCard generation.
+  - enquiry form mailto handling.
+  - social rendering.
+  - gallery rendering.
+  - video embed rendering.
+  - QR/payment rendering.
+  - map rendering.
+  - bottom nav usage.
+
+17. Detailed Feature Matrix
+
+Account and authentication:
+- Email/password account creation.
+- Email/password login.
+- Google login.
+- Redirect fallback for blocked Google popup.
+- Password reset email.
+- Auto-redirect to dashboard after login/signup.
+- Auth guard on dashboard.
+- Logout from dashboard.
+
+Username and public URL:
+- Username derived from email on signup.
+- Username mapping stored separately in usernames collection.
+- Public URL format: /{username}.
+- Dashboard can update username.
+- Public route supports fallback query if mapping is absent.
+- Username is normalized to lowercase alphanumeric only.
+
+Profile identity:
+- Name.
+- Professional title.
+- Company.
+- Bio/about.
+- Profile image.
+- Cover image.
+
+Contact:
+- Phone.
+- Email.
+- Address.
+- Website.
+- Calendar booking URL.
+- Google reviews URL.
+- Call action.
+- SMS action.
+- Email action.
+- WhatsApp action.
+- Location/map action.
+
+Business/profile content:
+- Services/specialities.
+- Image gallery.
+- Video embeds.
+- Custom links.
+- Location map.
+- Bank details.
+- UPI ID.
+- Payment link.
+- Payment QR image.
+
+Sharing:
+- Public link copy.
+- QR code for profile.
+- QR code for UPI payment.
+- Optional QR logo/avatar in modern theme.
+- Share to WhatsApp.
+- Share to Telegram.
+- Share to X/Twitter.
+- Share to Facebook.
+- Share to LinkedIn.
+- Share by email.
+- Share by SMS.
+- Native device share when available.
+- Direct WhatsApp share drawer from BottomNav.
+
+Lead/enquiry:
+- Public card contact form.
+- Uses mailto to send the enquiry to profile email.
+- Does not currently persist leads to Firestore/backend.
+
+Design/theme:
+- Six layouts.
+- Preset palettes per layout.
+- Live dashboard preview.
+- Temporary preview mode before applying theme.
+- Design settings for colors, typography-ish font class, radius, card style, avatar style, background effect, QR behavior, gradients, alignment, shadow, banner, borders, social badges, animation, bio size, form aesthetic.
+
+Demo:
+- Known demo email has rich sample data.
+- Dashboard can fill demo data manually.
+- Demo can auto-seed when demo account is detected.
+
+18. Detailed Dashboard Flow
+
+Initial load:
+1. Dashboard component mounts.
+2. loading is true.
+3. onAuthStateChanged subscribes to Firebase Auth.
+4. If no authenticated user:
+   - router.push("/admin").
+5. If authenticated user:
+   - user state is set.
+   - Firestore users/{uid} is fetched.
+   - If no document exists, data defaults to empty object.
+   - Demo profile logic may merge demo data.
+   - setForm merges fetched data into INITIAL_FORM defaults.
+   - loading is set to false.
+
+Form merge behavior:
+- Top-level profile fields from Firestore overwrite default form values.
+- social merges prev.social with data.social.
+- payment merges prev.payment with data.payment.
+- theme merges prev.theme with data.theme.
+- services/gallery/customLinks/videos default to empty arrays if missing.
+
+Field updates:
+- handleChange updates top-level fields by input name.
+- handleNestedChange updates nested objects like social, payment, or theme.
+- handleArrayChange replaces one array item by index.
+- handleCustomLinkChange updates one key in one custom link object.
+- addArrayItem appends an item to an array field.
+- removeArrayItem filters an item out by index.
+
+Upload flow:
+1. User chooses an image file.
+2. handleImageUpload reads e.target.files[0].
+3. uploading true, progress set to 30.
+4. File is posted to ImgBB upload endpoint.
+5. progress set to 80 after response.
+6. If success:
+   - gallery index is updated, or
+   - image is updated, or
+   - coverImage is updated, or
+   - payment.qrCode is updated.
+7. Finally uploading false and progress 0.
+
+Save flow:
+1. User clicks Save Changes.
+2. handleSave checks user exists.
+3. Writes { ...form, uid: user.uid } to users/{uid}.
+4. Shows alert on success or failure.
+
+Demo fill flow:
+1. User clicks Fill Demo Data.
+2. confirm dialog is shown.
+3. createDemoProfile called.
+4. Current form is merged with demo data.
+5. Current image is preserved if already present.
+6. Current social/payment/theme values override demo values in the merge.
+
+Username update flow:
+1. User enters edit mode.
+2. New username is cleaned.
+3. If length < 3, alert.
+4. usernames/{clean} is checked.
+5. If taken by another user, alert.
+6. Old username mapping is deleted if form.username exists.
+7. New mapping is written.
+8. User document is merged with new username.
+9. Local form username updated.
+
+Tab reset flow:
+- Each tab reset asks for confirmation.
+- themes reset only layout and color indexes.
+- profile clears identity/photos.
+- business clears contact/payment.
+- social clears social links.
+- media clears arrays.
+- design merges DEFAULT_THEME.
+
+19. Detailed Public Profile Flow
+
+Incoming request:
+- User visits /someusername.
+- Next routes this to app/[username]/page.jsx.
+- Component unwraps params with use(params).
+
+Lookup:
+1. cleanUsername = username.toLowerCase().trim().replace(/[^a-z0-9]/g, "").
+2. Try direct document usernames/{cleanUsername}.
+3. If found, read uid.
+4. If not found, query users collection where username == cleanUsername.
+5. If uid remains null, stop loading and show not found.
+6. Read users/{uid}.
+7. If found, set profile data.
+
+Render:
+- NexCard chooses theme.
+- Theme renders full public card.
+- BottomNav gives section navigation and share drawer.
+
+Error states:
+- Firestore error sets error to "Failed to connect to database", but the rendered not-found UI only checks !data. The error state is currently not prominently displayed.
+
+20. Theme System Details
+
+Theme selection:
+- data.theme.layout controls renderer.
+- Values used:
+  - modern.
+  - classic.
+  - minimal.
+  - glass.
+  - bold.
+  - neo.
+
+Theme data usage:
+- ModernTheme uses the widest set of theme fields.
+- Other themes use some theme fields, mostly primary/background/layout-specific appearance.
+- Dashboard exposes many settings; not all settings have equal effect in every theme.
+
+ModernTheme notable settings:
+- primary.
+- background.
+- font.
+- radius.
+- avatarStyle.
+- bgGradient.
+- textAlign.
+- cardBg.
+- textPrimary.
+- textSecondary.
+- cardText.
+- btnBg.
+- btnText.
+- inputBg.
+- inputText.
+- cardStyle.
+- shadowDepth.
+- bannerSize.
+- avatarBorder.
+- socialStyle.
+- qrLogo.
+- actionAnimation.
+- bioFontSize.
+- cardBorderPattern.
+- formAesthetic.
+
+Design limitation:
+- Because theme behavior is implemented per theme manually, adding a new setting requires changes in each theme that should support it.
+
+21. Data Validation Notes
+
+Current validation:
+- Auth page requires email/password before email login/signup.
+- Dashboard username requires minimum 3 cleaned characters.
+- Enquiry forms require name and message.
+- Upload requires file selected.
+
+Missing validation:
+- URL validation for website, calendar, social links, videos, custom links.
+- Phone normalization and country handling for profile phone.
+- Email format beyond browser input behavior in some places.
+- Image file type/size validation before ImgBB upload.
+- Video URL normalization beyond simple YouTube watch-to-embed replacement in themes.
+- UPI format validation.
+- Required field policy for public profiles.
+
+22. External Services and APIs
+
+Firebase Auth:
+- Email/password auth.
+- Google auth.
+- Password reset.
+- Auth state listener.
+
+Firestore:
+- users collection.
+- usernames collection.
+- Direct reads/writes from client.
+
+ImgBB:
+- Used for image upload from dashboard.
+- API key is in client code.
+
+Google Maps:
+- Public themes embed Google Maps iframe using address query.
+- Navigation link uses Google Maps directions URL.
+
+WhatsApp:
+- Quick action opens wa.me profile phone.
+- Share actions use api.whatsapp.com/send.
+- Bottom drawer opens wa.me with country code and typed phone.
+
+Social share endpoints:
+- Telegram share URL.
+- X/Twitter intent.
+- Facebook sharer.
+- LinkedIn share.
+
+Browser APIs:
+- navigator.clipboard.
+- navigator.share.
+- Blob and URL.createObjectURL for dynamic vCard generation.
+- Intl.DateTimeFormat timezone for country code inference.
+
+23. User Roles and Permissions
+
+Actual roles implemented:
+- Anonymous visitor:
+  - Can access homepage.
+  - Can access any public card route if Firestore rules allow reads.
+- Authenticated user:
+  - Can access dashboard.
+  - Can edit their own form in UI.
+
+Roles not implemented:
+- Admin/superadmin.
+- Team management.
+- Organization accounts.
+- Public/private profile toggle.
+- Per-field visibility permissions.
+
+Critical dependency:
+- Firestore rules must ensure users cannot overwrite other users' data or steal usernames.
+
+24. Recommended Firestore Rule Intent
+
+Not present in repo, but the app needs rules equivalent to:
+
+- users/{uid}
+  - Allow authenticated user to read/write their own document.
+  - Allow public read of safe profile fields if public cards are intended.
+  - Prevent users from writing uid that does not match request.auth.uid.
+
+- usernames/{username}
+  - Allow public read for lookup.
+  - Allow create only if authenticated and document does not exist and uid == request.auth.uid.
+  - Allow delete only if authenticated and existing uid == request.auth.uid.
+  - Allow update rarely or never; prefer delete/create transaction or backend function.
+
+Because the public page reads users/{uid} directly, either public reads are required on users documents or the architecture needs a publicProfiles collection with sanitized data.
+
+25. Recommended Backend Responsibilities
+
+If backend becomes real, best responsibilities:
+
+- Secure upload signing/proxy:
+  - Hide ImgBB key or replace with Firebase Storage signed flow.
+- Username reservation:
+  - Transactional reservation and release.
+  - Prevent race conditions.
+- Lead capture:
+  - Store enquiry form submissions.
+  - Send email notifications.
+- Analytics:
+  - Track profile views.
+  - Track link clicks.
+  - Track QR scans if QR redirects through backend.
+- Payment support:
+  - Payment link management.
+  - Webhooks from payment providers.
+- Public profile API:
+  - Serve sanitized public profile data.
+  - Avoid public access to full users/{uid} documents.
+
+26. Feature Gaps Compared to Product Promise
+
+The app already supports core digital card creation, but these features would make it more production-complete:
+
+- Real analytics dashboard.
+- Actual lead inbox.
+- Public/private profile toggle.
+- Custom domain support.
+- SEO metadata per profile.
+- Open Graph image per card.
+- File/image management with delete/replace.
+- Card templates with preview screenshots.
+- Drag-and-drop ordering for services/gallery/links/videos.
+- Better mobile dashboard ergonomics.
+- Toast notifications instead of alerts.
+- Error boundary for failed Firebase reads.
+- Loading states for save, username update, and image upload.
+- Validation and inline error messages.
+- Duplicate username conflict handling with transactions.
+
+27. Code Quality Review
+
+Strengths:
+- Clear product direction.
+- Feature-rich public card.
+- Multiple visual themes already implemented.
+- Firebase integration is straightforward.
+- Public username mapping allows stable profile URLs.
+- Live preview in dashboard improves editing workflow.
+- Demo profile makes testing easier.
+
+Weaknesses:
+- Large components with duplicated logic.
+- Many inline styles/classes make maintenance harder.
+- Theme renderers duplicate business logic.
+- Client-side upload secret.
+- Alert-based feedback.
+- Some encoding issues in comments/strings.
+- Hardcoded demo and placeholder values in several places.
+- No tests.
+- TypeScript is not used, and build ignores TypeScript errors anyway.
+- Backend is not functionally integrated.
+
+Highest-value cleanup:
+1. Extract shared card logic from themes.
+2. Extract dashboard tabs.
+3. Move upload logic out of dashboard component.
+4. Add validation helpers.
+5. Add Firestore rules/docs.
+6. Fix Next config warnings.
+
+28. Suggested Folder Structure After Refactor
+
+Possible frontend structure:
+
+frontend/app/admin/dashboard/
+- page.jsx
+- constants.js
+- components/
+  - DashboardHeader.jsx
+  - DashboardSkeleton.jsx
+  - LivePreviewPanel.jsx
+  - PublicLinkPanel.jsx
+  - TabNavigation.jsx
+  - ResetTabButton.jsx
+  - fields/
+    - TextField.jsx
+    - TextAreaField.jsx
+    - UploadField.jsx
+    - ColorField.jsx
+    - OptionButton.jsx
+    - OptionGrid.jsx
+  - tabs/
+    - ProfileTab.jsx
+    - BusinessTab.jsx
+    - SocialTab.jsx
+    - MediaTab.jsx
+    - ThemesTab.jsx
+    - DesignTab.jsx
+- hooks/
+  - useDashboardProfile.js
+  - useImageUpload.js
+  - useUsernameUpdate.js
+- utils/
+  - profileMerge.js
+  - username.js
+
+frontend/app/components/card/
+- NexCard.jsx
+- shared/
+  - ActionButtons.jsx
+  - BottomNav.jsx
+  - ContactForm.jsx
+  - Gallery.jsx
+  - LocationMap.jsx
+  - PaymentBlock.jsx
+  - QrBlock.jsx
+  - Services.jsx
+  - ShareActions.jsx
+  - SocialLinks.jsx
+  - VCardButton.jsx
+- themes/
+  - ModernTheme.jsx
+  - ClassicTheme.jsx
+  - MinimalTheme.jsx
+  - GlassTheme.jsx
+  - BoldTheme.jsx
+  - NeoTheme.jsx
+- utils/
+  - buildActions.js
+  - cardUrl.js
+  - generateVcard.js
+  - paymentQr.js
+  - socialIcons.js
+
+29. Manual QA Checklist
+
+Homepage:
+- Loads without console errors.
+- Pixelated text rotates.
+- CTA opens /admin.
+- Mobile hero text does not overflow.
+
+Admin auth:
+- Login with valid email/password.
+- Login with invalid password shows useful error.
+- Signup creates user document and username mapping.
+- Google popup login works.
+- Google redirect fallback works if popup blocked.
+- Password reset sends email.
+
+Dashboard:
+- Unauthenticated user redirects to /admin.
+- Existing user data loads correctly.
+- Save persists edits.
+- Public link opens correct /username route.
+- Copy link copies correct URL.
+- Username edit prevents taken usernames.
+- Reset buttons clear only intended fields.
+- Demo fill populates rich sample data.
+- Image upload updates correct field.
+- Live preview updates as fields change.
+- Theme preview does not permanently apply until Apply is clicked.
+
+Public card:
+- /existingusername loads profile.
+- /missingusername shows not found.
+- All six themes render.
+- Call/mail/SMS/WhatsApp links work.
+- Save contact downloads vCard.
+- Calendar link opens externally.
+- Social links open externally.
+- Gallery images render.
+- Video embeds render.
+- Custom links open.
+- Payment QR appears for UPI.
+- Custom payment QR image appears.
+- Map renders for address.
+- Enquiry form opens mail client.
+- Share drawer opens.
+- Direct WhatsApp share works.
+- Bottom nav scrolls to sections.
+
+Build/deploy:
+- npm run build passes.
+- No unsupported Next config warnings after cleanup.
+- Vercel deployment uses correct workspace/root.
+
+30. Glossary
+
+Card:
+- The public digital profile page rendered by NexCard and one of the theme components.
+
+Dashboard:
+- Authenticated editor at /admin/dashboard.
+
+Username mapping:
+- Firestore document usernames/{username} that maps public URL slug to user uid.
+
+Theme:
+- Visual renderer selected by data.theme.layout.
+
+Preset:
+- Dashboard theme option with layout plus color combinations.
+
+Preview theme:
+- Temporary theme object used by dashboard live preview before applying changes to form.theme.
+
+Public profile:
+- The data rendered at /[username].
+
+Demo profile:
+- Rich sample profile generated by createDemoProfile.
+
+31. Final Product Understanding
+
+NexCard is currently a strong prototype/MVP for a digital business card platform. The frontend contains nearly all product logic. The main user journey is:
+
+1. Visitor lands on marketing page.
+2. Visitor creates account or logs in.
+3. App creates a username and default profile.
+4. User edits card details in dashboard.
+5. User customizes theme/design.
+6. User saves profile to Firestore.
+7. User shares /username link or QR.
+8. Public visitor views the card, saves contact, opens links, pays via UPI QR, navigates to location, or sends an enquiry.
+
+The biggest next step is not adding more features immediately; it is making the existing feature set safer and more maintainable. The app already has a lot of surface area. Production readiness depends on stronger data rules, secure uploads, validation, better component boundaries, and a real backend or Firebase Functions layer for sensitive workflows.

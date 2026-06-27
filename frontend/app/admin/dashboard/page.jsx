@@ -2,14 +2,20 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { auth, db, storage } from "../../../lib/firebase";
+import { auth, db } from "../../../lib/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Camera, Trash2, Plus, GripVertical, ExternalLink, Copy, Eye, Check, QrCode, Upload, X, Palette, Layout, Type, Square, Box, Sparkles, RotateCcw, LogOut } from "lucide-react";
+import { Camera, Trash2, Plus, GripVertical, ExternalLink, Copy, Eye, Check, QrCode, Upload, X, Palette, Layout, Box, Sparkles, RotateCcw, LogOut } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import NexCard from "../../components/NexCard";
 import { DEMO_EMAIL, createDemoProfile } from "../../demoProfile";
+import {
+  DASHBOARD_TABS,
+  DEFAULT_COLOR_INDEXES,
+  DEFAULT_THEME,
+  INITIAL_FORM,
+  THEME_PRESETS
+} from "./constants";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -19,56 +25,11 @@ export default function Dashboard() {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  const [form, setForm] = useState({
-    name: "", title: "", company: "", phone: "", email: "", about: "", image: "", coverImage: "",
-    address: "", website: "", calendarUrl: "", googleReviewsUrl: "",
-    social: { instagram: "", linkedin: "", twitter: "", facebook: "", youtube: "" },
-    payment: { upi: "", link: "", bankDetails: "", qrCode: "" },
-    services: [], gallery: [], customLinks: [], videos: [],
-    theme: { 
-      primary: "#4f46e5", 
-      background: "#f8fafc", 
-      layout: "modern",
-      font: "font-sans", 
-      radius: "1rem", 
-      cardStyle: "standard", 
-      avatarStyle: "circle",
-      bgEffect: "none",
-      defaultQr: "share",
-      bgGradient: "none",
-      textAlign: "center",
-      shadowDepth: "subtle",
-      bannerSize: "standard",
-      avatarBorder: "thick",
-      socialStyle: "colored",
-      qrLogo: "none",
-      actionAnimation: "float",
-      bioFontSize: "standard",
-      cardBorderPattern: "none",
-      formAesthetic: "flat",
-      cardBg: "#ffffff",
-      textPrimary: "#0f172a",
-      textSecondary: "#64748b",
-      cardText: "#1e293b",
-      btnBg: "#4f46e5",
-      btnText: "#ffffff",
-      inputBg: "#f1f5f9",
-      inputText: "#0f172a",
-      gradientStart: "#4f46e5",
-      gradientEnd: "#ec4899"
-    }
-  });
+  const [form, setForm] = useState(INITIAL_FORM);
 
   const [activeTab, setActiveTab] = useState("profile");
   const [previewTheme, setPreviewTheme] = useState(null);
-  const [selectedColorIndexes, setSelectedColorIndexes] = useState({
-    modern: 0,
-    classic: 0,
-    minimal: 0,
-    glass: 0,
-    bold: 0,
-    neo: 0
-  });
+  const [selectedColorIndexes, setSelectedColorIndexes] = useState(DEFAULT_COLOR_INDEXES);
 
   // 🔐 AUTH & FETCH DATA
   useEffect(() => {
@@ -238,48 +199,7 @@ export default function Dashboard() {
     }
   };
 
-  if (loading) return (
-    <div className="min-h-screen bg-slate-100 p-8 animate-pulse">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <div className="h-10 w-64 bg-slate-200 rounded-xl" />
-          <div className="h-12 w-32 bg-slate-200 rounded-full" />
-        </div>
-
-        <div className="mb-8 p-6 bg-white border border-slate-200 rounded-2xl flex justify-between items-center">
-          <div className="space-y-2">
-            <div className="h-3 w-32 bg-slate-100 rounded" />
-            <div className="h-5 w-64 bg-slate-100 rounded" />
-          </div>
-          <div className="flex gap-2">
-            <div className="h-10 w-24 bg-slate-100 rounded-xl" />
-            <div className="h-10 w-24 bg-slate-100 rounded-xl" />
-          </div>
-        </div>
-
-        <div className="flex gap-2 mb-6">
-          {[1, 2, 3, 4, 5, 6].map(i => (
-            <div key={i} className="h-10 w-28 bg-white border border-slate-200 rounded-full" />
-          ))}
-        </div>
-
-        <div className="bg-white rounded-2xl border border-slate-200 p-8 space-y-8">
-          <div className="h-8 w-48 bg-slate-100 rounded" />
-          <div className="flex gap-8">
-            <div className="w-32 h-32 rounded-full bg-slate-100" />
-            <div className="flex-1 space-y-4">
-              <div className="h-12 w-full bg-slate-50 rounded-xl" />
-              <div className="grid grid-cols-2 gap-4">
-                <div className="h-12 w-full bg-slate-50 rounded-xl" />
-                <div className="h-12 w-full bg-slate-50 rounded-xl" />
-              </div>
-              <div className="h-32 w-full bg-slate-50 rounded-xl" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  if (loading) return <DashboardSkeleton />;
 
   const profileUrl = typeof window !== 'undefined' && form.username ? `${window.location.origin}/${form.username}` : '';
 
@@ -331,20 +251,6 @@ export default function Dashboard() {
     }
   };
 
-  const DEFAULT_THEME = {
-    primary: "#4f46e5", background: "#f8fafc", layout: "modern",
-    font: "font-sans", radius: "1rem", cardStyle: "standard",
-    avatarStyle: "circle", bgEffect: "none", defaultQr: "share",
-    bgGradient: "none", textAlign: "center", shadowDepth: "subtle",
-    bannerSize: "standard", avatarBorder: "thick", socialStyle: "colored",
-    qrLogo: "none", actionAnimation: "float", bioFontSize: "standard",
-    cardBorderPattern: "none", formAesthetic: "flat",
-    cardBg: "#ffffff", textPrimary: "#0f172a", textSecondary: "#64748b",
-    cardText: "#1e293b", btnBg: "#4f46e5", btnText: "#ffffff",
-    inputBg: "#f1f5f9", inputText: "#0f172a",
-    gradientStart: "#4f46e5", gradientEnd: "#ec4899"
-  };
-
   const handleTabReset = (tabId) => {
     const confirmMsg = {
       themes: "Theme Preset reset ho jayega — layout aur colors default ho jayenge. Sure ho?",
@@ -358,7 +264,7 @@ export default function Dashboard() {
 
     if (tabId === "themes") {
       setForm(prev => ({ ...prev, theme: { ...prev.theme, layout: "modern" } }));
-      setSelectedColorIndexes({ modern: 0, classic: 0, minimal: 0, glass: 0, bold: 0, neo: 0 });
+      setSelectedColorIndexes(DEFAULT_COLOR_INDEXES);
     } else if (tabId === "profile") {
       setForm(prev => ({ ...prev, name: "", title: "", company: "", about: "", image: "", coverImage: "" }));
     } else if (tabId === "business") {
@@ -377,41 +283,14 @@ export default function Dashboard() {
     }
   };
 
-  const tabs = [
-    { id: "profile", label: "Profile Info" },
-    { id: "business", label: "Business & Contacts" },
-    { id: "social", label: "Social Links" },
-    { id: "media", label: "Media & Arrays" },
-    { id: "themes", label: "Theme Presets" },
-    { id: "design", label: "Design Settings" }
-  ];
-
   return (
     <div className="min-h-screen lg:h-screen bg-slate-100 font-sans flex flex-col lg:overflow-hidden">
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-[60] py-2 px-4 lg:px-8">
-        <div className="max-w-[1400px] mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 lg:gap-8 flex-wrap">
-          <div className="flex items-center gap-8">
-            <div className="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-200">
-              <Layout className="w-6 h-6" />
-            </div>
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">NexCard Studio</h1>
-          </div>
-          <div className="flex w-full sm:w-auto justify-between sm:justify-start items-center gap-2 sm:gap-4 lg:gap-6 flex-wrap">
-             <button onClick={handleLoadDemo} className="flex items-center gap-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-4 py-2 rounded-xl font-bold transition-all text-sm shadow-sm">
-                <Sparkles className="w-4 h-4 text-indigo-600" /> Fill Demo Data
-             </button>
-             <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-slate-600 hover:text-indigo-600 font-bold text-sm px-3 py-2 rounded-xl transition-all">
-                <Eye className="w-4 h-4" /> View Live
-             </a>
-             <button onClick={handleSave} className="bg-slate-900 hover:bg-black text-white px-5 lg:px-7 py-2 lg:py-2.5 rounded-xl font-bold shadow-md transition-all text-sm lg:text-base">
-               Save Changes
-             </button>
-             <button onClick={handleLogout} className="flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-xl font-bold transition-all text-sm shadow-sm">
-                <LogOut className="w-4 h-4" /> Logout
-             </button>
-          </div>
-        </div>
-      </div>
+      <DashboardHeader
+        profileUrl={profileUrl}
+        onLoadDemo={handleLoadDemo}
+        onLogout={handleLogout}
+        onSave={handleSave}
+      />
 
       <main className="flex-1 lg:overflow-hidden">
         <div className="max-w-[1500px] mx-auto h-full flex flex-col lg:flex-row gap-5 px-4 py-4 lg:px-6 lg:py-3">
@@ -454,7 +333,7 @@ export default function Dashboard() {
             )}
 
             <div className="bg-white/80 backdrop-blur-md border border-slate-200 rounded-2xl p-2 flex overflow-x-auto gap-3 lg:gap-8 scrollbar-none sticky top-[130px] sm:top-[70px] lg:top-0 z-50 shadow-sm">
-              {tabs.map((tab) => (
+              {DASHBOARD_TABS.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
@@ -1534,74 +1413,7 @@ export default function Dashboard() {
                 </button>
               </div>
               <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
-                {[
-                  {
-                    name: "Modern (Curved)",
-                    layout: "modern",
-                    colorCombinations: [
-                      { primary: "#4F46E5", background: "#F8FAFC", accent: "#6366F1" },
-                      { primary: "#10B981", background: "#F0FDF4", accent: "#34D399" },
-                      { primary: "#F43F5E", background: "#FFF1F2", accent: "#FB7185" },
-                      { primary: "#F59E0B", background: "#FFFBEB", accent: "#FBBF24" },
-                      { primary: "#7C3AED", background: "#F5F3FF", accent: "#A78BFA" }
-                    ]
-                  },
-                  {
-                    name: "Classic Corporate",
-                    layout: "classic",
-                    colorCombinations: [
-                      { primary: "#1D4ED8", background: "#EFF6FF", accent: "#3B82F6" },
-                      { primary: "#0F172A", background: "#F8FAFC", accent: "#475569" },
-                      { primary: "#800020", background: "#FFFDF9", accent: "#A24857" },
-                      { primary: "#14532D", background: "#F0FDF4", accent: "#16A34A" },
-                      { primary: "#0E7490", background: "#ECFEFF", accent: "#06B6D4" }
-                    ]
-                  },
-                  {
-                    name: "Swiss Minimal",
-                    layout: "minimal",
-                    colorCombinations: [
-                      { primary: "#334155", background: "#FFFFFF", accent: "#475569" },
-                      { primary: "#000000", background: "#FFFFFF", accent: "#000000" },
-                      { primary: "#3F6212", background: "#F9FAF8", accent: "#4D7C0F" },
-                      { primary: "#44403C", background: "#FAF8F5", accent: "#57534E" },
-                      { primary: "#991B1B", background: "#FFFDFD", accent: "#B91C1C" }
-                    ]
-                  },
-                  {
-                    name: "Rose Glass",
-                    layout: "glass",
-                    colorCombinations: [
-                      { primary: "#B76E79", background: "#FFF7F3", accent: "#EAB8A6" },
-                      { primary: "#0D9488", background: "#F0FDFA", accent: "#5EEAD4" },
-                      { primary: "#8B5CF6", background: "#FAF5FF", accent: "#C084FC" },
-                      { primary: "#059669", background: "#F0FDF4", accent: "#6EE7B7" },
-                      { primary: "#EA580C", background: "#FFF7ED", accent: "#FDBA74" }
-                    ]
-                  },
-                  {
-                    name: "Bold Luxe",
-                    layout: "bold",
-                    colorCombinations: [
-                      { primary: "#0EA5A4", background: "#F7FBF8", accent: "#F4B860" },
-                      { primary: "#C2410C", background: "#FFF7ED", accent: "#F97316" },
-                      { primary: "#6366F1", background: "#FAF5FF", accent: "#EC4899" },
-                      { primary: "#15803D", background: "#F0FDF4", accent: "#22C55E" },
-                      { primary: "#B45309", background: "#FFFBEB", accent: "#F59E0B" }
-                    ]
-                  },
-                  {
-                    name: "Cyber Neon",
-                    layout: "neo",
-                    colorCombinations: [
-                      { primary: "#00FFCC", background: "#0A0A0A", accent: "#00ccff" },
-                      { primary: "#FF007F", background: "#050505", accent: "#7F00FF" },
-                      { primary: "#39FF14", background: "#030A00", accent: "#00FF00" },
-                      { primary: "#FFD700", background: "#080700", accent: "#FF8C00" },
-                      { primary: "#00E5FF", background: "#000A0A", accent: "#0066FF" }
-                    ]
-                  }
-                ].map((preset, idx) => {
+                {THEME_PRESETS.map((preset, idx) => {
                   const isActive = form.theme?.layout === preset.layout;
                   const colorIndex = selectedColorIndexes[preset.layout] || 0;
                   const activeCombo = preset.colorCombinations[colorIndex];
@@ -1692,31 +1504,110 @@ export default function Dashboard() {
         </div>
       </div>
 
-            <div className="w-full lg:w-[400px] shrink-0 h-[600px] lg:h-full flex flex-col pb-2 mt-8 lg:mt-0">
-              <div 
-                className="relative group bg-white border border-slate-200 rounded-[1.75rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] overflow-hidden flex-1 min-h-0"
-                style={{ transform: 'translateZ(0)' }}
-              >
-                  <div className="w-full h-full overflow-hidden relative">
-                    <NexCard 
-                      key={previewTheme ? `preview-${previewTheme.layout}` : `live-${form.theme.layout}`} 
-                      data={previewTheme ? { ...form, theme: { ...form.theme, ...previewTheme } } : form} 
-                      inPreview={true}
-                    />
-                  </div>
-                
-                <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
-              </div>
-              <div className="mt-2 flex items-center justify-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${previewTheme ? 'bg-indigo-500 animate-pulse' : 'bg-green-500'}`}></div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                  {previewTheme ? 'Theme Preview Active' : 'Live Preview (Real-Time)'}
-                </p>
-              </div>
-            </div>
+            <LivePreviewPanel form={form} previewTheme={previewTheme} />
 
           </div>
       </main>
+    </div>
+  );
+}
+
+function DashboardSkeleton() {
+  return (
+    <div className="min-h-screen bg-slate-100 p-8 animate-pulse">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <div className="h-10 w-64 bg-slate-200 rounded-xl" />
+          <div className="h-12 w-32 bg-slate-200 rounded-full" />
+        </div>
+
+        <div className="mb-8 p-6 bg-white border border-slate-200 rounded-2xl flex justify-between items-center">
+          <div className="space-y-2">
+            <div className="h-3 w-32 bg-slate-100 rounded" />
+            <div className="h-5 w-64 bg-slate-100 rounded" />
+          </div>
+          <div className="flex gap-2">
+            <div className="h-10 w-24 bg-slate-100 rounded-xl" />
+            <div className="h-10 w-24 bg-slate-100 rounded-xl" />
+          </div>
+        </div>
+
+        <div className="flex gap-2 mb-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="h-10 w-28 bg-white border border-slate-200 rounded-full" />
+          ))}
+        </div>
+
+        <div className="bg-white rounded-2xl border border-slate-200 p-8 space-y-8">
+          <div className="h-8 w-48 bg-slate-100 rounded" />
+          <div className="flex gap-8">
+            <div className="w-32 h-32 rounded-full bg-slate-100" />
+            <div className="flex-1 space-y-4">
+              <div className="h-12 w-full bg-slate-50 rounded-xl" />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="h-12 w-full bg-slate-50 rounded-xl" />
+                <div className="h-12 w-full bg-slate-50 rounded-xl" />
+              </div>
+              <div className="h-32 w-full bg-slate-50 rounded-xl" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DashboardHeader({ profileUrl, onLoadDemo, onLogout, onSave }) {
+  return (
+    <div className="bg-white border-b border-slate-200 sticky top-0 z-[60] py-2 px-4 lg:px-8">
+      <div className="max-w-[1400px] mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 lg:gap-8 flex-wrap">
+        <div className="flex items-center gap-8">
+          <div className="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-200">
+            <Layout className="w-6 h-6" />
+          </div>
+          <h1 className="text-xl font-bold text-slate-900 tracking-tight">NexCard Studio</h1>
+        </div>
+        <div className="flex w-full sm:w-auto justify-between sm:justify-start items-center gap-2 sm:gap-4 lg:gap-6 flex-wrap">
+          <button onClick={onLoadDemo} className="flex items-center gap-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-4 py-2 rounded-xl font-bold transition-all text-sm shadow-sm">
+            <Sparkles className="w-4 h-4 text-indigo-600" /> Fill Demo Data
+          </button>
+          <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-slate-600 hover:text-indigo-600 font-bold text-sm px-3 py-2 rounded-xl transition-all">
+            <Eye className="w-4 h-4" /> View Live
+          </a>
+          <button onClick={onSave} className="bg-slate-900 hover:bg-black text-white px-5 lg:px-7 py-2 lg:py-2.5 rounded-xl font-bold shadow-md transition-all text-sm lg:text-base">
+            Save Changes
+          </button>
+          <button onClick={onLogout} className="flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-xl font-bold transition-all text-sm shadow-sm">
+            <LogOut className="w-4 h-4" /> Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LivePreviewPanel({ form, previewTheme }) {
+  const previewData = previewTheme ? { ...form, theme: { ...form.theme, ...previewTheme } } : form;
+  const previewKey = previewTheme ? `preview-${previewTheme.layout}` : `live-${form.theme.layout}`;
+
+  return (
+    <div className="w-full lg:w-[400px] shrink-0 h-[600px] lg:h-full flex flex-col pb-2 mt-8 lg:mt-0">
+      <div
+        className="relative group bg-white border border-slate-200 rounded-[1.75rem] shadow-[0_20px_50px_rgba(0,0,0,0.08)] overflow-hidden flex-1 min-h-0"
+        style={{ transform: "translateZ(0)" }}
+      >
+        <div className="w-full h-full overflow-hidden relative">
+          <NexCard key={previewKey} data={previewData} inPreview={true} />
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+      </div>
+      <div className="mt-2 flex items-center justify-center gap-2">
+        <div className={`w-2 h-2 rounded-full ${previewTheme ? "bg-indigo-500 animate-pulse" : "bg-green-500"}`}></div>
+        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+          {previewTheme ? "Theme Preview Active" : "Live Preview (Real-Time)"}
+        </p>
+      </div>
     </div>
   );
 }

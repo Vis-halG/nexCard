@@ -21,6 +21,17 @@ export default function BottomNav({
   const [sharePhone, setSharePhone] = useState("");
   const phoneInputRef = useRef(null);
 
+  useEffect(() => {
+    if (showWhatsAppInput) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showWhatsAppInput]);
+
   const detectCountryCode = () => {
     try {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -344,7 +355,9 @@ export default function BottomNav({
       </AnimatePresence>
 
       <div 
-        className={`${inPreview ? "absolute" : "fixed"} bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[100] flex justify-between items-end px-4 pt-2 ${containerClass} ${fontClass}`}
+        className={`${inPreview ? "absolute" : "fixed"} bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[100] flex justify-between items-end px-4 pt-2 transition-all duration-300 ${
+          showWhatsAppInput ? "translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
+        } ${containerClass} ${fontClass}`}
         style={{
           ...customStyle,
           paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 8px)'

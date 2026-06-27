@@ -10,30 +10,6 @@ const WhatsAppBrandIcon = ({ className }) => (
   </svg>
 );
 
-const TelegramBrandIcon = ({ className }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18.717-.962 4.084-1.362 5.467-.168.583-.48 1.134-.73 1.341-.542.449-1.281.332-1.921-.122l-1.932-1.328-1.564 1.442c-.22.203-.43.376-.84.376-.41 0-.324-.316-.484-.937l-1.12-3.437-3.08-1.077c-.642-.224-.652-.638.136-.931L16.2 5.86c.696-.258 1.44-.112 1.362 2.301z"/>
-  </svg>
-);
-
-const FacebookBrandIcon = ({ className }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-    <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/>
-  </svg>
-);
-
-const TwitterBrandIcon = ({ className }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-  </svg>
-);
-
-const LinkedInBrandIcon = ({ className }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-  </svg>
-);
-
 export default function ShareActions({ data, layout = "modern", primaryColor = "#00C2FF" }) {
   const [copied, setCopied] = useState(false);
 
@@ -82,7 +58,7 @@ export default function ShareActions({ data, layout = "modern", primaryColor = "
 
   return (
     <div className="w-full">
-      <div className="flex items-center gap-4.5 whitespace-nowrap pb-3 pt-1 select-none w-full">
+      <div className="flex items-center gap-4.5 whitespace-nowrap pb-3 pt-1 select-none w-full overflow-x-auto scrollbar-none">
         {/* Copy Link */}
         <button 
           onClick={handleCopy}
@@ -108,60 +84,6 @@ export default function ShareActions({ data, layout = "modern", primaryColor = "
           <span className="text-[10px] font-semibold" style={{ color: textSecondaryColor }}>WhatsApp</span>
         </button>
 
-        {/* Telegram */}
-        <button 
-          onClick={() => {
-            const shareText = `Hi! Check out my digital visiting card on NexCard: ${cardUrl}`;
-            window.open(`https://t.me/share/url?url=${encodeURIComponent(cardUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
-          }}
-          className="flex flex-col items-center gap-1.5 shrink-0 snap-start cursor-pointer border-none bg-transparent outline-none"
-        >
-          <div className={appIconWrapperClasses} style={getIconStyle('#0088cc')}>
-            <TelegramBrandIcon className="w-5 h-5" />
-          </div>
-          <span className="text-[10px] font-semibold" style={{ color: textSecondaryColor }}>Telegram</span>
-        </button>
-
-        {/* Twitter / X */}
-        <button 
-          onClick={() => {
-            const shareText = `Hi! Check out my digital visiting card on NexCard: ${cardUrl}`;
-            window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(cardUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
-          }}
-          className="flex flex-col items-center gap-1.5 shrink-0 snap-start cursor-pointer border-none bg-transparent outline-none"
-        >
-          <div className={appIconWrapperClasses} style={getIconStyle('#0f1419')}>
-            <TwitterBrandIcon className="w-4 h-4" />
-          </div>
-          <span className="text-[10px] font-semibold" style={{ color: textSecondaryColor }}>Twitter (X)</span>
-        </button>
-
-        {/* Facebook */}
-        <button 
-          onClick={() => {
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(cardUrl)}`, '_blank');
-          }}
-          className="flex flex-col items-center gap-1.5 shrink-0 snap-start cursor-pointer border-none bg-transparent outline-none"
-        >
-          <div className={appIconWrapperClasses} style={getIconStyle('#1877F2')}>
-            <FacebookBrandIcon className="w-5 h-5" />
-          </div>
-          <span className="text-[10px] font-semibold" style={{ color: textSecondaryColor }}>Facebook</span>
-        </button>
-
-        {/* LinkedIn */}
-        <button 
-          onClick={() => {
-            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(cardUrl)}`, '_blank');
-          }}
-          className="flex flex-col items-center gap-1.5 shrink-0 snap-start cursor-pointer border-none bg-transparent outline-none"
-        >
-          <div className={appIconWrapperClasses} style={getIconStyle('#0077B5')}>
-            <LinkedInBrandIcon className="w-5 h-5" />
-          </div>
-          <span className="text-[10px] font-semibold" style={{ color: textSecondaryColor }}>LinkedIn</span>
-        </button>
-
         {/* Email */}
         <button 
           onClick={() => {
@@ -175,7 +97,7 @@ export default function ShareActions({ data, layout = "modern", primaryColor = "
           <span className="text-[10px] font-semibold" style={{ color: textSecondaryColor }}>Email</span>
         </button>
 
-        {/* SMS */}
+        {/* Message */}
         <button 
           onClick={() => {
             window.location.href = `sms:?body=Check out my digital visiting card here: ${cardUrl}`;
@@ -185,7 +107,7 @@ export default function ShareActions({ data, layout = "modern", primaryColor = "
           <div className={appIconWrapperClasses} style={getIconStyle('#8b5cf6')}>
             <MessageSquare className="w-5 h-5" />
           </div>
-          <span className="text-[10px] font-semibold" style={{ color: textSecondaryColor }}>SMS</span>
+          <span className="text-[10px] font-semibold" style={{ color: textSecondaryColor }}>Message</span>
         </button>
 
         {/* More */}

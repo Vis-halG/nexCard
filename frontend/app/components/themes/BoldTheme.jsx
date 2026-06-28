@@ -101,9 +101,6 @@ export default function BoldTheme({ data, inPreview = false }) {
   const visibleActions = hasMore ? actions.slice(0, 3) : actions;
   const remainingActions = hasMore ? actions.slice(3) : [];
 
-  const primaryColor = data?.theme?.primary || "#00A6D6";
-  const savedBg = data?.theme?.background || "#F7FEFF";
-  const bgColor = isDarkHex(savedBg) ? "#F7FEFF" : savedBg;
   const socials = Object.entries(data?.social || {}).filter(([, url]) => url);
   const pref = data?.preferences || {};
 
@@ -128,19 +125,71 @@ export default function BoldTheme({ data, inPreview = false }) {
     window.location.href = `mailto:${data?.email || ""}?subject=Enquiry from ${name}&body=${msg}`;
   };
 
+  const theme = data?.theme || {};
+  const primaryColor = theme.primary || "#00A6D6";
+  const savedBg = theme.background || "#F7FEFF";
+  const bgColor = isDarkHex(savedBg) ? "#F7FEFF" : savedBg;
+  const cardBg = theme.cardBg || "#FFFFFF";
+  const textPrimary = theme.textPrimary || "#0F172A";
+  const textSecondary = theme.textSecondary || "#64748B";
+
+  const nameColor = theme.nameColor || textPrimary;
+  const sectionHeadingColor = theme.sectionHeadingColor || textPrimary;
+  const saveBtnBg = theme.saveBtnBg || primaryColor;
+  const actionBtnBg = theme.actionBtnBg || primaryColor;
+  const linkCardBg = theme.linkCardBg || cardBg;
+  const qrLogo = theme.qrLogo || "none";
+
   return (
     <div 
       className={inPreview 
-        ? "h-full w-full relative overflow-hidden flex flex-col font-sans text-slate-900 selection:bg-teal-100"
-        : "min-h-screen flex justify-center font-sans text-slate-900 selection:bg-teal-100"
+        ? "h-full w-full relative overflow-hidden flex flex-col font-sans text-slate-900 selection:bg-teal-100 bold-theme-root"
+        : "min-h-screen flex justify-center font-sans text-slate-900 selection:bg-teal-100 bold-theme-root"
       } 
       style={inPreview ? { backgroundColor: bgColor } : { backgroundColor: bgColor, scrollBehavior: "smooth" }}
     >
+      <style dangerouslySetInnerHTML={{__html: `
+        .bold-theme-root h1 {
+          color: ${nameColor} !important;
+        }
+        .bold-theme-root h2 {
+          color: ${sectionHeadingColor} !important;
+        }
+        .bold-theme-root h3,
+        .bold-theme-root .text-slate-900,
+        .bold-theme-root .text-slate-800 {
+          color: ${textPrimary} !important;
+        }
+        .bold-theme-root p,
+        .bold-theme-root .text-slate-500,
+        .bold-theme-root .text-slate-655,
+        .bold-theme-root .text-slate-650,
+        .bold-theme-root .text-slate-600,
+        .bold-theme-root .text-slate-400 {
+          color: ${textSecondary} !important;
+        }
+        /* Action buttons */
+        .bold-theme-root .action-btn:hover {
+          background-color: ${actionBtnBg}15 !important;
+          color: ${actionBtnBg} !important;
+          border-color: ${actionBtnBg}50 !important;
+        }
+        /* Save Contact button */
+        .bold-theme-root .save-contact-btn {
+          background-color: ${saveBtnBg} !important;
+          color: #ffffff !important;
+        }
+        /* Link cards */
+        .bold-theme-root .link-card {
+          background-color: ${linkCardBg} !important;
+        }
+      `}} />
       <div 
         className={inPreview
           ? "w-full h-full overflow-y-auto scrollbar-none bg-white relative flex-1"
           : "w-full max-w-[500px] min-h-screen overflow-hidden bg-white shadow-[0_35px_90px_rgba(15,23,42,0.10)]"
         }
+        style={{ backgroundColor: cardBg }}
       >
         <section id="home" className="relative px-6 pb-8 pt-8">
           <button 
@@ -185,7 +234,7 @@ export default function BoldTheme({ data, inPreview = false }) {
                   href={act.href}
                   target={act.target}
                   rel={act.rel}
-                  className="group flex flex-col items-center justify-center rounded-2xl bg-slate-50 py-3 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+                  className="group flex flex-col items-center justify-center rounded-2xl bg-slate-50 py-3 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 action-btn"
                 >
                   <span className="mb-1 text-slate-500 group-hover:scale-110 transition-transform">
                     {act.id === 'whatsapp'
@@ -200,7 +249,7 @@ export default function BoldTheme({ data, inPreview = false }) {
               {hasMore ? (
                 <button
                   onClick={() => setShowMore(!showMore)}
-                  className={`group flex flex-col items-center justify-center rounded-2xl py-3 transition ${
+                  className={`group flex flex-col items-center justify-center rounded-2xl py-3 transition action-btn ${
                     showMore ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                   }`}
                 >
@@ -216,7 +265,7 @@ export default function BoldTheme({ data, inPreview = false }) {
                     href={act.href}
                     target={act.target}
                     rel={act.rel}
-                    className="group flex flex-col items-center justify-center rounded-2xl bg-slate-50 py-3 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+                    className="group flex flex-col items-center justify-center rounded-2xl bg-slate-50 py-3 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 action-btn"
                   >
                     <span className="mb-1 text-slate-500 group-hover:scale-110 transition-transform">
                       {act.id === 'whatsapp'
@@ -242,7 +291,7 @@ export default function BoldTheme({ data, inPreview = false }) {
                     href={act.href}
                     target={act.target}
                     rel={act.rel}
-                    className="group flex flex-col items-center justify-center rounded-2xl bg-slate-50 py-3 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+                    className="group flex flex-col items-center justify-center rounded-2xl bg-slate-50 py-3 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 action-btn"
                   >
                     <span className="mb-1 text-slate-500 group-hover:scale-110 transition-transform">
                       {act.id === 'whatsapp'
@@ -263,7 +312,7 @@ export default function BoldTheme({ data, inPreview = false }) {
           <div className="relative mt-4 grid gap-3">
             <button
               onClick={generateVcard}
-              className="flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-sm font-black uppercase tracking-[0.2em] text-white shadow-[0_16px_36px_rgba(14,165,164,0.25)] transition hover:-translate-y-0.5"
+              className="flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-sm font-black uppercase tracking-[0.2em] text-white shadow-[0_16px_36px_rgba(14,165,164,0.25)] transition hover:-translate-y-0.5 save-contact-btn"
               style={{ backgroundColor: primaryColor }}
             >
               <Download className="h-4 w-4" />
@@ -360,7 +409,7 @@ export default function BoldTheme({ data, inPreview = false }) {
                   const faviconUrl = domain ? `https://www.google.com/s2/favicons?sz=64&domain=${domain}` : null;
 
                   return (
-                    <a key={index} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-2xl bg-slate-50 px-5 py-3.5 font-black text-slate-800 transition-all duration-300 hover:bg-slate-100 hover:-translate-y-0.5 group">
+                    <a key={index} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-2xl bg-slate-50 px-5 py-3.5 font-black text-slate-800 transition-all duration-300 hover:bg-slate-100 hover:-translate-y-0.5 group link-card">
                       <div className="flex items-center gap-3 min-w-0">
                         {faviconUrl ? (
                           <img src={faviconUrl} alt="" className="w-5 h-5 object-contain shrink-0 rounded-sm" />
@@ -427,7 +476,22 @@ export default function BoldTheme({ data, inPreview = false }) {
                   <div className="flex flex-col items-center">
                     <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400 mb-2">Connect</span>
                     <div className="rounded-2xl bg-slate-50 p-4 shadow-inner border border-slate-100 flex items-center justify-center w-[180px] h-[180px]">
-                      <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={148} level="H" fgColor="#0F172A" />
+                      <QRCodeSVG 
+                        value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} 
+                        size={148} 
+                        level="Q" 
+                        fgColor="#0F172A"
+                        {...(qrLogo === 'avatar' && data?.image ? {
+                          imageSettings: {
+                            src: data.image,
+                            x: null,
+                            y: null,
+                            height: 32,
+                            width: 32,
+                            excavate: true,
+                          }
+                        } : {})}
+                      />
                     </div>
                   </div>
                   <div className="flex flex-col items-center">
@@ -463,7 +527,22 @@ export default function BoldTheme({ data, inPreview = false }) {
             ) : (
               <>
                 <div className="mx-auto w-fit rounded-2xl bg-slate-50 p-4">
-                  <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={148} level="H" fgColor="#0F172A" />
+                  <QRCodeSVG 
+                    value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} 
+                    size={148} 
+                    level="Q" 
+                    fgColor="#0F172A"
+                    {...(qrLogo === 'avatar' && data?.image ? {
+                      imageSettings: {
+                        src: data.image,
+                        x: null,
+                        y: null,
+                        height: 32,
+                        width: 32,
+                        excavate: true,
+                      }
+                    } : {})}
+                  />
                 </div>
                 <button
                   onClick={() => {

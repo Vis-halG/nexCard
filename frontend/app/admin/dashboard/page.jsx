@@ -1498,7 +1498,15 @@ export default function Dashboard() {
                       onClick={() => setPreviewTheme({
                         layout: preset.layout,
                         primary: activeCombo.primary,
-                        background: activeCombo.background
+                        background: activeCombo.background,
+                        nameColor: "",
+                        sectionHeadingColor: "",
+                        saveBtnBg: "",
+                        actionBtnBg: "",
+                        linkCardBg: "",
+                        textPrimary: "",
+                        textSecondary: "",
+                        cardBg: ""
                       })}
                       className={`rounded-2xl border-2 transition-all overflow-hidden flex flex-col cursor-pointer ${isActive ? 'border-indigo-600 scale-[1.02] shadow-md ring-4 ring-indigo-50' : 'border-slate-200 hover:border-indigo-300'}`}
                     >
@@ -1529,7 +1537,15 @@ export default function Dashboard() {
                                     setPreviewTheme({
                                       layout: preset.layout,
                                       primary: combo.primary,
-                                      background: combo.background
+                                      background: combo.background,
+                                      nameColor: "",
+                                      sectionHeadingColor: "",
+                                      saveBtnBg: "",
+                                      actionBtnBg: "",
+                                      linkCardBg: "",
+                                      textPrimary: "",
+                                      textSecondary: "",
+                                      cardBg: ""
                                     });
                                     // If this theme is currently active/applied, update it in real time
                                     if (isActive) {
@@ -1538,7 +1554,15 @@ export default function Dashboard() {
                                         theme: { 
                                           ...prev.theme, 
                                           primary: combo.primary, 
-                                          background: combo.background 
+                                          background: combo.background,
+                                          nameColor: "",
+                                          sectionHeadingColor: "",
+                                          saveBtnBg: "",
+                                          actionBtnBg: "",
+                                          linkCardBg: "",
+                                          textPrimary: "",
+                                          textSecondary: "",
+                                          cardBg: ""
                                         } 
                                       }));
                                     }
@@ -1565,7 +1589,15 @@ export default function Dashboard() {
                               setPreviewTheme({
                                 layout: preset.layout,
                                 primary: activeCombo.primary,
-                                background: activeCombo.background
+                                background: activeCombo.background,
+                                nameColor: "",
+                                sectionHeadingColor: "",
+                                saveBtnBg: "",
+                                actionBtnBg: "",
+                                linkCardBg: "",
+                                textPrimary: "",
+                                textSecondary: "",
+                                cardBg: ""
                               });
                             }}
                             className={`flex-1 py-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 ${previewTheme?.layout === preset.layout ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
@@ -1575,7 +1607,23 @@ export default function Dashboard() {
                           <button 
                             onClick={(e) => {
                               e.stopPropagation();
-                              setForm(prev => ({ ...prev, theme: { ...prev.theme, primary: activeCombo.primary, background: activeCombo.background, layout: preset.layout } }));
+                              setForm(prev => ({ 
+                                ...prev, 
+                                theme: { 
+                                  ...prev.theme, 
+                                  primary: activeCombo.primary, 
+                                  background: activeCombo.background, 
+                                  layout: preset.layout,
+                                  nameColor: "",
+                                  sectionHeadingColor: "",
+                                  saveBtnBg: "",
+                                  actionBtnBg: "",
+                                  linkCardBg: "",
+                                  textPrimary: "",
+                                  textSecondary: "",
+                                  cardBg: ""
+                                } 
+                              }));
                               setPreviewTheme(null);
                             }}
                             className={`flex-1 py-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 ${isActive ? 'bg-brand-indigo text-white shadow-sm' : 'bg-slate-800 text-white hover:bg-slate-950'}`}
@@ -1634,7 +1682,39 @@ export default function Dashboard() {
         </div>
       </div>
 
-            <LivePreviewPanel form={form} previewTheme={previewTheme} />
+            <LivePreviewPanel 
+              form={form} 
+              previewTheme={previewTheme} 
+              onThemeChange={(key, val) => {
+                const currentLayout = previewTheme?.layout || form.theme?.layout || "modern";
+                const preset = THEME_PRESETS.find(p => p.layout === currentLayout);
+                const colorIndex = selectedColorIndexes[currentLayout] || 0;
+                const combo = preset ? preset.colorCombinations[colorIndex] : null;
+                
+                setForm(prev => {
+                  const resolvedColors = resolveLayoutThemeColors(currentLayout, combo, prev.theme);
+                  return {
+                    ...prev,
+                    theme: { 
+                      ...prev.theme, 
+                      ...resolvedColors,
+                      [key]: val 
+                    }
+                  };
+                });
+                if (previewTheme) {
+                  setPreviewTheme(prev => {
+                    if (!prev) return null;
+                    const resolvedColors = resolveLayoutThemeColors(currentLayout, combo, prev);
+                    return {
+                      ...prev,
+                      ...resolvedColors,
+                      [key]: val
+                    };
+                  });
+                }
+              }}
+            />
 
           </div>
       </main>
@@ -1738,27 +1818,341 @@ function DashboardHeader({ profileUrl, onLoadDemo, onLogout, onSave }) {
   );
 }
 
-function LivePreviewPanel({ form, previewTheme }) {
+const detectColorTarget = (element, primaryColor, pageBg, cardBg) => {
+  let el = element;
+  while (el && el.tagName && el.tagName.toLowerCase() !== "body") {
+    // Safely extract className as a string (handles HTML string vs SVGAnimatedString object)
+    const className = typeof el.className === "string" 
+      ? el.className 
+      : (el.className && typeof el.className === "object" && 'baseVal' in el.className ? el.className.baseVal : "");
+
+    if (
+      className && 
+      (
+        className.includes("inspector-overlay") || 
+        className.includes("color-popover") ||
+        className.includes("color-picker")
+      )
+    ) {
+      return null;
+    }
+
+    const tagName = el.tagName.toLowerCase();
+    const style = el.style || {};
+
+    // 1. User Name Title (h1)
+    if (tagName === "h1" || className.includes("name-title")) {
+      return { id: "nameColor", label: "User Name Title" };
+    }
+
+    // 2. Section Headings (h2)
+    if (tagName === "h2" || className.includes("section-heading")) {
+      return { id: "sectionHeadingColor", label: "Section Headings" };
+    }
+
+    // 3. Save Contact Button
+    if (
+      className.includes("save-contact-btn") ||
+      (tagName === "button" && el.textContent?.toLowerCase().includes("save"))
+    ) {
+      return { id: "saveBtnBg", label: "Save Contact Button" };
+    }
+
+    // 4. Contact Action Row Buttons (Call, Email, WhatsApp)
+    if (
+      tagName === "a" && (
+        el.getAttribute("href")?.startsWith("tel:") ||
+        el.getAttribute("href")?.startsWith("mailto:") ||
+        el.getAttribute("href")?.startsWith("sms:") ||
+        el.getAttribute("href")?.includes("wa.me") ||
+        el.getAttribute("href")?.includes("whatsapp") ||
+        className.includes("action-btn")
+      )
+    ) {
+      return { id: "actionBtnBg", label: "Action Row Buttons" };
+    }
+
+    // 5. Custom Link Cards
+    if (
+      className.includes("link-card") || 
+      className.includes("featured-link") ||
+      className.includes("custom-link") ||
+      (tagName === "a" && (className.includes("shadow-") || className.includes("rounded-")) && className.includes("p-"))
+    ) {
+      return { id: "linkCardBg", label: "Custom Link Cards" };
+    }
+
+    // 6. Page Background (outermost wrapper of profile page)
+    if (className.includes("frosted-selection") || className.includes("min-h-screen") || el.id === "theme-root") {
+      return { id: "background", label: "Page Background" };
+    }
+
+    // 7. Card panel background
+    if (
+      (tagName === "section" || className.includes("rounded-") || className.includes("Panel")) &&
+      (className.includes("border") || className.includes("bg-white") || className.includes("backdrop-blur") || className.includes("nm-flat"))
+    ) {
+      return { id: "cardBg", label: "Card Panel Background" };
+    }
+
+    // 8. Secondary / Description Text
+    if (
+      tagName === "p" || 
+      className.includes("text-slate-500") || 
+      className.includes("text-slate-655") || 
+      className.includes("text-slate-650") || 
+      className.includes("text-slate-600") || 
+      className.includes("text-zinc-400") ||
+      className.includes("text-slate-400")
+    ) {
+      return { id: "textSecondary", label: "Paragraphs & Bio Text" };
+    }
+
+    el = el.parentElement;
+  }
+  return { id: "background", label: "Page Background" };
+};
+
+const resolveLayoutThemeColors = (layout, combo, themeObj) => {
+  const t = themeObj || {};
+  
+  // 1. Get base primary and background from themeObj or preset combo
+  const primary = t.primary || (combo ? combo.primary : "#00C2FF");
+  const background = t.background || (combo ? combo.background : "#F7FEFF");
+  
+  // 2. Layout-specific default fallbacks
+  let defCardBg = "#FFFFFF";
+  let defTextPrimary = "#0F172A";
+  let defTextSecondary = "#64748B";
+  
+  if (layout === "neo") {
+    defCardBg = "#0F0F0F";
+    defTextPrimary = "#FFFFFF";
+    defTextSecondary = "#A1A1AA";
+  } else if (layout === "neumorphism") {
+    defCardBg = background; // neumorphism cards share background color
+    defTextPrimary = "#1E293B";
+    defTextSecondary = "#64748B";
+  } else if (layout === "glass" || layout === "frosted") {
+    defCardBg = "rgba(255, 255, 255, 0.45)";
+  } else if (layout === "minimal") {
+    defTextPrimary = primary;
+    defTextSecondary = "#4B5563";
+  }
+  
+  const cardBg = t.cardBg || defCardBg;
+  const textPrimary = t.textPrimary || defTextPrimary;
+  const textSecondary = t.textSecondary || defTextSecondary;
+  
+  return {
+    layout: layout,
+    primary: primary,
+    background: background,
+    cardBg: cardBg,
+    textPrimary: textPrimary,
+    textSecondary: textSecondary,
+    nameColor: t.nameColor || textPrimary,
+    sectionHeadingColor: t.sectionHeadingColor || textPrimary,
+    saveBtnBg: t.saveBtnBg || primary,
+    actionBtnBg: t.actionBtnBg || primary,
+    linkCardBg: t.linkCardBg || cardBg
+  };
+};
+
+function LivePreviewPanel({ form, previewTheme, onThemeChange }) {
+  const [inspectorActive, setInspectorActive] = useState(false);
+  const [hoveredPart, setHoveredPart] = useState(null);
+  const [selectedPart, setSelectedPart] = useState(null);
+  
   const previewData = previewTheme ? { ...form, theme: { ...form.theme, ...previewTheme } } : form;
   const previewKey = previewTheme ? `preview-${previewTheme.layout}` : `live-${form.theme.layout}`;
 
+  const primaryColor = previewData.theme?.primary || "#0d6efd";
+  const pageBg = previewData.theme?.background || "#ffffff";
+  const cardBg = previewData.theme?.cardBg || "#ffffff";
+
+  const handleMouseMove = (e) => {
+    if (!inspectorActive) return;
+    
+    const containerRect = e.currentTarget.getBoundingClientRect();
+    const targetInfo = detectColorTarget(e.target, primaryColor, pageBg, cardBg);
+    
+    if (targetInfo) {
+      const targetRect = e.target.getBoundingClientRect();
+      setHoveredPart({
+        id: targetInfo.id,
+        label: targetInfo.label,
+        rect: {
+          top: targetRect.top - containerRect.top,
+          left: targetRect.left - containerRect.left,
+          width: targetRect.width,
+          height: targetRect.height
+        }
+      });
+    } else {
+      setHoveredPart(null);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredPart(null);
+  };
+
+  const handleClick = (e) => {
+    if (!inspectorActive) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
+
+    const targetInfo = detectColorTarget(e.target, primaryColor, pageBg, cardBg);
+    if (targetInfo) {
+      const targetRect = e.target.getBoundingClientRect();
+      const containerRect = e.currentTarget.getBoundingClientRect();
+      setSelectedPart({
+        id: targetInfo.id,
+        label: targetInfo.label,
+        currentColor: previewData.theme[targetInfo.id] || (
+          targetInfo.id === "nameColor" ? (previewData.theme?.nameColor || previewData.theme?.textPrimary || "#0F172A") :
+          targetInfo.id === "sectionHeadingColor" ? (previewData.theme?.sectionHeadingColor || previewData.theme?.textPrimary || "#0F172A") :
+          targetInfo.id === "saveBtnBg" ? (previewData.theme?.saveBtnBg || primaryColor) :
+          targetInfo.id === "actionBtnBg" ? (previewData.theme?.actionBtnBg || primaryColor) :
+          targetInfo.id === "linkCardBg" ? (previewData.theme?.linkCardBg || cardBg) :
+          targetInfo.id === "textSecondary" ? (previewData.theme?.textSecondary || "#64748B") :
+          targetInfo.id === "background" ? pageBg : cardBg
+        ),
+        rect: {
+          top: targetRect.top - containerRect.top,
+          left: targetRect.left - containerRect.left,
+          width: targetRect.width,
+          height: targetRect.height
+        }
+      });
+    }
+  };
+
+  const handleColorChange = (newColor) => {
+    if (!selectedPart) return;
+    onThemeChange(selectedPart.id, newColor);
+    setSelectedPart(prev => prev ? { ...prev, currentColor: newColor } : null);
+  };
+
   return (
-    <div className="w-full lg:w-[400px] shrink-0 h-[600px] lg:h-full flex flex-col pb-2 mt-8 lg:mt-0">
+    <div className="w-full lg:w-[400px] shrink-0 h-[650px] lg:h-full flex flex-col pb-2 mt-8 lg:mt-0 relative">
+      {/* Inspector Toggle Header */}
+      <div className="mb-3.5 flex items-center justify-between">
+        <button
+          onClick={() => {
+            setInspectorActive(!inspectorActive);
+            setHoveredPart(null);
+            setSelectedPart(null);
+          }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer border ${
+            inspectorActive 
+              ? "bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-600 shadow-md ring-4 ring-indigo-50" 
+              : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-300 shadow-sm"
+          }`}
+        >
+          <Palette className="w-3.5 h-3.5" />
+          {inspectorActive ? "Inspector Active" : "Color Inspector"}
+        </button>
+        <div className="flex items-center gap-2">
+          <div className={`w-2 h-2 rounded-full ${previewTheme ? "bg-rose-500 animate-pulse" : "bg-indigo-500"}`}></div>
+          <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">
+            {previewTheme ? "Preview Active" : "Live Mode"}
+          </p>
+        </div>
+      </div>
+
+      {/* Main Preview Wrapper Frame */}
       <div
-        className="relative group bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex-1 min-h-0"
+        className={`relative bg-white border rounded-2xl shadow-sm overflow-hidden flex-1 min-h-0 transition-all ${
+          inspectorActive ? 'border-indigo-500 ring-4 ring-indigo-50/50' : 'border-slate-200'
+        }`}
         style={{ transform: "translateZ(0)" }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleClick}
       >
-        <div className="w-full h-full overflow-hidden relative">
+        <div className={`w-full h-full overflow-hidden relative ${inspectorActive ? 'cursor-crosshair select-none' : ''}`}>
           <NexCard key={previewKey} data={previewData} inPreview={true} />
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
-      </div>
-      <div className="mt-2 flex items-center justify-center gap-2">
-        <div className={`w-2 h-2 rounded-full ${previewTheme ? "bg-rose-500 animate-pulse" : "bg-indigo-500"}`}></div>
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-          {previewTheme ? "Theme Preview Active" : "Live Preview (Real-Time)"}
-        </p>
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent pointer-events-none z-20"></div>
+
+        {/* Hover Highlight Overlay Frame */}
+        {inspectorActive && hoveredPart && (
+          <div 
+            className="absolute border-2 border-dashed border-indigo-500 bg-indigo-500/10 pointer-events-none transition-all duration-75 z-30 flex items-start justify-start"
+            style={{
+              top: hoveredPart.rect.top - 2,
+              left: hoveredPart.rect.left - 2,
+              width: hoveredPart.rect.width + 4,
+              height: hoveredPart.rect.height + 4,
+            }}
+          >
+            <span className="absolute bg-indigo-600 text-white text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded shadow-sm top-[-22px] left-[-2px] z-40 whitespace-nowrap">
+              {hoveredPart.label}
+            </span>
+          </div>
+        )}
+
+        {/* Selected Part Color Popover */}
+        {inspectorActive && selectedPart && (
+          <div 
+            className="absolute bg-white border border-slate-200 p-4 rounded-xl shadow-xl z-50 w-64 color-popover flex flex-col gap-3 text-left border-t-4 border-t-indigo-500 animate-in fade-in zoom-in-95 duration-200"
+            style={{
+              top: Math.min(selectedPart.rect.top + selectedPart.rect.height + 10, 420),
+              left: Math.max(10, Math.min(selectedPart.rect.left, 120)),
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">{selectedPart.label}</span>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedPart(null);
+                }}
+                className="w-5 h-5 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 border-0 bg-transparent cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <div className="relative w-9 h-9 rounded-lg overflow-hidden border border-slate-200 shrink-0">
+                <input 
+                  type="color" 
+                  value={selectedPart.currentColor} 
+                  onChange={(e) => handleColorChange(e.target.value)}
+                  className="absolute inset-0 w-full h-full p-0 border-0 cursor-pointer"
+                  style={{ width: '140%', height: '140%', transform: 'translate(-15%, -15%)' }}
+                />
+              </div>
+              
+              <div className="flex-1 flex flex-col gap-0.5">
+                <span className="text-[10px] font-mono font-bold text-slate-700">{selectedPart.currentColor.toUpperCase()}</span>
+                <span className="text-[8px] text-slate-400 font-medium">Click box to customize color</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5 pt-1.5 border-t border-slate-100">
+              <span className="text-[8px] font-black uppercase tracking-wider text-slate-400">Quick Palette</span>
+              <div className="flex items-center gap-1.5">
+                {["#0d6efd", "#00C2FF", "#25D366", "#FF007F", "#1e293b", "#ffffff"].map((c) => (
+                  <button
+                    key={c}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleColorChange(c);
+                    }}
+                    className="w-5 h-5 rounded-full border border-black/5 hover:scale-110 transition-transform cursor-pointer"
+                    style={{ backgroundColor: c }}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

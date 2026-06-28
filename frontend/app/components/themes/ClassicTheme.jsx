@@ -96,27 +96,68 @@ export default function ClassicTheme({ data, inPreview = false }) {
     window.location.href = `mailto:${data?.email || ''}?subject=Enquiry from ${name}&body=${msg}`;
   };
 
-  const primaryColor = data?.theme?.primary || "#0078C7";
-
-  const wrapperBg = "#F8FAFC";
+  const theme = data?.theme || {};
+  const primaryColor = theme.primary || "#0078C7";
+  const wrapperBg = theme.background || "#F8FAFC";
+  const cardBg = theme.cardBg || "#FFFFFF";
+  const textPrimary = theme.textPrimary || "#0F172A";
+  const textSecondary = theme.textSecondary || "#64748B";
+  const qrLogo = theme.qrLogo || "none";
+  const saveBtnBg = theme.saveBtnBg || primaryColor;
+  const actionBtnBg = theme.actionBtnBg || primaryColor;
 
   return (
     <div
       className={inPreview
-        ? "h-full w-full relative overflow-hidden flex flex-col font-sans selection:bg-slate-900 selection:text-white"
-        : `min-h-screen flex justify-center font-sans pb-16 ${inPreview ? "pt-0" : "pt-8"} selection:bg-slate-900 selection:text-white`
+        ? "h-full w-full relative overflow-hidden flex flex-col font-sans selection:bg-slate-900 selection:text-white classic-theme-root"
+        : `min-h-screen flex justify-center font-sans pb-16 ${inPreview ? "pt-0" : "pt-8"} selection:bg-slate-900 selection:text-white classic-theme-root`
       }
       style={inPreview ? { backgroundColor: wrapperBg } : { backgroundColor: wrapperBg, scrollBehavior: "smooth" }}
     >
+      <style dangerouslySetInnerHTML={{__html: `
+        .classic-theme-root .classic-card {
+          background-color: ${cardBg} !important;
+          border-color: ${textSecondary}15 !important;
+        }
+        .classic-theme-root .classic-header {
+          background-color: ${cardBg} !important;
+          border-color: ${textSecondary}15 !important;
+          color: ${textPrimary} !important;
+        }
+        .classic-theme-root h1, 
+        .classic-theme-root h2, 
+        .classic-theme-root h3,
+        .classic-theme-root .text-slate-900,
+        .classic-theme-root .text-slate-800 {
+          color: ${textPrimary} !important;
+        }
+        .classic-theme-root p,
+        .classic-theme-root .text-slate-500,
+        .classic-theme-root .text-slate-400,
+        .classic-theme-root .text-slate-650,
+        .classic-theme-root .text-slate-600 {
+          color: ${textSecondary} !important;
+        }
+        .classic-theme-root .border-slate-100,
+        .classic-theme-root .border-slate-200 {
+          border-color: ${textSecondary}15 !important;
+        }
+        /* Action buttons */
+        .classic-theme-root .action-btn:hover {
+          background-color: ${actionBtnBg}15 !important;
+          color: ${actionBtnBg} !important;
+          border-color: ${actionBtnBg}60 !important;
+        }
+      `}} />
       <div
         className={inPreview
-          ? "w-full h-full overflow-y-auto scrollbar-none bg-white rounded-t-none rounded-b-[2rem] relative border border-white bg-clip-padding flex-1"
-          : `w-full max-w-[480px] min-h-screen bg-white ${inPreview ? "rounded-t-none rounded-b-[2rem]" : "rounded-[2rem]"} shadow-[0_30px_60px_-15px_rgba(15,23,42,0.18)] overflow-hidden relative border border-white bg-clip-padding`
+          ? "w-full h-full overflow-y-auto scrollbar-none bg-white rounded-t-none rounded-b-[2rem] relative border border-white bg-clip-padding flex-1 classic-card"
+          : `w-full max-w-[480px] min-h-screen bg-white ${inPreview ? "rounded-t-none rounded-b-[2rem]" : "rounded-[2rem]"} shadow-[0_30px_60px_-15px_rgba(15,23,42,0.18)] overflow-hidden relative border border-white bg-clip-padding classic-card`
         }
       >
 
         {/* EXECUTIVE TOP BAR */}
-        <div className="flex justify-between items-center px-8 py-5 border-b border-slate-100 bg-white sticky top-0 z-50 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)]">
+        <div className="flex justify-between items-center px-8 py-5 border-b border-slate-100 bg-white sticky top-0 z-50 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] classic-header">
           <div className="font-serif font-bold text-slate-900 tracking-tight text-xl flex items-center gap-3">
             <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: primaryColor }}></div>
             {data?.name ? data.name.split(' ')[0] : 'Profile'}
@@ -178,7 +219,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
                     href={act.href}
                     target={act.target}
                     rel={act.rel}
-                    className={`w-12 h-12 rounded-full border border-slate-200 text-slate-600 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-1 group ${act.hoverClass || ''}`}
+                    className={`w-12 h-12 rounded-full border border-slate-200 text-slate-600 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-1 group ${act.hoverClass || ''} action-btn`}
                     style={act.id === 'call' || act.id === 'location' ? { hoverBackgroundColor: primaryColor } : undefined}
                   >
                     {act.id === "whatsapp"
@@ -191,7 +232,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
                 {hasMore ? (
                   <button
                     onClick={() => setShowMore(!showMore)}
-                    className={`w-12 h-12 rounded-full border border-slate-200 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:-translate-y-1 group ${showMore
+                    className={`w-12 h-12 rounded-full border border-slate-200 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:-translate-y-1 group action-btn ${showMore
                         ? 'bg-slate-900 text-white border-transparent shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)]'
                         : 'text-slate-600 hover:bg-slate-900'
                       }`}
@@ -206,7 +247,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
                       href={act.href}
                       target={act.target}
                       rel={act.rel}
-                      className={`w-12 h-12 rounded-full border border-slate-200 text-slate-600 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-1 group ${act.hoverClass || ''}`}
+                      className={`w-12 h-12 rounded-full border border-slate-200 text-slate-600 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-1 group ${act.hoverClass || ''} action-btn`}
                       style={act.id === 'mail' ? undefined : { hoverBackgroundColor: primaryColor }}
                     >
                       {act.id === "whatsapp"
@@ -226,7 +267,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
                       href={act.href}
                       target={act.target}
                       rel={act.rel}
-                      className={`w-12 h-12 rounded-full border border-slate-200 text-slate-600 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-1 group ${act.hoverClass || ''}`}
+                      className={`w-12 h-12 rounded-full border border-slate-200 text-slate-600 hover:text-white hover:border-transparent flex items-center justify-center transition-all duration-300 hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-1 group ${act.hoverClass || ''} action-btn`}
                       style={act.id === 'sms' ? undefined : (act.id === 'mail' ? undefined : { hoverBackgroundColor: primaryColor })}
                     >
                       {act.id === "whatsapp"
@@ -246,7 +287,7 @@ export default function ClassicTheme({ data, inPreview = false }) {
           <button
             onClick={generateVcard}
             className="w-full py-4 text-white font-medium tracking-widest uppercase text-sm flex items-center justify-center gap-3 hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-0.5 rounded-sm"
-            style={{ backgroundColor: primaryColor }}
+            style={{ backgroundColor: saveBtnBg }}
           >
             <Download className="w-4 h-4" /> Save to Contacts
           </button>
@@ -482,7 +523,22 @@ export default function ClassicTheme({ data, inPreview = false }) {
                 <div className="flex flex-col items-center">
                   <span className="text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2">Connect</span>
                   <div className="p-3.5 bg-white border border-slate-100 shadow-sm rounded-sm flex items-center justify-center w-[180px] h-[180px]">
-                    <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={152} level="H" fgColor="#0F172A" />
+                    <QRCodeSVG 
+                      value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} 
+                      size={152} 
+                      level="Q" 
+                      fgColor="#0F172A"
+                      {...(qrLogo === 'avatar' && data?.image ? {
+                        imageSettings: {
+                          src: data.image,
+                          x: null,
+                          y: null,
+                          height: 32,
+                          width: 32,
+                          excavate: true,
+                        }
+                      } : {})}
+                    />
                   </div>
                 </div>
                 <div className="flex flex-col items-center">
@@ -508,7 +564,22 @@ export default function ClassicTheme({ data, inPreview = false }) {
             ) : (
               <>
                 <div className="p-4 bg-white border border-slate-100 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.05)] mb-8 rounded-sm">
-                  <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={160} level="H" fgColor="#0F172A" />
+                  <QRCodeSVG 
+                    value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} 
+                    size={160} 
+                    level="Q" 
+                    fgColor="#0F172A"
+                    {...(qrLogo === 'avatar' && data?.image ? {
+                      imageSettings: {
+                        src: data.image,
+                        x: null,
+                        y: null,
+                        height: 32,
+                        width: 32,
+                        excavate: true,
+                      }
+                    } : {})}
+                  />
                 </div>
                 <button onClick={() => {
                   if (navigator.share) { navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : 'Digital Card', url: window.location.href }).catch(console.error); } else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }

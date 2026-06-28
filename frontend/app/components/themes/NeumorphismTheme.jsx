@@ -67,6 +67,16 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
   const accentColor = theme.accent || "#FFE156";
   const savedBackground = theme.background || "#E8ECF2";
   const backgroundColor = savedBackground;
+  const cardBg = theme.cardBg || backgroundColor;
+  const textPrimary = theme.textPrimary || "#27272a";
+  const textSecondary = theme.textSecondary || "#64748B";
+
+  const nameColor = theme.nameColor || textPrimary;
+  const sectionHeadingColor = theme.sectionHeadingColor || textPrimary;
+  const saveBtnBg = theme.saveBtnBg || primaryColor;
+  const actionBtnBg = theme.actionBtnBg || primaryColor;
+  const linkCardBg = theme.linkCardBg || cardBg;
+  const qrLogo = theme.qrLogo || "none";
 
   const generateVcard = () => {
     const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${data?.name || "User"}\nTITLE:${data?.title || ""}\nTEL;TYPE=WORK,VOICE:${data?.phone || ""}\nEMAIL;TYPE=WORK:${data?.email || ""}\nURL:${data?.website || ""}\nADR;TYPE=WORK:;;${data?.address || ""};;;;\nEND:VCARD`;
@@ -94,12 +104,12 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
   return (
     <div
       className={inPreview 
-        ? "h-full w-full relative overflow-hidden flex flex-col font-sans selection:bg-slate-300/40"
-        : "min-h-screen flex justify-center font-sans selection:bg-slate-300/40"
+        ? "h-full w-full relative overflow-hidden flex flex-col font-sans selection:bg-slate-300/40 neumorphism-theme-root"
+        : "min-h-screen flex justify-center font-sans selection:bg-slate-300/40 neumorphism-theme-root"
       }
       style={{
         backgroundColor: backgroundColor,
-        color: "#27272a",
+        color: textPrimary,
         scrollBehavior: inPreview ? undefined : "smooth",
       }}
     >
@@ -112,13 +122,46 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
         {/* Style block for Neumorphic variables and custom shadows */}
         <style dangerouslySetInnerHTML={{__html: `
           .nm-flat {
-            background: ${backgroundColor};
+            background: ${cardBg};
             box-shadow: 7px 7px 14px rgba(165, 177, 198, 0.45), -7px -7px 14px rgba(255, 255, 255, 0.85);
           }
           .nm-inset {
-            background: ${backgroundColor};
+            background: ${cardBg};
             box-shadow: inset 4px 4px 8px rgba(165, 177, 198, 0.35), inset -4px -4px 8px rgba(255, 255, 255, 0.8);
             transition: all 0.25s ease-in-out;
+          }
+          .neumorphism-theme-root h1 {
+            color: ${nameColor} !important;
+          }
+          .neumorphism-theme-root h2 {
+            color: ${sectionHeadingColor} !important;
+          }
+          .neumorphism-theme-root h3,
+          .neumorphism-theme-root .text-slate-900,
+          .neumorphism-theme-root .text-slate-800,
+          .neumorphism-theme-root .text-zinc-800,
+          .neumorphism-theme-root .text-zinc-700 {
+            color: ${textPrimary} !important;
+          }
+          .neumorphism-theme-root p,
+          .neumorphism-theme-root .text-slate-500,
+          .neumorphism-theme-root .text-slate-655,
+          .neumorphism-theme-root .text-slate-600,
+          .neumorphism-theme-root .text-slate-400 {
+            color: ${textSecondary} !important;
+          }
+          /* Action buttons */
+          .neumorphism-theme-root .action-btn:hover {
+            color: ${actionBtnBg} !important;
+          }
+          /* Save Contact button */
+          .neumorphism-theme-root .save-contact-btn {
+            background-color: ${saveBtnBg} !important;
+            color: #ffffff !important;
+          }
+          /* Link cards */
+          .neumorphism-theme-root .link-card {
+            background-color: ${linkCardBg} !important;
           }
           .nm-inset:focus, .nm-inset:focus-within {
             box-shadow: inset 2px 2px 4px rgba(165, 177, 198, 0.25), inset -2px -2px 4px rgba(255, 255, 255, 0.7);
@@ -193,7 +236,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
                   href={act.href}
                   target={act.target}
                   rel={act.rel}
-                  className="flex h-12 items-center justify-center rounded-2xl text-slate-600 transition-all border-0 nm-flat nm-btn"
+                  className="flex h-12 items-center justify-center rounded-2xl text-slate-600 transition-all border-0 nm-flat nm-btn action-btn"
                   aria-label={act.label}
                   style={{ color: act.id === 'whatsapp' ? '#25D366' : primaryColor }}
                 >
@@ -207,7 +250,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
               {hasMore ? (
                 <button
                   onClick={() => setShowMore(!showMore)}
-                  className="flex h-12 items-center justify-center rounded-2xl transition-all border-0 nm-flat nm-btn text-slate-600"
+                  className="flex h-12 items-center justify-center rounded-2xl transition-all border-0 nm-flat nm-btn text-slate-600 action-btn"
                   style={showMore ? { color: primaryColor } : {}}
                   aria-label="More"
                 >
@@ -220,7 +263,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
                     href={act.href}
                     target={act.target}
                     rel={act.rel}
-                    className="flex h-12 items-center justify-center rounded-2xl text-slate-600 transition-all border-0 nm-flat nm-btn"
+                    className="flex h-12 items-center justify-center rounded-2xl text-slate-600 transition-all border-0 nm-flat nm-btn action-btn"
                     aria-label={act.label}
                     style={{ color: primaryColor }}
                   >
@@ -241,7 +284,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
                     href={act.href}
                     target={act.target}
                     rel={act.rel}
-                    className="flex h-12 items-center justify-center rounded-2xl text-slate-600 transition-all border-0 nm-flat nm-btn"
+                    className="flex h-12 items-center justify-center rounded-2xl text-slate-600 transition-all border-0 nm-flat nm-btn action-btn"
                     aria-label={act.label}
                     style={{ color: primaryColor }}
                   >
@@ -261,7 +304,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
           <div className="mt-6 mb-6 space-y-4">
             <button
               onClick={generateVcard}
-              className="flex w-full items-center justify-center gap-3 rounded-[1.75rem] py-4 text-xs font-black uppercase tracking-[0.22em] text-white transition-all border-0 nm-flat"
+              className="flex w-full items-center justify-center gap-3 rounded-[1.75rem] py-4 text-xs font-black uppercase tracking-[0.22em] text-white transition-all border-0 nm-flat save-contact-btn"
               style={{ backgroundColor: primaryColor, color: '#ffffff', boxShadow: `6px 6px 15px rgba(165,177,198,0.3), -6px -6px 15px rgba(255,255,255,0.7)` }}
             >
               <Download className="h-4 w-4" />
@@ -357,7 +400,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
 
                   return (
                     <a key={index} href={link.url} target="_blank" rel="noreferrer" 
-                      className="flex items-center justify-between rounded-2xl px-5 py-3.5 font-bold text-slate-800 transition-all border-0 nm-flat nm-btn hover:-translate-y-0.5">
+                      className="flex items-center justify-between rounded-2xl px-5 py-3.5 font-bold text-slate-800 transition-all border-0 nm-flat nm-btn hover:-translate-y-0.5 link-card">
                       <div className="flex items-center gap-3.5 min-w-0">
                         {faviconUrl ? (
                           <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border-0 nm-inset bg-slate-100/50">
@@ -428,7 +471,22 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
                 <div className="flex flex-col items-center">
                   <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-3">Connect QR</span>
                   <div className="rounded-[1.75rem] p-4 flex items-center justify-center w-[180px] h-[180px] nm-inset bg-white">
-                    <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={148} level="H" fgColor="#111827" />
+                    <QRCodeSVG 
+                      value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} 
+                      size={148} 
+                      level="Q" 
+                      fgColor="#111827"
+                      {...(qrLogo === 'avatar' && data?.image ? {
+                        imageSettings: {
+                          src: data.image,
+                          x: null,
+                          y: null,
+                          height: 32,
+                          width: 32,
+                          excavate: true,
+                        }
+                      } : {})}
+                    />
                   </div>
                 </div>
 

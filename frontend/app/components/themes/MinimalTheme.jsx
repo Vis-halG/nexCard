@@ -95,25 +95,70 @@ export default function MinimalTheme({ data, inPreview = false }) {
 
   const theme = data?.theme || {};
   const primaryColor = theme.primary || "#00C2FF";
-  const bgColor = theme.background || "#ffffff";
+  const bgColor = theme.background || "#f4f4f5";
+  const cardBg = theme.cardBg || "#ffffff";
+  const textPrimary = theme.textPrimary || "#000000";
+  const textSecondary = theme.textSecondary || "#4B5563";
   const fontClass = theme.font || "font-sans";
   const profileIdSeed = data?.username || data?.email || data?.name || "nexcard";
   const profileId = Array.from(profileIdSeed).reduce((sum, char) => sum + char.charCodeAt(0), 0) % 9000 + 1000;
 
+  const nameColor = theme.nameColor || textPrimary;
+  const sectionHeadingColor = theme.sectionHeadingColor || textPrimary;
+  const saveBtnBg = theme.saveBtnBg || primaryColor;
+  const actionBtnBg = theme.actionBtnBg || primaryColor;
+  const linkCardBg = theme.linkCardBg || cardBg;
+  const qrLogo = theme.qrLogo || "none";
+
   return (
     <div
       className={inPreview
-        ? `h-full w-full relative overflow-hidden flex flex-col ${fontClass} text-black selection:bg-black selection:text-white bg-[#f4f4f5]`
-        : `min-h-screen ${fontClass} flex justify-center text-black selection:bg-black selection:text-white overflow-x-hidden bg-[#f4f4f5]`
+        ? `h-full w-full relative overflow-hidden flex flex-col ${fontClass} text-black selection:bg-black selection:text-white minimal-theme-root`
+        : `min-h-screen ${fontClass} flex justify-center text-black selection:bg-black selection:text-white overflow-x-hidden minimal-theme-root`
       }
-      style={inPreview ? {} : { scrollBehavior: "smooth" }}
+      style={inPreview ? { backgroundColor: bgColor } : { backgroundColor: bgColor, scrollBehavior: "smooth" }}
     >
+      <style dangerouslySetInnerHTML={{__html: `
+        .minimal-theme-root h1 {
+          color: ${nameColor} !important;
+        }
+        .minimal-theme-root .section-heading {
+          background-color: ${sectionHeadingColor} !important;
+          color: #000000 !important;
+        }
+        .minimal-theme-root h2, 
+        .minimal-theme-root h3,
+        .minimal-theme-root .text-black,
+        .minimal-theme-root .text-slate-900 {
+          color: ${textPrimary} !important;
+        }
+        .minimal-theme-root p,
+        .minimal-theme-root .text-slate-500,
+        .minimal-theme-root .text-zinc-500,
+        .minimal-theme-root .text-slate-650,
+        .minimal-theme-root .text-slate-600 {
+          color: ${textSecondary} !important;
+        }
+        .minimal-theme-root .border-black {
+          border-color: ${textPrimary} !important;
+        }
+        .minimal-theme-root .bg-white {
+          background-color: ${cardBg} !important;
+        }
+        .minimal-theme-root .save-contact-btn {
+          background-color: ${saveBtnBg} !important;
+          color: #ffffff !important;
+        }
+        .minimal-theme-root .link-card {
+          background-color: ${linkCardBg} !important;
+        }
+      `}} />
       <div
         className={inPreview
           ? "w-full h-full overflow-y-auto scrollbar-none relative flex flex-col bg-white border-x-4 border-black flex-1"
           : "w-full max-w-[500px] min-h-screen relative flex flex-col bg-white border-x-4 border-black"
         }
-        style={{ backgroundColor: bgColor }}
+        style={{ backgroundColor: cardBg }}
       >
         <button
           onClick={() => setShowWhatsAppInput(true)}
@@ -243,7 +288,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
 
           {/* CTA SECTIONS */}
           <div className="p-8 border-b-4 border-black flex flex-col gap-4 bg-[#f4f4f5]">
-            <button onClick={generateVcard} className="w-full py-4 border-4 border-black bg-white text-black font-black text-sm uppercase tracking-widest hover:bg-black hover:text-white transition-colors duration-300 shadow-[6px_6px_0_0_#000] active:shadow-[0_0_0_0_#000] active:translate-x-1.5 active:translate-y-1.5 flex justify-between px-6 items-center">
+            <button onClick={generateVcard} className="w-full py-4 border-4 border-black bg-white text-black font-black text-sm uppercase tracking-widest hover:bg-black hover:text-white transition-colors duration-300 shadow-[6px_6px_0_0_#000] active:shadow-[0_0_0_0_#000] active:translate-x-1.5 active:translate-y-1.5 flex justify-between px-6 items-center save-contact-btn">
               <span>Save Contact</span> <Download className="w-5 h-5" />
             </button>
             {data?.calendarUrl && (
@@ -306,7 +351,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
                   const faviconUrl = domain ? `https://www.google.com/s2/favicons?sz=64&domain=${domain}` : null;
 
                   return (
-                    <a key={i} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between px-6 py-4 bg-white border-2 border-black hover:bg-black hover:text-white transition-all duration-300 text-black font-black uppercase tracking-wider group shadow-[3px_3px_0_0_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none">
+                    <a key={i} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between px-6 py-4 bg-white border-2 border-black hover:bg-black hover:text-white transition-all duration-300 text-black font-black uppercase tracking-wider group shadow-[3px_3px_0_0_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none link-card">
                       <div className="flex items-center gap-3 min-w-0">
                         {faviconUrl ? (
                           <img src={faviconUrl} alt="" className="w-5 h-5 object-contain shrink-0 rounded-sm filter grayscale group-hover:grayscale-0" />
@@ -401,7 +446,22 @@ export default function MinimalTheme({ data, inPreview = false }) {
                   <div className="flex flex-col items-center">
                     <span className="text-[10px] font-black uppercase tracking-widest text-black mb-3">Connect</span>
                     <div className="border-4 border-black p-3 bg-white shadow-[6px_6px_0_0_#000] flex items-center justify-center w-[180px] h-[180px]">
-                      <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={148} level="H" fgColor="#000" />
+                      <QRCodeSVG 
+                        value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} 
+                        size={148} 
+                        level="Q" 
+                        fgColor="#000"
+                        {...(qrLogo === 'avatar' && data?.image ? {
+                          imageSettings: {
+                            src: data.image,
+                            x: null,
+                            y: null,
+                            height: 32,
+                            width: 32,
+                            excavate: true,
+                          }
+                        } : {})}
+                      />
                     </div>
                   </div>
                   <div className="flex flex-col items-center">

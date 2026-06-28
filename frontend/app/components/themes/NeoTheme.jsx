@@ -95,7 +95,26 @@ export default function NeoTheme({ data, inPreview = false }) {
 
   const theme = data?.theme || {};
   const primaryColor = theme.primary || "#00ffcc";
-  const bgColor = "#050505"; // Force true dark for cyber aesthetic
+  const bgColor = theme.background || "#050505";
+  const cardBg = theme.cardBg || "#0a0a0a";
+  const textPrimary = theme.textPrimary || "#ffffff";
+  const textSecondary = theme.textSecondary || "#A0AEC0";
+
+  const nameColor = theme.nameColor || textPrimary;
+  const sectionHeadingColor = theme.sectionHeadingColor || textPrimary;
+  const saveBtnBg = theme.saveBtnBg || primaryColor;
+  const actionBtnBg = theme.actionBtnBg || primaryColor;
+  const linkCardBg = theme.linkCardBg || cardBg;
+  const qrLogo = theme.qrLogo || "none";
+
+  const hexToRgba = (hex, opacity) => {
+    if (!hex) return "";
+    const cleaned = hex.replace("#", "");
+    const r = parseInt(cleaned.substring(0, 2), 16) || 255;
+    const g = parseInt(cleaned.substring(2, 4), 16) || 255;
+    const b = parseInt(cleaned.substring(4, 6), 16) || 255;
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  };
   
   // Create styles for dynamic neon glows
   const neonText = { textShadow: `0 0 8px ${primaryColor}88, 0 0 12px ${primaryColor}44`, color: primaryColor };
@@ -104,11 +123,52 @@ export default function NeoTheme({ data, inPreview = false }) {
   return (
     <div 
       className={inPreview 
-        ? "h-full w-full relative overflow-hidden flex flex-col font-mono text-white selection:bg-[#00ffcc] selection:text-black"
-        : `min-h-screen font-mono flex justify-center text-white selection:bg-[#00ffcc] selection:text-black overflow-x-hidden`
+        ? "h-full w-full relative overflow-hidden flex flex-col font-mono text-white selection:bg-[#00ffcc] selection:text-black neo-theme-root"
+        : `min-h-screen font-mono flex justify-center text-white selection:bg-[#00ffcc] selection:text-black overflow-x-hidden neo-theme-root`
       } 
       style={inPreview ? { backgroundColor: bgColor } : { scrollBehavior: "smooth", backgroundColor: bgColor }}
     >
+      <style dangerouslySetInnerHTML={{__html: `
+        .neo-theme-root h1 {
+          color: ${nameColor} !important;
+          text-shadow: 0 0 8px ${nameColor}88, 0 0 12px ${nameColor}44 !important;
+        }
+        .neo-theme-root h2 {
+          color: ${sectionHeadingColor} !important;
+          text-shadow: 0 0 8px ${sectionHeadingColor}88, 0 0 12px ${sectionHeadingColor}44 !important;
+        }
+        .neo-theme-root h3,
+        .neo-theme-root .text-white {
+          color: ${textPrimary} !important;
+        }
+        .neo-theme-root p,
+        .neo-theme-root .text-slate-400,
+        .neo-theme-root .text-gray-400 {
+          color: ${textSecondary} !important;
+        }
+        .neo-theme-root .bg-\\[\\#0a0a0a\\]\\/80,
+        .neo-theme-root .bg-\\[\\#0f0f0f\\]\\/90 {
+          background-color: ${hexToRgba(cardBg, 0.8)} !important;
+        }
+        /* Action buttons */
+        .neo-theme-root .action-btn:hover {
+          background-color: ${actionBtnBg}22 !important;
+          color: ${actionBtnBg} !important;
+          border-color: ${actionBtnBg}aa !important;
+          box-shadow: inset 0 0 12px ${actionBtnBg}22, 0 0 8px ${actionBtnBg}44 !important;
+        }
+        /* Save Contact button */
+        .neo-theme-root .save-contact-btn {
+          background-color: ${saveBtnBg}22 !important;
+          color: ${saveBtnBg} !important;
+          border-color: ${saveBtnBg}88 !important;
+          box-shadow: inset 0 0 20px ${saveBtnBg}11, 0 0 10px ${saveBtnBg}33 !important;
+        }
+        /* Link cards */
+        .neo-theme-root .link-card {
+          background-color: ${hexToRgba(linkCardBg, 0.8)} !important;
+        }
+      `}} />
       
       {/* GLOBAL CYBER CSS */}
       <style dangerouslySetInnerHTML={{__html: `
@@ -219,7 +279,7 @@ export default function NeoTheme({ data, inPreview = false }) {
                  href={act.href}
                  target={act.target}
                  rel={act.rel}
-                 className="flex flex-col items-center justify-center p-3 bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 transition-all group backdrop-blur-md"
+                 className="flex flex-col items-center justify-center p-3 bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 transition-all group backdrop-blur-md action-btn"
                >
                  {act.id === 'whatsapp'
                    ? act.icon("w-5 h-5 text-zinc-400 group-hover:text-[#25D366] fill-current mb-2 transition-colors")
@@ -232,7 +292,7 @@ export default function NeoTheme({ data, inPreview = false }) {
              {hasMore ? (
                <button
                  onClick={() => setShowMore(!showMore)}
-                 className={`flex flex-col items-center justify-center p-3 border transition-all group backdrop-blur-md ${
+                 className={`flex flex-col items-center justify-center p-3 border transition-all group backdrop-blur-md action-btn ${
                    showMore 
                      ? 'bg-zinc-800 border-zinc-600 text-white' 
                      : 'bg-zinc-900/50 border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-white'
@@ -252,7 +312,7 @@ export default function NeoTheme({ data, inPreview = false }) {
                    href={act.href}
                    target={act.target}
                    rel={act.rel}
-                   className="flex flex-col items-center justify-center p-3 bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 transition-all group backdrop-blur-md"
+                   className="flex flex-col items-center justify-center p-3 bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 transition-all group backdrop-blur-md action-btn"
                  >
                    {act.id === 'whatsapp'
                      ? act.icon("w-5 h-5 text-zinc-400 group-hover:text-[#25D366] fill-current mb-2 transition-colors")
@@ -276,7 +336,7 @@ export default function NeoTheme({ data, inPreview = false }) {
                    href={act.href}
                    target={act.target}
                    rel={act.rel}
-                   className="flex flex-col items-center justify-center p-3 bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 transition-all group backdrop-blur-md"
+                   className="flex flex-col items-center justify-center p-3 bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 transition-all group backdrop-blur-md action-btn"
                  >
                    {act.id === 'whatsapp'
                      ? act.icon("w-5 h-5 text-zinc-400 group-hover:text-[#25D366] fill-current mb-2 transition-colors")
@@ -296,7 +356,7 @@ export default function NeoTheme({ data, inPreview = false }) {
           
           {/* PRIMARY CTAS */}
           <div className="flex flex-col gap-3">
-             <button onClick={generateVcard} className="w-full relative group overflow-hidden bg-zinc-900/80 border flex items-center justify-between px-6 py-4 transition-all" style={neonBox}>
+             <button onClick={generateVcard} className="w-full relative group overflow-hidden bg-zinc-900/80 border flex items-center justify-between px-6 py-4 transition-all save-contact-btn" style={neonBox}>
                <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity" style={{ backgroundColor: primaryColor }}></div>
                <span className="relative z-10 text-xs font-bold uppercase tracking-widest text-white flex items-center gap-3"><Terminal size={14}/> Download_Data</span>
                <Download className="w-4 h-4 relative z-10" style={{ color: primaryColor }} />
@@ -400,7 +460,7 @@ export default function NeoTheme({ data, inPreview = false }) {
                   const faviconUrl = domain ? `https://www.google.com/s2/favicons?sz=64&domain=${domain}` : null;
 
                   return (
-                    <a key={i} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 bg-zinc-900/30 border border-zinc-800 hover:border-zinc-600 transition-all group">
+                    <a key={i} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 bg-zinc-900/30 border border-zinc-800 hover:border-zinc-600 transition-all group link-card">
                       <div className="flex items-center gap-3 min-w-0">
                         {faviconUrl ? (
                           <img src={faviconUrl} alt="" className="w-4 h-4 object-contain shrink-0 filter grayscale group-hover:grayscale-0 transition-all duration-300" />
@@ -474,7 +534,22 @@ export default function NeoTheme({ data, inPreview = false }) {
                     <div className="flex flex-col items-center">
                       <span className="text-[9px] uppercase tracking-widest text-zinc-500 mb-2">Connect</span>
                       <div className="p-3.5 bg-black border border-zinc-800 flex items-center justify-center w-[180px] h-[180px]">
-                        <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={152} level="M" fgColor="#000" />
+                        <QRCodeSVG 
+                          value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} 
+                          size={152} 
+                          level="Q" 
+                          fgColor="#ffffff" 
+                          {...(qrLogo === 'avatar' && data?.image ? {
+                            imageSettings: {
+                              src: data.image,
+                              x: null,
+                              y: null,
+                              height: 32,
+                              width: 32,
+                              excavate: true,
+                            }
+                          } : {})}
+                        />
                       </div>
                     </div>
                     <div className="flex flex-col items-center">
@@ -501,7 +576,22 @@ export default function NeoTheme({ data, inPreview = false }) {
              ) : (
                <>
                  <div className="p-4 bg-white mb-8 border-4" style={{ borderColor: primaryColor }}>
-                   <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={120} level="M" fgColor="#000" />
+                    <QRCodeSVG 
+                      value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} 
+                      size={120} 
+                      level="Q" 
+                      fgColor="#000000" 
+                      {...(qrLogo === 'avatar' && data?.image ? {
+                        imageSettings: {
+                          src: data.image,
+                          x: null,
+                          y: null,
+                          height: 24,
+                          width: 24,
+                          excavate: true,
+                        }
+                      } : {})}
+                    />
                  </div>
                  
                  <button onClick={() => {

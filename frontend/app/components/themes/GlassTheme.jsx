@@ -100,9 +100,29 @@ export default function GlassTheme({ data, inPreview = false }) {
   const visibleActions = hasMore ? actions.slice(0, 3) : actions;
   const remainingActions = hasMore ? actions.slice(3) : [];
 
-  const primaryColor = data?.theme?.primary || "#FF3D71";
-  const savedBackground = data?.theme?.background || "#FFF6FA";
+  const theme = data?.theme || {};
+  const primaryColor = theme.primary || "#FF3D71";
+  const savedBackground = theme.background || "#FFF6FA";
   const backgroundColor = isDarkHex(savedBackground) ? "#FFF6FA" : savedBackground;
+  const cardBg = theme.cardBg || "#FFFFFF";
+  const textPrimary = theme.textPrimary || "#1E293B";
+  const textSecondary = theme.textSecondary || "#64748B";
+
+  const nameColor = theme.nameColor || textPrimary;
+  const sectionHeadingColor = theme.sectionHeadingColor || textPrimary;
+  const saveBtnBg = theme.saveBtnBg || primaryColor;
+  const actionBtnBg = theme.actionBtnBg || primaryColor;
+  const linkCardBg = theme.linkCardBg || cardBg;
+  const qrLogo = theme.qrLogo || "none";
+
+  const hexToRgba = (hex, opacity) => {
+    if (!hex) return "";
+    const cleaned = hex.replace("#", "");
+    const r = parseInt(cleaned.substring(0, 2), 16) || 255;
+    const g = parseInt(cleaned.substring(2, 4), 16) || 255;
+    const b = parseInt(cleaned.substring(4, 6), 16) || 255;
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  };
 
   const generateVcard = () => {
     const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${data?.name || "User"}\nTITLE:${data?.title || ""}\nTEL;TYPE=WORK,VOICE:${data?.phone || ""}\nEMAIL;TYPE=WORK:${data?.email || ""}\nURL:${data?.website || ""}\nADR;TYPE=WORK:;;${data?.address || ""};;;;\nEND:VCARD`;
@@ -128,13 +148,13 @@ export default function GlassTheme({ data, inPreview = false }) {
   const socials = Object.entries(data?.social || {}).filter(([, url]) => url);
   const pref = data?.preferences || {};
   const cardClasses =
-    "rounded-[1.75rem] border border-white/80 bg-white/72 p-6 shadow-[0_24px_70px_rgba(183,110,121,0.12)] backdrop-blur-2xl";
+    "rounded-[1.75rem] border border-white/85 p-6 shadow-[0_24px_70px_rgba(183,110,121,0.12)] backdrop-blur-2xl";
 
   return (
     <div
       className={inPreview
-        ? "h-full w-full relative overflow-hidden flex flex-col font-sans text-slate-800 selection:bg-rose-200 selection:text-slate-900"
-        : "min-h-screen flex justify-center font-sans text-slate-800 selection:bg-rose-200 selection:text-slate-900"
+        ? "h-full w-full relative overflow-hidden flex flex-col font-sans text-slate-800 selection:bg-rose-200 selection:text-slate-900 glass-theme-root"
+        : "min-h-screen flex justify-center font-sans text-slate-800 selection:bg-rose-200 selection:text-slate-900 glass-theme-root"
       }
       style={{
         background:
@@ -142,6 +162,49 @@ export default function GlassTheme({ data, inPreview = false }) {
         scrollBehavior: inPreview ? undefined : "smooth",
       }}
     >
+      <style dangerouslySetInnerHTML={{__html: `
+        .glass-theme-root h1 {
+          color: ${nameColor} !important;
+        }
+        .glass-theme-root h2 {
+          color: ${sectionHeadingColor} !important;
+        }
+        .glass-theme-root h3,
+        .glass-theme-root .text-slate-900,
+        .glass-theme-root .text-slate-800 {
+          color: ${textPrimary} !important;
+        }
+        .glass-theme-root p,
+        .glass-theme-root .text-slate-500,
+        .glass-theme-root .text-slate-650,
+        .glass-theme-root .text-slate-600,
+        .glass-theme-root .text-slate-400 {
+          color: ${textSecondary} !important;
+        }
+        .glass-theme-root .bg-white\\/72,
+        .glass-theme-root .bg-white\\/70,
+        .glass-theme-root .bg-white\\/60 {
+          background-color: ${hexToRgba(cardBg, 0.72)} !important;
+        }
+        .glass-theme-root .border-white\\/80 {
+          border-color: ${hexToRgba(cardBg, 0.8)} !important;
+        }
+        /* Action buttons */
+        .glass-theme-root .action-btn:hover {
+          background-color: ${hexToRgba(actionBtnBg, 0.25)} !important;
+          color: ${actionBtnBg} !important;
+          border-color: ${hexToRgba(actionBtnBg, 0.55)} !important;
+        }
+        /* Save Contact button */
+        .glass-theme-root .save-contact-btn {
+          background-color: ${saveBtnBg} !important;
+          color: #ffffff !important;
+        }
+        /* Link cards */
+        .glass-theme-root .link-card {
+          background-color: ${hexToRgba(linkCardBg, 0.72)} !important;
+        }
+      `}} />
       <div
         className={inPreview
           ? "w-full h-full overflow-y-auto scrollbar-none px-5 pt-5 pb-28 relative flex-1"
@@ -191,7 +254,7 @@ export default function GlassTheme({ data, inPreview = false }) {
                   href={act.href}
                   target={act.target}
                   rel={act.rel}
-                  className="flex h-14 items-center justify-center rounded-2xl border border-white/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:text-rose-500 hover:bg-white/95"
+                  className="flex h-14 items-center justify-center rounded-2xl border border-white/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:text-rose-500 hover:bg-white/95 action-btn"
                   aria-label={act.label}
                 >
                   {act.id === 'whatsapp'
@@ -204,7 +267,7 @@ export default function GlassTheme({ data, inPreview = false }) {
               {hasMore ? (
                 <button
                   onClick={() => setShowMore(!showMore)}
-                  className={`flex h-14 items-center justify-center rounded-2xl border border-white/80 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:text-rose-500 ${showMore ? 'bg-white/90 text-rose-500 border-rose-200' : 'bg-white/70 text-slate-600'
+                  className={`flex h-14 items-center justify-center rounded-2xl border border-white/80 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:text-rose-500 action-btn ${showMore ? 'bg-white/90 text-rose-500 border-rose-200' : 'bg-white/70 text-slate-600'
                     }`}
                   aria-label="More"
                 >
@@ -217,7 +280,7 @@ export default function GlassTheme({ data, inPreview = false }) {
                     href={act.href}
                     target={act.target}
                     rel={act.rel}
-                    className="flex h-14 items-center justify-center rounded-2xl border border-white/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:text-rose-500 hover:bg-white/95"
+                    className="flex h-14 items-center justify-center rounded-2xl border border-white/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:text-rose-500 hover:bg-white/95 action-btn"
                     aria-label={act.label}
                   >
                     {act.id === 'whatsapp'
@@ -241,7 +304,7 @@ export default function GlassTheme({ data, inPreview = false }) {
                     href={act.href}
                     target={act.target}
                     rel={act.rel}
-                    className="flex h-14 items-center justify-center rounded-2xl border border-white/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:text-rose-500 hover:bg-white/95"
+                    className="flex h-14 items-center justify-center rounded-2xl border border-white/80 bg-white/70 text-slate-600 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:text-rose-500 hover:bg-white/95 action-btn"
                     aria-label={act.label}
                   >
                     {act.id === 'whatsapp'
@@ -262,7 +325,7 @@ export default function GlassTheme({ data, inPreview = false }) {
           <div className="mt-5 grid gap-3">
             <button
               onClick={generateVcard}
-              className="flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5"
+              className="flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5 save-contact-btn"
               style={{ backgroundColor: primaryColor, color: '#ffffff', boxShadow: `0 10px 25px ${primaryColor}30` }}
             >
               <Download className="h-4 w-4" />
@@ -346,7 +409,7 @@ export default function GlassTheme({ data, inPreview = false }) {
                   const faviconUrl = domain ? `https://www.google.com/s2/favicons?sz=64&domain=${domain}` : null;
 
                   return (
-                    <a key={index} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-2xl bg-white/40 border border-white/50 backdrop-blur-md px-5 py-3.5 font-bold text-slate-800 shadow-sm transition-all duration-300 hover:bg-white/60 hover:-translate-y-0.5">
+                    <a key={index} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-2xl bg-white/40 border border-white/50 backdrop-blur-md px-5 py-3.5 font-bold text-slate-800 shadow-sm transition-all duration-300 hover:bg-white/60 hover:-translate-y-0.5 link-card">
                       <div className="flex items-center gap-3 min-w-0">
                         {faviconUrl ? (
                           <img src={faviconUrl} alt="" className="w-5 h-5 object-contain shrink-0 rounded-sm" />
@@ -410,7 +473,22 @@ export default function GlassTheme({ data, inPreview = false }) {
                     <div className="flex flex-col items-center">
                       <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-2">Connect</span>
                       <div className="rounded-[1.5rem] bg-white/90 p-4 shadow-sm flex items-center justify-center w-[180px] h-[180px]">
-                        <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={148} level="H" fgColor="#111827" />
+                        <QRCodeSVG 
+                          value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} 
+                          size={148} 
+                          level="Q" 
+                          fgColor="#111827"
+                          {...(qrLogo === 'avatar' && data?.image ? {
+                            imageSettings: {
+                              src: data.image,
+                              x: null,
+                              y: null,
+                              height: 32,
+                              width: 32,
+                              excavate: true,
+                            }
+                          } : {})}
+                        />
                       </div>
                     </div>
                     <div className="flex flex-col items-center">
@@ -446,7 +524,22 @@ export default function GlassTheme({ data, inPreview = false }) {
               ) : (
                 <>
                   <div className="rounded-[1.5rem] bg-white p-4 shadow-sm">
-                    <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={150} level="H" fgColor="#111827" />
+                    <QRCodeSVG 
+                      value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} 
+                      size={150} 
+                      level="Q" 
+                      fgColor="#111827"
+                      {...(qrLogo === 'avatar' && data?.image ? {
+                        imageSettings: {
+                          src: data.image,
+                          x: null,
+                          y: null,
+                          height: 32,
+                          width: 32,
+                          excavate: true,
+                        }
+                      } : {})}
+                    />
                   </div>
                   <button
                     onClick={() => {

@@ -89,6 +89,25 @@ export default function FrostedTheme({ data, inPreview = false }) {
   const accentColor = theme.accent || "#FFE156";
   const savedBackground = theme.background || "#F5F3FF";
   const backgroundColor = savedBackground;
+  const cardBg = theme.cardBg || "#FFFFFF";
+  const textPrimary = theme.textPrimary || "#1E293B";
+  const textSecondary = theme.textSecondary || "#64748B";
+
+  const nameColor = theme.nameColor || textPrimary;
+  const sectionHeadingColor = theme.sectionHeadingColor || textPrimary;
+  const saveBtnBg = theme.saveBtnBg || primaryColor;
+  const actionBtnBg = theme.actionBtnBg || primaryColor;
+  const linkCardBg = theme.linkCardBg || cardBg;
+  const qrLogo = theme.qrLogo || "none";
+
+  const hexToRgba = (hex, opacity) => {
+    if (!hex) return "";
+    const cleaned = hex.replace("#", "");
+    const r = parseInt(cleaned.substring(0, 2), 16) || 255;
+    const g = parseInt(cleaned.substring(2, 4), 16) || 255;
+    const b = parseInt(cleaned.substring(4, 6), 16) || 255;
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  };
 
   const generateVcard = () => {
     const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${data?.name || "User"}\nTITLE:${data?.title || ""}\nTEL;TYPE=WORK,VOICE:${data?.phone || ""}\nEMAIL;TYPE=WORK:${data?.email || ""}\nURL:${data?.website || ""}\nADR;TYPE=WORK:;;${data?.address || ""};;;;\nEND:VCARD`;
@@ -117,14 +136,57 @@ export default function FrostedTheme({ data, inPreview = false }) {
   return (
     <div
       className={inPreview 
-        ? "h-full w-full relative overflow-hidden flex flex-col font-sans text-slate-800 frosted-selection"
-        : "min-h-screen flex justify-center font-sans text-slate-800 frosted-selection"
+        ? "h-full w-full relative overflow-hidden flex flex-col font-sans text-slate-800 frosted-selection frosted-theme-root"
+        : "min-h-screen flex justify-center font-sans text-slate-800 frosted-selection frosted-theme-root"
       }
       style={{
         background: backgroundColor,
         scrollBehavior: inPreview ? undefined : "smooth",
       }}
     >
+      <style dangerouslySetInnerHTML={{__html: `
+        .frosted-theme-root h1 {
+          color: ${nameColor} !important;
+        }
+        .frosted-theme-root h2 {
+          color: ${sectionHeadingColor} !important;
+        }
+        .frosted-theme-root h3,
+        .frosted-theme-root .text-slate-900,
+        .frosted-theme-root .text-slate-800,
+        .frosted-theme-root .text-slate-700 {
+          color: ${textPrimary} !important;
+        }
+        .frosted-theme-root p,
+        .frosted-theme-root .text-slate-500,
+        .frosted-theme-root .text-slate-655,
+        .frosted-theme-root .text-slate-600,
+        .frosted-theme-root .text-slate-400 {
+          color: ${textSecondary} !important;
+        }
+        .frosted-theme-root .bg-white\\/20,
+        .frosted-theme-root .bg-white\\/40 {
+          background-color: ${hexToRgba(cardBg, 0.2)} !important;
+        }
+        .frosted-theme-root .border-white\\/40 {
+          border-color: ${hexToRgba(cardBg, 0.4)} !important;
+        }
+        /* Action buttons */
+        .frosted-theme-root .action-btn:hover {
+          background-color: ${hexToRgba(actionBtnBg, 0.35)} !important;
+          color: #ffffff !important;
+          border-color: ${hexToRgba(actionBtnBg, 0.6)} !important;
+        }
+        /* Save Contact button */
+        .frosted-theme-root .save-contact-btn {
+          background-color: ${saveBtnBg} !important;
+          color: #ffffff !important;
+        }
+        /* Link cards */
+        .frosted-theme-root .link-card {
+          background-color: ${hexToRgba(linkCardBg, 0.2)} !important;
+        }
+      `}} />
       <div 
         className={inPreview
           ? "w-full h-full overflow-y-auto scrollbar-none px-5 pt-4 pb-20 relative flex-1 z-10"
@@ -207,7 +269,7 @@ export default function FrostedTheme({ data, inPreview = false }) {
                   href={act.href}
                   target={act.target}
                   rel={act.rel}
-                  className="flex items-center justify-start gap-3 px-4 py-3.5 rounded-2xl border border-white/50 bg-white/50 text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 frosted-btn text-xs font-bold uppercase tracking-wider"
+                  className="flex items-center justify-start gap-3 px-4 py-3.5 rounded-2xl border border-white/50 bg-white/50 text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 frosted-btn text-xs font-bold uppercase tracking-wider action-btn"
                   aria-label={act.label}
                 >
                   <span style={{ color: primaryColor }}>
@@ -223,7 +285,7 @@ export default function FrostedTheme({ data, inPreview = false }) {
               {hasMore ? (
                 <button
                   onClick={() => setShowMore(!showMore)}
-                  className="flex items-center justify-center gap-2 px-4 py-3.5 rounded-2xl border border-white/50 bg-white/50 text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 frosted-btn text-xs font-bold uppercase tracking-wider"
+                  className="flex items-center justify-center gap-2 px-4 py-3.5 rounded-2xl border border-white/50 bg-white/50 text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 frosted-btn text-xs font-bold uppercase tracking-wider action-btn"
                   style={showMore ? { color: primaryColor, backgroundColor: "rgba(255, 255, 255, 0.85)" } : {}}
                   aria-label="More"
                 >
@@ -237,7 +299,7 @@ export default function FrostedTheme({ data, inPreview = false }) {
                     href={act.href}
                     target={act.target}
                     rel={act.rel}
-                    className="flex items-center justify-start gap-3 px-4 py-3.5 rounded-2xl border border-white/50 bg-white/50 text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 frosted-btn text-xs font-bold uppercase tracking-wider"
+                    className="flex items-center justify-start gap-3 px-4 py-3.5 rounded-2xl border border-white/50 bg-white/50 text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 frosted-btn text-xs font-bold uppercase tracking-wider action-btn"
                     aria-label={act.label}
                   >
                     <span style={{ color: primaryColor }}>
@@ -257,7 +319,7 @@ export default function FrostedTheme({ data, inPreview = false }) {
                     href={act.href}
                     target={act.target}
                     rel={act.rel}
-                    className="flex items-center justify-start gap-3 px-4 py-3.5 rounded-2xl border border-white/50 bg-white/50 text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 frosted-btn text-xs font-bold uppercase tracking-wider"
+                    className="flex items-center justify-start gap-3 px-4 py-3.5 rounded-2xl border border-white/50 bg-white/50 text-slate-700 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 frosted-btn text-xs font-bold uppercase tracking-wider action-btn"
                     aria-label={act.label}
                   >
                     <span style={{ color: primaryColor }}>
@@ -280,7 +342,7 @@ export default function FrostedTheme({ data, inPreview = false }) {
             {pref.showSaveContact !== false && (
               <button
                 onClick={generateVcard}
-                className="flex w-full items-center justify-center gap-3 rounded-2xl py-4 text-xs font-black uppercase tracking-[0.2em] text-white shadow-md transition-all hover:-translate-y-0.5"
+                className="flex w-full items-center justify-center gap-3 rounded-2xl py-4 text-xs font-black uppercase tracking-[0.2em] text-white shadow-md transition-all hover:-translate-y-0.5 save-contact-btn"
                 style={{ backgroundColor: primaryColor, color: '#ffffff', boxShadow: `0 10px 25px ${primaryColor}30` }}
               >
                 <Download className="h-4 w-4" />
@@ -390,7 +452,7 @@ export default function FrostedTheme({ data, inPreview = false }) {
 
                   return (
                     <a key={index} href={link.url} target="_blank" rel="noreferrer" 
-                      className="flex items-center justify-between rounded-2xl border border-white/60 bg-white/35 px-5 py-3.5 font-bold text-slate-800 shadow-sm transition-all duration-300 hover:-translate-y-0.5 frosted-btn">
+                      className="flex items-center justify-between rounded-2xl border border-white/60 bg-white/35 px-5 py-3.5 font-bold text-slate-800 shadow-sm transition-all duration-300 hover:-translate-y-0.5 frosted-btn link-card">
                       <div className="flex items-center gap-3.5 min-w-0">
                         {faviconUrl ? (
                           <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border border-white/40 bg-white/20 backdrop-blur-sm">
@@ -461,7 +523,22 @@ export default function FrostedTheme({ data, inPreview = false }) {
                 <div className="flex flex-col items-center">
                   <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-3">Connect QR</span>
                   <div className="rounded-[1.75rem] p-4 flex items-center justify-center w-[180px] h-[180px] bg-white border border-white shadow-inner">
-                    <QRCodeSVG value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} size={148} level="H" fgColor="#111827" />
+                    <QRCodeSVG 
+                      value={typeof window !== "undefined" ? window.location.href : "https://nexcard.app"} 
+                      size={148} 
+                      level="Q" 
+                      fgColor="#111827"
+                      {...(qrLogo === 'avatar' && data?.image ? {
+                        imageSettings: {
+                          src: data.image,
+                          x: null,
+                          y: null,
+                          height: 32,
+                          width: 32,
+                          excavate: true,
+                        }
+                      } : {})}
+                    />
                   </div>
                 </div>
 

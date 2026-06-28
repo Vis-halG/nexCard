@@ -11,6 +11,28 @@ const WhatsAppIcon = ({ className }) => (
   </svg>
 );
 
+const InstagramIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>);
+const LinkedinIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>);
+const TwitterIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>);
+const YoutubeIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>);
+const FacebookIcon = ({ className }) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>);
+
+const SOCIAL_ICONS = {
+  instagram: (cls) => <InstagramIcon className={cls} />,
+  linkedin: (cls) => <LinkedinIcon className={cls} />,
+  twitter: (cls) => <TwitterIcon className={cls} />,
+  youtube: (cls) => <YoutubeIcon className={cls} />,
+  facebook: (cls) => <FacebookIcon className={cls} />,
+};
+
+const SOCIAL_COLORS = {
+  instagram: 'text-pink-500 hover:text-pink-600',
+  linkedin: 'text-blue-600 hover:text-blue-700',
+  twitter: 'text-sky-400 hover:text-sky-500',
+  youtube: 'text-red-600 hover:text-red-700',
+  facebook: 'text-blue-800 hover:text-blue-900',
+};
+
 export default function FrostedTheme({ data, inPreview = false }) {
   const [showMore, setShowMore] = useState(false);
   const [showWhatsAppInput, setShowWhatsAppInput] = useState(false);
@@ -90,7 +112,7 @@ export default function FrostedTheme({ data, inPreview = false }) {
   };
 
   const socials = Object.entries(data?.social || {}).filter(([, url]) => url);
-  const cardClasses = "rounded-[2rem] border border-white/50 bg-white/45 p-6 shadow-[0_12px_40px_rgba(31,38,135,0.04)] backdrop-blur-xl transition-all duration-300";
+  const cardClasses = "relative z-10 rounded-[2rem] border border-white/40 bg-white/20 p-6 shadow-[0_12px_32px_rgba(31,38,135,0.05)] backdrop-blur-xl transition-all duration-300";
 
   return (
     <div
@@ -103,16 +125,16 @@ export default function FrostedTheme({ data, inPreview = false }) {
         scrollBehavior: inPreview ? undefined : "smooth",
       }}
     >
-      {/* 🔮 Background Mesh Blob Effects */}
-      <div className="absolute top-10 left-10 w-72 h-72 rounded-full blur-[80px] pointer-events-none opacity-40 blob-1" style={{ background: `radial-gradient(circle, ${primaryColor} 0%, transparent 70%)` }}></div>
-      <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full blur-[100px] pointer-events-none opacity-30 blob-2" style={{ background: `radial-gradient(circle, ${accentColor} 0%, transparent 70%)` }}></div>
-
       <div 
         className={inPreview
           ? "w-full h-full overflow-y-auto scrollbar-none px-5 pt-4 pb-20 relative flex-1 z-10"
           : `w-full max-w-[480px] min-h-screen px-5 pt-4 pb-20 relative overflow-hidden z-10`
         }
       >
+        {/* 🔮 Background Mesh Blob Effects (Inside container so they sit directly behind the cards) */}
+        <div className="absolute top-10 left-1/4 -translate-x-1/2 w-80 h-80 rounded-full blur-[90px] pointer-events-none opacity-55 blob-1 z-0" style={{ background: `radial-gradient(circle, ${primaryColor} 0%, transparent 75%)` }}></div>
+        <div className="absolute bottom-1/3 right-10 w-96 h-96 rounded-full blur-[110px] pointer-events-none opacity-45 blob-2 z-0" style={{ background: `radial-gradient(circle, ${accentColor} 0%, transparent 75%)` }}></div>
+        <div className="absolute top-1/2 right-1/4 w-72 h-72 rounded-full blur-[80px] pointer-events-none opacity-40 blob-1 z-0" style={{ background: `radial-gradient(circle, ${primaryColor}44 0%, transparent 70%)` }}></div>
         <style dangerouslySetInnerHTML={{__html: `
           @keyframes floatBlob1 {
             0% { transform: translate(0px, 0px) scale(1); }
@@ -253,23 +275,24 @@ export default function FrostedTheme({ data, inPreview = false }) {
         </section>
 
         {/* Save Contact & Appointment Booker */}
-        {pref.showSaveContact !== false && (
+        {((pref.showSaveContact !== false) || data?.calendarUrl) && (
           <div className="mt-5 mb-5 space-y-3">
-            <button
-              onClick={generateVcard}
-              className="flex w-full items-center justify-center gap-3 rounded-2xl py-4 text-xs font-black uppercase tracking-[0.2em] text-white shadow-md transition-all hover:-translate-y-0.5"
-              style={{ background: `linear-gradient(135deg, ${primaryColor}, ${accentColor}dd)`, boxShadow: `0 10px 25px ${primaryColor}25` }}
-            >
-              <Download className="h-4 w-4" />
-              Save Contact
-            </button>
-
+            {pref.showSaveContact !== false && (
+              <button
+                onClick={generateVcard}
+                className="flex w-full items-center justify-center gap-3 rounded-2xl py-4 text-xs font-black uppercase tracking-[0.2em] text-white shadow-md transition-all hover:-translate-y-0.5"
+                style={{ backgroundColor: primaryColor, color: '#ffffff', boxShadow: `0 10px 25px ${primaryColor}30` }}
+              >
+                <Download className="h-4 w-4" />
+                Save Contact
+              </button>
+            )}
             {data?.calendarUrl && (
               <a
                 href={data.calendarUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="flex w-full items-center justify-center gap-3 rounded-2xl border border-white/60 bg-white/40 px-6 py-4 text-xs font-bold uppercase tracking-[0.18em] text-slate-700 shadow-sm backdrop-blur-md hover:-translate-y-0.5 frosted-btn"
+                className="flex w-full items-center justify-center gap-3 rounded-2xl py-4 text-xs font-black uppercase tracking-[0.2em] text-slate-700 shadow-sm backdrop-blur-md hover:-translate-y-0.5 frosted-btn"
               >
                 <Calendar className="h-4 w-4" style={{ color: primaryColor }} />
                 Book Appointment
@@ -287,16 +310,22 @@ export default function FrostedTheme({ data, inPreview = false }) {
             </section>
           )}
 
-          {pref.showServices !== false && data?.services?.length > 0 && (
+          {pref.showServices !== false && ((pref.servicesLayout === "paragraph" && data?.servicesText) || (pref.servicesLayout !== "paragraph" && data?.services?.length > 0)) && (
             <section className={cardClasses}>
               <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Specialities</h2>
-              <div className="flex flex-wrap gap-2">
-                {data.services.map((service, index) => (
-                  <span key={index} className="rounded-xl border border-white/60 bg-white/30 px-4 py-2 text-xs font-bold text-slate-755 shadow-sm backdrop-blur-md">
-                    {service}
-                  </span>
-                ))}
-              </div>
+              {pref.servicesLayout === "paragraph" ? (
+                <p className="text-[14px] leading-7 text-slate-650 whitespace-pre-line text-left bg-white/20 p-5 rounded-2xl border border-white/30 backdrop-blur-md shadow-inner break-words">
+                  {data.servicesText}
+                </p>
+              ) : (
+                <div className="flex flex-wrap gap-2.5">
+                  {data.services.map((service, index) => (
+                    <span key={index} className="rounded-2xl border border-white/60 bg-white/30 px-4.5 py-2.5 text-xs font-bold text-slate-700 shadow-sm backdrop-blur-md">
+                      {service}
+                    </span>
+                  ))}
+                </div>
+              )}
             </section>
           )}
 
@@ -306,8 +335,8 @@ export default function FrostedTheme({ data, inPreview = false }) {
               <div className="grid grid-cols-5 gap-3.5">
                 {socials.map(([network, url]) => (
                   <a key={network} href={url} target="_blank" rel="noreferrer" aria-label={network}
-                    className="aspect-square w-full max-w-12 justify-self-center rounded-2xl border border-white/60 bg-white/35 flex items-center justify-center text-slate-500 shadow-sm transition-all duration-350 hover:-translate-y-0.5 frosted-btn">
-                    <Globe className="w-5 h-5" style={{ color: primaryColor }} />
+                    className={`aspect-square w-full max-w-12 justify-self-center rounded-2xl border border-white/60 bg-white/35 flex items-center justify-center shadow-sm transition-all duration-350 hover:-translate-y-0.5 frosted-btn text-slate-500 ${SOCIAL_COLORS[network] || 'hover:text-slate-700'}`}>
+                    {SOCIAL_ICONS[network] ? SOCIAL_ICONS[network]("w-5 h-5") : <Globe className="w-5 h-5" style={{ color: primaryColor }} />}
                   </a>
                 ))}
               </div>
@@ -330,18 +359,54 @@ export default function FrostedTheme({ data, inPreview = false }) {
             </section>
           )}
 
+          {/* Videos Section */}
+          {pref.showVideos !== false && data?.videos?.length > 0 && (
+            <section className={cardClasses}>
+              <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Videos</h2>
+              <div className="flex flex-col gap-4.5">
+                {data.videos.map((vid, index) => (
+                  <div key={index} className="w-full overflow-hidden border border-white/60 bg-white/20 relative pt-[56.25%] rounded-2xl shadow-sm backdrop-blur-md">
+                    <iframe className="absolute top-0 left-0 w-full h-full" src={vid.includes('youtube.com/watch?v=') ? vid.replace('watch?v=', 'embed/') : vid} title={`Video ${index + 1}`} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* Featured Links Section */}
           {pref.showCustomLinks !== false && data?.customLinks?.length > 0 && (
             <section className={cardClasses}>
               <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Featured Links</h2>
               <div className="space-y-3">
-                {data.customLinks.map((link, index) => (
-                  <a key={index} href={link.url} target="_blank" rel="noreferrer" 
-                    className="flex items-center justify-between rounded-2xl border border-white/60 bg-white/35 px-5 py-4 font-bold text-slate-800 shadow-sm transition-all duration-300 hover:-translate-y-0.5 frosted-btn">
-                    <span className="text-xs uppercase tracking-wider" style={{ color: primaryColor }}>{link.title}</span>
-                    <ChevronRight className="h-4.5 w-4.5 text-slate-400" />
-                  </a>
-                ))}
+                {data.customLinks.map((link, index) => {
+                  let domain = "";
+                  try {
+                    const parsed = new URL(link.url.startsWith('http') ? link.url : `https://${link.url}`);
+                    domain = parsed.hostname;
+                  } catch (e) {
+                    domain = "";
+                  }
+                  const faviconUrl = domain ? `https://www.google.com/s2/favicons?sz=64&domain=${domain}` : null;
+
+                  return (
+                    <a key={index} href={link.url} target="_blank" rel="noreferrer" 
+                      className="flex items-center justify-between rounded-2xl border border-white/60 bg-white/35 px-5 py-3.5 font-bold text-slate-800 shadow-sm transition-all duration-300 hover:-translate-y-0.5 frosted-btn">
+                      <div className="flex items-center gap-3.5 min-w-0">
+                        {faviconUrl ? (
+                          <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border border-white/40 bg-white/20 backdrop-blur-sm">
+                            <img src={faviconUrl} alt="" className="w-4 h-4 object-contain" />
+                          </div>
+                        ) : (
+                          <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border border-white/40 bg-white/20 backdrop-blur-sm">
+                            <Globe className="w-4 h-4 text-slate-400" />
+                          </div>
+                        )}
+                        <span className="text-xs uppercase tracking-wider truncate" style={{ color: primaryColor }}>{link.title}</span>
+                      </div>
+                      <ChevronRight className="h-4.5 w-4.5 text-slate-400 shrink-0" />
+                    </a>
+                  );
+                })}
               </div>
             </section>
           )}
@@ -352,20 +417,20 @@ export default function FrostedTheme({ data, inPreview = false }) {
               <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Payments</h2>
               <div className="space-y-4">
                 {data.payment.upi && (
-                  <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/60 bg-white/35 px-4.5 py-3.5 shadow-sm">
+                  <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/60 bg-white/35 px-5 py-4 shadow-sm backdrop-blur-md">
                     <span className="font-bold text-[9px] uppercase tracking-wider text-slate-400">UPI ID</span>
-                    <span className="text-right font-mono text-xs font-bold text-slate-800">{data.payment.upi}</span>
+                    <span className="text-right font-mono text-xs font-bold text-slate-800 select-all">{data.payment.upi}</span>
                   </div>
                 )}
                 {data.payment.bankDetails && (
-                  <div className="rounded-2xl border border-white/60 bg-white/20 p-4.5 font-mono text-[11px] leading-6 text-slate-600 whitespace-pre-line shadow-inner">
+                  <div className="rounded-2xl border border-white/60 bg-white/20 p-5 font-mono text-[11px] leading-6 text-slate-600 whitespace-pre-line shadow-inner">
                     {data.payment.bankDetails}
                   </div>
                 )}
                 {data.payment.link && (
                   <a href={data.payment.link} target="_blank" rel="noreferrer" 
-                    className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-xs font-black uppercase tracking-wider text-white shadow-md transition-all hover:-translate-y-0.5"
-                    style={{ backgroundColor: primaryColor }}
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-xs font-black uppercase tracking-wider text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg duration-300"
+                    style={{ backgroundColor: primaryColor, boxShadow: `0 10px 25px ${primaryColor}20` }}
                   >
                     Pay Online
                   </a>
@@ -378,10 +443,10 @@ export default function FrostedTheme({ data, inPreview = false }) {
             <section id="contact" className={cardClasses}>
               <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Message Me</h2>
               <form onSubmit={handleEnquiry} className="space-y-3.5">
-                <input name="name" required placeholder="Full name" className="w-full rounded-2xl border border-white/60 bg-white/30 px-5 py-4 text-xs font-bold outline-none backdrop-blur-md shadow-inner focus:border-indigo-400" />
-                <input name="phone" type="tel" placeholder="Phone number" className="w-full rounded-2xl border border-white/60 bg-white/30 px-5 py-4 text-xs font-bold outline-none backdrop-blur-md shadow-inner focus:border-indigo-400" />
-                <textarea name="message" required rows="4" placeholder="Message" className="w-full resize-none rounded-2xl border border-white/60 bg-white/30 px-5 py-4 text-xs font-bold outline-none backdrop-blur-md shadow-inner focus:border-indigo-400" />
-                <button type="submit" className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-xs font-black uppercase tracking-wider text-white shadow-md transition-all hover:-translate-y-0.5" style={{ backgroundColor: primaryColor, color: "#ffffff" }}>
+                <input name="name" required placeholder="Full name" className="w-full rounded-2xl border border-white/60 bg-white/30 px-5 py-4 text-xs font-bold outline-none backdrop-blur-md shadow-inner focus:border-white/80 focus:bg-white/40 transition-all duration-300 text-slate-800 placeholder-slate-400" />
+                <input name="phone" type="tel" placeholder="Phone number" className="w-full rounded-2xl border border-white/60 bg-white/30 px-5 py-4 text-xs font-bold outline-none backdrop-blur-md shadow-inner focus:border-white/80 focus:bg-white/40 transition-all duration-300 text-slate-800 placeholder-slate-400" />
+                <textarea name="message" required rows="4" placeholder="Message" className="w-full resize-none rounded-2xl border border-white/60 bg-white/30 px-5 py-4 text-xs font-bold outline-none backdrop-blur-md shadow-inner focus:border-white/80 focus:bg-white/40 transition-all duration-300 text-slate-800 placeholder-slate-400" />
+                <button type="submit" className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-xs font-black uppercase tracking-wider text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg duration-300" style={{ backgroundColor: primaryColor, color: "#ffffff", boxShadow: `0 10px 25px ${primaryColor}20` }}>
                   <Send className="h-4 w-4" />
                   Send Message
                 </button>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Phone, Mail, Globe, MapPin, Download, MessageCircle, MessageSquare, User, Briefcase, Send, QrCode, Eye, Calendar, CreditCard, Share2, Star, MoreHorizontal } from "lucide-react";
+import { Phone, Mail, Globe, MapPin, Download, MessageCircle, MessageSquare, User, Briefcase, Send, QrCode, Eye, Calendar, CreditCard, Share2, Star, MoreHorizontal, ExternalLink, Link } from "lucide-react";
 
 import { QRCodeSVG } from "qrcode.react";
 import BottomNav from "../BottomNav";
@@ -127,6 +127,76 @@ export default function ModernTheme({ data, inPreview = false }) {
   const inputText = theme.inputText || "#0f172a";
 
   // Card Depth & Shadow
+  const getLinkMeta = (url) => {
+    let domain = "Website";
+    try {
+      const parsed = new URL(url.startsWith('http') ? url : `https://${url}`);
+      domain = parsed.hostname.replace('www.', '');
+    } catch (e) {
+      domain = "Link";
+    }
+
+    const lower = url.toLowerCase();
+    if (lower.includes("github.com")) {
+      return {
+        icon: (cls) => (
+          <svg viewBox="0 0 24 24" fill="currentColor" className={cls}>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+          </svg>
+        ),
+        color: "#181717",
+        domain: "GitHub"
+      };
+    }
+    if (lower.includes("youtube.com") || lower.includes("youtu.be")) {
+      return {
+        icon: (cls) => <YoutubeIcon className={cls} />,
+        color: "#FF0000",
+        domain: "YouTube"
+      };
+    }
+    if (lower.includes("linkedin.com")) {
+      return {
+        icon: (cls) => <LinkedinIcon className={cls} />,
+        color: "#0A66C2",
+        domain: "LinkedIn"
+      };
+    }
+    if (lower.includes("instagram.com")) {
+      return {
+        icon: (cls) => <InstagramIcon className={cls} />,
+        color: "#E1306C",
+        domain: "Instagram"
+      };
+    }
+    if (lower.includes("twitter.com") || lower.includes("x.com")) {
+      return {
+        icon: (cls) => <TwitterIcon className={cls} />,
+        color: "#1DA1F2",
+        domain: "X / Twitter"
+      };
+    }
+    if (lower.includes("facebook.com")) {
+      return {
+        icon: (cls) => <FacebookIcon className={cls} />,
+        color: "#1877F2",
+        domain: "Facebook"
+      };
+    }
+    if (lower.includes("wa.me") || lower.includes("whatsapp.com")) {
+      return {
+        icon: (cls) => <WhatsAppIcon className={cls} />,
+        color: "#25D366",
+        domain: "WhatsApp"
+      };
+    }
+    return {
+      icon: (cls) => <Link className={cls} />,
+      color: primaryColor,
+      domain: domain
+    };
+  };
+
   const cardStyle = theme.cardStyle || 'standard';
   const shadowDepth = theme.shadowDepth || "subtle";
   let shadowClass = 'shadow-lg';
@@ -430,7 +500,7 @@ export default function ModernTheme({ data, inPreview = false }) {
             <button
               onClick={generateVcard}
               className="w-full py-[18px] font-bold flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-all duration-400 relative overflow-hidden group"
-              style={{ background: `linear-gradient(135deg, ${btnBg}, ${btnBg}ee)`, color: btnText, borderRadius: borderRadius }}
+              style={{ backgroundColor: btnBg, color: btnText, borderRadius: borderRadius }}
             >
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <Download className="w-[18px] h-[18px] relative z-10" />
@@ -466,16 +536,22 @@ export default function ModernTheme({ data, inPreview = false }) {
           )}
 
           {/* 🛠 SPECIALTIES */}
-          {pref.showServices !== false && data?.services?.length > 0 && (
+          {pref.showServices !== false && ((pref.servicesLayout === "paragraph" && data?.servicesText) || (pref.servicesLayout !== "paragraph" && data?.services?.length > 0)) && (
             <div className="scroll-mt-6">
               <h2 className="text-[20px] font-bold mb-4 tracking-tight" style={{ color: textPrimary }}>Specialities</h2>
-              <div className="flex flex-wrap gap-2.5">
-                {data.services.map((s, i) => (
-                  <span key={i} className="px-5 py-2.5 text-[13px] font-semibold rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.02)] transition-colors cursor-default" style={{ backgroundColor: cardBg, color: cardText, border: `1px solid ${cardText}15` }}>
-                    {s}
-                  </span>
-                ))}
-              </div>
+              {pref.servicesLayout === "paragraph" ? (
+                <p className={`${bioFontSizeClass} leading-relaxed font-normal whitespace-pre-line break-words`} style={{ color: textSecondary }}>
+                  {data.servicesText}
+                </p>
+              ) : (
+                <div className="flex flex-wrap gap-2.5">
+                  {data.services.map((s, i) => (
+                    <span key={i} className="px-5 py-2.5 text-[13px] font-semibold rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.02)] transition-colors cursor-default" style={{ backgroundColor: cardBg, color: cardText, border: `1px solid ${cardText}15` }}>
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -589,15 +665,48 @@ export default function ModernTheme({ data, inPreview = false }) {
           {pref.showCustomLinks !== false && data?.customLinks?.length > 0 && (
             <div className="scroll-mt-6">
               <h2 className="text-[20px] font-bold mb-4 tracking-tight" style={{ color: textPrimary }}>Important Links</h2>
-              <div className="flex flex-col gap-8">
-                {data.customLinks.map((link, i) => (
-                  <a key={i} href={link.url} target="_blank" rel="noreferrer" className={`w-full flex items-center justify-between p-5 transition-all duration-300 group ${cardClasses} ${borderPatternClass}`} style={{ borderRadius: borderRadius, ...shadowStyle, ...borderPatternStyle, ...cardStyleOverride }}>
-                    <span className="font-bold text-[15px]" style={{ color: cardText }}>{link.title}</span>
-                    <div className="w-10 h-10 rounded-full bg-slate-50 text-slate-400 group-hover:text-slate-800 flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-colors">
-                      <Globe className="w-4 h-4" />
-                    </div>
-                  </a>
-                ))}
+              <div className="flex flex-col gap-3.5">
+                {data.customLinks.map((link, i) => {
+                  let domain = "";
+                  try {
+                    const parsed = new URL(link.url.startsWith('http') ? link.url : `https://${link.url}`);
+                    domain = parsed.hostname;
+                  } catch (e) {
+                    domain = "";
+                  }
+                  const faviconUrl = domain ? `https://www.google.com/s2/favicons?sz=64&domain=${domain}` : null;
+
+                  return (
+                    <a 
+                      key={i} 
+                      href={link.url} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className={`w-full flex items-center gap-4 py-3 px-4 transition-all duration-300 group link-card-hover ${cardClasses} ${borderPatternClass}`} 
+                      style={{ borderRadius: borderRadius, ...shadowStyle, ...borderPatternStyle, ...cardStyleOverride }}
+                    >
+                      {/* Left: Favicon Container */}
+                      <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 transition-all duration-300 border border-slate-100 link-brand-icon-container">
+                        {faviconUrl ? (
+                          <img src={faviconUrl} alt="" className="w-5.5 h-5.5 object-contain rounded-sm transition-transform duration-300 group-hover:scale-110" />
+                        ) : (
+                          <Globe className="w-5.5 h-5.5 text-slate-400 transition-transform duration-300 group-hover:scale-110" />
+                        )}
+                      </div>
+
+                      {/* Middle: Title and Subtitle (domain) */}
+                      <div className="flex-1 min-w-0 flex flex-col text-left">
+                        <span className="font-bold text-[15px] truncate" style={{ color: cardText }}>{link.title}</span>
+                        {domain && <span className="text-[11px] font-medium tracking-wide truncate mt-0.5 opacity-65" style={{ color: textSecondary }}>{domain.replace('www.', '')}</span>}
+                      </div>
+
+                      {/* Right: Outbound Arrow */}
+                      <div className="w-8 h-8 rounded-full bg-slate-50/50 text-slate-400 flex items-center justify-center transition-all duration-300 link-arrow-container">
+                        <ExternalLink className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </div>
+                    </a>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -758,6 +867,19 @@ export default function ModernTheme({ data, inPreview = false }) {
         __html: `
         .group:hover svg.hoverColor { stroke: ${primaryColor}; }
         .focus-color:focus { border-color: ${primaryColor}; box-shadow: 0 0 0 4px ${primaryColor}20; }
+        .link-card-hover:hover {
+          border-color: ${primaryColor}33 !important;
+          transform: translateY(-2px);
+          box-shadow: 0 12px 24px -10px ${primaryColor}30 !important;
+        }
+        .link-card-hover:hover .link-brand-icon-container {
+          transform: scale(1.04);
+          box-shadow: 0 6px 12px -3px rgba(0,0,0,0.05);
+        }
+        .link-card-hover:hover .link-arrow-container {
+          background-color: ${primaryColor}10 !important;
+          color: ${primaryColor} !important;
+        }
       `}} />
     </div>
   );

@@ -320,21 +320,27 @@ export default function NeoTheme({ data, inPreview = false }) {
           )}
 
           {/* MODULES / EXPERTISE */}
-          {pref.showServices !== false && data?.services?.length > 0 && (
+          {pref.showServices !== false && ((pref.servicesLayout === "paragraph" && data?.servicesText) || (pref.servicesLayout !== "paragraph" && data?.services?.length > 0)) && (
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <Cpu size={14} style={{ color: primaryColor }} />
                 <span className="text-[10px] uppercase tracking-widest text-white font-bold">Specialities</span>
                 <div className="flex-1 h-[1px] bg-zinc-800"></div>
               </div>
-              <div className="flex flex-col gap-2">
-                {data.services.map((s, i) => (
-                  <div key={i} className="flex items-center justify-between bg-zinc-900/40 border border-zinc-800/50 p-3 hover:bg-zinc-800/50 transition-colors">
-                    <span className="text-xs uppercase tracking-wider text-zinc-300">{s}</span>
-                    <span className="text-[8px] text-zinc-600 font-mono">MOD_{(i+1).toString().padStart(2, '0')}</span>
-                  </div>
-                ))}
-              </div>
+              {pref.servicesLayout === "paragraph" ? (
+                <p className="text-xs leading-relaxed text-zinc-400 whitespace-pre-line text-left bg-zinc-900/20 border border-zinc-900/60 p-4 break-words">
+                  {data.servicesText}
+                </p>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  {data.services.map((s, i) => (
+                    <div key={i} className="flex items-center justify-between bg-zinc-900/40 border border-zinc-800/50 p-3 hover:bg-zinc-800/50 transition-colors">
+                      <span className="text-xs uppercase tracking-wider text-zinc-300">{s}</span>
+                      <span className="text-[8px] text-zinc-600 font-mono">MOD_{(i+1).toString().padStart(2, '0')}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -383,12 +389,30 @@ export default function NeoTheme({ data, inPreview = false }) {
           {pref.showCustomLinks !== false && data?.customLinks?.length > 0 && (
             <div>
               <div className="flex flex-col gap-2">
-                {data.customLinks.map((link, i) => (
-                  <a key={i} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 bg-zinc-900/30 border border-zinc-800 hover:border-zinc-600 transition-all group">
-                    <span className="text-xs uppercase tracking-widest text-zinc-400 group-hover:text-white font-bold">{link.title}</span>
-                    <span className="text-[8px] uppercase text-zinc-600 group-hover:text-zinc-400 flex items-center gap-1">EXT_LINK <ArrowRight size={10} /></span>
-                  </a>
-                ))}
+                {data.customLinks.map((link, i) => {
+                  let domain = "";
+                  try {
+                    const parsed = new URL(link.url.startsWith('http') ? link.url : `https://${link.url}`);
+                    domain = parsed.hostname;
+                  } catch (e) {
+                    domain = "";
+                  }
+                  const faviconUrl = domain ? `https://www.google.com/s2/favicons?sz=64&domain=${domain}` : null;
+
+                  return (
+                    <a key={i} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 bg-zinc-900/30 border border-zinc-800 hover:border-zinc-600 transition-all group">
+                      <div className="flex items-center gap-3 min-w-0">
+                        {faviconUrl ? (
+                          <img src={faviconUrl} alt="" className="w-4 h-4 object-contain shrink-0 filter grayscale group-hover:grayscale-0 transition-all duration-300" />
+                        ) : (
+                          <Globe size={14} className="text-zinc-600 shrink-0" />
+                        )}
+                        <span className="text-xs uppercase tracking-widest text-zinc-400 group-hover:text-white font-bold truncate">{link.title}</span>
+                      </div>
+                      <span className="text-[8px] uppercase text-zinc-600 group-hover:text-zinc-400 flex items-center gap-1 shrink-0">EXT_LINK <ArrowRight size={10} /></span>
+                    </a>
+                  );
+                })}
               </div>
             </div>
           )}

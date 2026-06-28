@@ -285,16 +285,22 @@ export default function BoldTheme({ data, inPreview = false }) {
             </Panel>
           )}
 
-          {pref.showServices !== false && data?.services?.length > 0 && (
+          {pref.showServices !== false && ((pref.servicesLayout === "paragraph" && data?.servicesText) || (pref.servicesLayout !== "paragraph" && data?.services?.length > 0)) && (
             <Panel title="Specialities">
-              <div className="grid gap-3">
-                {data.services.map((service, index) => (
-                  <div key={index} className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 font-bold text-slate-700">
-                    <CheckCircle2 className="h-4 w-4" style={{ color: primaryColor }} />
-                    {service}
-                  </div>
-                ))}
-              </div>
+              {pref.servicesLayout === "paragraph" ? (
+                <p className="text-[15px] leading-7 text-slate-600 whitespace-pre-line text-left break-words">
+                  {data.servicesText}
+                </p>
+              ) : (
+                <div className="grid gap-3">
+                  {data.services.map((service, index) => (
+                    <div key={index} className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 font-bold text-slate-700">
+                      <CheckCircle2 className="h-4 w-4" style={{ color: primaryColor }} />
+                      {service}
+                    </div>
+                  ))}
+                </div>
+              )}
             </Panel>
           )}
 
@@ -343,12 +349,30 @@ export default function BoldTheme({ data, inPreview = false }) {
           {pref.showCustomLinks !== false && data?.customLinks?.length > 0 && (
             <Panel title="Resources">
               <div className="space-y-3">
-                {data.customLinks.map((link, index) => (
-                  <a key={index} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-2xl bg-slate-50 px-5 py-4 font-black text-slate-800">
-                    {link.title}
-                    <Globe className="h-4 w-4 text-slate-400" />
-                  </a>
-                ))}
+                {data.customLinks.map((link, index) => {
+                  let domain = "";
+                  try {
+                    const parsed = new URL(link.url.startsWith('http') ? link.url : `https://${link.url}`);
+                    domain = parsed.hostname;
+                  } catch (e) {
+                    domain = "";
+                  }
+                  const faviconUrl = domain ? `https://www.google.com/s2/favicons?sz=64&domain=${domain}` : null;
+
+                  return (
+                    <a key={index} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-2xl bg-slate-50 px-5 py-3.5 font-black text-slate-800 transition-all duration-300 hover:bg-slate-100 hover:-translate-y-0.5 group">
+                      <div className="flex items-center gap-3 min-w-0">
+                        {faviconUrl ? (
+                          <img src={faviconUrl} alt="" className="w-5 h-5 object-contain shrink-0 rounded-sm" />
+                        ) : (
+                          <Globe className="w-5 h-5 text-slate-450 shrink-0" />
+                        )}
+                        <span className="truncate">{link.title}</span>
+                      </div>
+                      <ArrowUpRight className="h-4 w-4 text-slate-400 group-hover:text-slate-800 transition-colors shrink-0" />
+                    </a>
+                  );
+                })}
               </div>
             </Panel>
           )}

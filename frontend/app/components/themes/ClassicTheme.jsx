@@ -182,8 +182,8 @@ export default function ClassicTheme({ data, inPreview = false }) {
                     style={act.id === 'call' || act.id === 'location' ? { hoverBackgroundColor: primaryColor } : undefined}
                   >
                     {act.id === "whatsapp"
-                      ? act.icon("w-5 h-5 fill-slate-600 group-hover:fill-white transition-colors duration-300")
-                      : act.icon("w-5 h-5 stroke-slate-600 group-hover:stroke-white transition-colors duration-300")
+                      ? act.icon("w-5 h-5 fill-current transition-colors duration-300")
+                      : act.icon("w-5 h-5 stroke-current transition-colors duration-300")
                     }
                   </a>
                 ))}
@@ -210,8 +210,8 @@ export default function ClassicTheme({ data, inPreview = false }) {
                       style={act.id === 'mail' ? undefined : { hoverBackgroundColor: primaryColor }}
                     >
                       {act.id === "whatsapp"
-                        ? act.icon("w-5 h-5 fill-slate-600 group-hover:fill-white transition-colors duration-300")
-                        : act.icon("w-5 h-5 stroke-slate-600 group-hover:stroke-white transition-colors duration-300")
+                        ? act.icon("w-5 h-5 fill-current transition-colors duration-300")
+                        : act.icon("w-5 h-5 stroke-current transition-colors duration-300")
                       }
                     </a>
                   ))
@@ -230,8 +230,8 @@ export default function ClassicTheme({ data, inPreview = false }) {
                       style={act.id === 'sms' ? undefined : (act.id === 'mail' ? undefined : { hoverBackgroundColor: primaryColor })}
                     >
                       {act.id === "whatsapp"
-                        ? act.icon("w-5 h-5 fill-slate-600 group-hover:fill-white transition-colors duration-300")
-                        : act.icon("w-5 h-5 stroke-slate-600 group-hover:stroke-white transition-colors duration-300")
+                        ? act.icon("w-5 h-5 fill-current transition-colors duration-300")
+                        : act.icon("w-5 h-5 stroke-current transition-colors duration-300")
                       }
                     </a>
                   ))}
@@ -277,20 +277,26 @@ export default function ClassicTheme({ data, inPreview = false }) {
           )}
 
           {/* SERVICES */}
-          {pref.showServices !== false && data?.services?.length > 0 && (
+          {pref.showServices !== false && ((pref.servicesLayout === "paragraph" && data?.servicesText) || (pref.servicesLayout !== "paragraph" && data?.services?.length > 0)) && (
             <div className="scroll-mt-24">
               <h2 className="text-2xl font-serif text-slate-900 mb-6 flex flex-col gap-2">
                 Specialities
                 <div className="w-10 h-0.5" style={{ backgroundColor: primaryColor }}></div>
               </h2>
-              <div className="grid grid-cols-1 gap-3">
-                {data.services.map((s, i) => (
-                  <div key={i} className="flex items-center gap-4 py-3 border-b border-slate-100 group hover:border-slate-300 transition-colors">
-                    <Check className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" style={{ color: primaryColor }} />
-                    <span className="text-slate-700 font-medium tracking-wide text-[15px]">{s}</span>
-                  </div>
-                ))}
-              </div>
+              {pref.servicesLayout === "paragraph" ? (
+                <p className="text-slate-500 leading-loose text-[15px] font-light whitespace-pre-line break-words">
+                  {data.servicesText}
+                </p>
+              ) : (
+                <div className="grid grid-cols-1 gap-3">
+                  {data.services.map((s, i) => (
+                    <div key={i} className="flex items-center gap-4 py-3 border-b border-slate-100 group hover:border-slate-300 transition-colors">
+                      <Check className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" style={{ color: primaryColor }} />
+                      <span className="text-slate-700 font-medium tracking-wide text-[15px]">{s}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -377,11 +383,30 @@ export default function ClassicTheme({ data, inPreview = false }) {
                 <div className="w-10 h-0.5" style={{ backgroundColor: primaryColor }}></div>
               </h2>
               <div className="space-y-3">
-                {data.customLinks.map((link, i) => (
-                  <a key={i} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between px-6 py-5 bg-slate-50 border border-slate-100 hover:bg-white hover:border-slate-200 hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.05)] transition-all duration-300 text-slate-800 font-medium tracking-wide group rounded-sm">
-                    {link.title} <Globe className="w-4 h-4 text-slate-300 group-hover:text-slate-600 transition-colors" />
-                  </a>
-                ))}
+                {data.customLinks.map((link, i) => {
+                  let domain = "";
+                  try {
+                    const parsed = new URL(link.url.startsWith('http') ? link.url : `https://${link.url}`);
+                    domain = parsed.hostname;
+                  } catch (e) {
+                    domain = "";
+                  }
+                  const faviconUrl = domain ? `https://www.google.com/s2/favicons?sz=64&domain=${domain}` : null;
+
+                  return (
+                    <a key={i} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between px-6 py-4 bg-slate-50 border border-slate-100 hover:bg-white hover:border-slate-200 hover:shadow-[0_10px_20px_-5px_rgba(0,0,0,0.05)] transition-all duration-300 text-slate-800 font-medium tracking-wide group rounded-sm">
+                      <div className="flex items-center gap-3 min-w-0">
+                        {faviconUrl ? (
+                          <img src={faviconUrl} alt="" className="w-5 h-5 object-contain shrink-0 rounded-sm" />
+                        ) : (
+                          <Globe className="w-5 h-5 text-slate-400 shrink-0" />
+                        )}
+                        <span className="truncate">{link.title}</span>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-slate-350 group-hover:text-slate-600 transition-colors shrink-0" />
+                    </a>
+                  );
+                })}
               </div>
             </div>
           )}

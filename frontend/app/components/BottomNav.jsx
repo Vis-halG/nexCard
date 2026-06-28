@@ -167,10 +167,10 @@ export default function BottomNav({
   let textPrimaryColor = theme.textPrimary || "#0f172a";
   let textSecondaryColor = theme.textSecondary || "#64748b";
 
-  let drawerClasses = `${inPreview ? "absolute" : "fixed"} bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[120] px-5 pt-5 pb-6 flex flex-col justify-center pb-safe border-t`;
+  let drawerClasses = `${inPreview ? "absolute" : "fixed"} bottom-0 left-0 right-0 mx-auto w-full max-w-[500px] z-[120] px-5 pt-4 pb-4 flex flex-col justify-center pb-safe border-t`;
   let closeBtnClasses = "w-8 h-8 flex items-center justify-center transition-all shrink-0 active:scale-95";
-  let qrContainerClasses = "flex flex-col items-center mb-6";
-  let qrFrameClasses = "p-4 flex items-center justify-center transition-all";
+  let qrContainerClasses = "flex flex-col items-center mb-4";
+  let qrFrameClasses = "p-3 flex items-center justify-center transition-all";
   let inputContainerClasses = "flex-1 flex items-center px-3 h-11 transition-all";
   let inputSelectClasses = "bg-transparent border-none text-[13px] font-bold outline-none cursor-pointer appearance-none pr-4.5 z-10";
   let inputFieldClasses = "w-full bg-transparent border-none text-[13px] font-semibold placeholder-slate-450 outline-none h-full";
@@ -330,11 +330,11 @@ export default function BottomNav({
               style={{
                 ...drawerStyles,
                 backgroundColor: drawerBg,
-                paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 12px)'
+                paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 8px)'
               }}
             >
             {/* Header */}
-            <div className="w-full flex items-center justify-between mb-4">
+            <div className="w-full flex items-center justify-between mb-3">
               <span className="text-sm font-bold tracking-tight uppercase" style={{ color: textPrimaryColor }}>Share Card</span>
               <button
                 onClick={() => {
@@ -352,7 +352,7 @@ export default function BottomNav({
               <div className={qrFrameClasses} style={qrFrameStyles}>
                 <QRCodeSVG
                   value={cardUrl || 'https://nexcard.app'}
-                  size={130}
+                  size={110}
                   level="Q"
                   className="rounded-lg"
                   fgColor="#0f172a"
@@ -368,17 +368,17 @@ export default function BottomNav({
                   } : {})}
                 />
               </div>
-              <span className="text-[10px] font-bold mt-2.5 uppercase tracking-wider" style={{ color: textSecondaryColor }}>Scan or share QR Code</span>
+              <span className="text-[10px] font-bold mt-2 uppercase tracking-wider" style={{ color: textSecondaryColor }}>Scan or share QR Code</span>
             </div>
 
             {/* Quick App Actions Row */}
-            <div className="w-full mb-6">
+            <div className="w-full mb-4">
               <ShareActions data={data} layout={layout} primaryColor={primaryColorResolved} />
             </div>
 
             {/* WhatsApp Direct Field */}
-            <div className="w-full border-t border-slate-250/20 pt-4" style={layout === 'neo' ? { borderTopColor: '#1a1a1a' } : {}}>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider mb-2.5 block" style={{ color: textSecondaryColor }}>Send directly on WhatsApp</span>
+            <div className="w-full border-t border-slate-250/20 pt-3" style={layout === 'neo' ? { borderTopColor: '#1a1a1a' } : {}}>
+              <span className="text-[10px] font-extrabold uppercase tracking-wider mb-2 block" style={{ color: textSecondaryColor }}>Send directly on WhatsApp</span>
               <div className="w-full flex items-center gap-3 h-11">
                 <div className={inputContainerClasses}>
                   <div className="relative flex items-center">

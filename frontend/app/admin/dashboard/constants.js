@@ -47,6 +47,7 @@ export const INITIAL_FORM = {
   social: { instagram: "", linkedin: "", twitter: "", facebook: "", youtube: "" },
   payment: { upi: "", link: "", bankDetails: "", qrCode: "" },
   services: [],
+  servicesText: "",
   gallery: [],
   customLinks: [],
   videos: [],
@@ -54,6 +55,7 @@ export const INITIAL_FORM = {
   preferences: {
     showAbout: true,
     showServices: true,
+    servicesLayout: "list",
     showSocial: true,
     showGallery: true,
     showVideos: true,

@@ -262,8 +262,8 @@ export default function GlassTheme({ data, inPreview = false }) {
           <div className="mt-5 grid gap-3">
             <button
               onClick={generateVcard}
-              className="flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-sm font-black uppercase tracking-[0.2em] text-white shadow-[0_18px_35px_rgba(183,110,121,0.28)] transition hover:-translate-y-0.5"
-              style={{ background: `linear-gradient(135deg, ${primaryColor}, #d89b86)` }}
+              className="flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-4 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5"
+              style={{ backgroundColor: primaryColor, color: '#ffffff', boxShadow: `0 10px 25px ${primaryColor}30` }}
             >
               <Download className="h-4 w-4" />
               Save Contact
@@ -289,15 +289,21 @@ export default function GlassTheme({ data, inPreview = false }) {
             </Section>
           )}
 
-          {pref.showServices !== false && data?.services?.length > 0 && (
+          {pref.showServices !== false && ((pref.servicesLayout === "paragraph" && data?.servicesText) || (pref.servicesLayout !== "paragraph" && data?.services?.length > 0)) && (
             <Section title="Specialities" className={cardClasses}>
-              <div className="flex flex-wrap gap-2">
-                {data.services.map((service, index) => (
-                  <span key={index} className="rounded-full border border-rose-100 bg-rose-50/70 px-4 py-2 text-sm font-bold text-slate-700">
-                    {service}
-                  </span>
-                ))}
-              </div>
+              {pref.servicesLayout === "paragraph" ? (
+                <p className="text-[15px] leading-7 text-slate-600 whitespace-pre-line text-left break-words">
+                  {data.servicesText}
+                </p>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {data.services.map((service, index) => (
+                    <span key={index} className="rounded-full border border-rose-100 bg-rose-50/70 px-4 py-2 text-sm font-bold text-slate-700">
+                      {service}
+                    </span>
+                  ))}
+                </div>
+              )}
             </Section>
           )}
 
@@ -329,12 +335,30 @@ export default function GlassTheme({ data, inPreview = false }) {
           {pref.showCustomLinks !== false && data?.customLinks?.length > 0 && (
             <Section title="Links" className={cardClasses}>
               <div className="space-y-3">
-                {data.customLinks.map((link, index) => (
-                  <a key={index} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-2xl bg-slate-50 px-5 py-4 font-bold text-slate-800">
-                    {link.title}
-                    <Globe className="h-4 w-4 text-slate-400" />
-                  </a>
-                ))}
+                {data.customLinks.map((link, index) => {
+                  let domain = "";
+                  try {
+                    const parsed = new URL(link.url.startsWith('http') ? link.url : `https://${link.url}`);
+                    domain = parsed.hostname;
+                  } catch (e) {
+                    domain = "";
+                  }
+                  const faviconUrl = domain ? `https://www.google.com/s2/favicons?sz=64&domain=${domain}` : null;
+
+                  return (
+                    <a key={index} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-2xl bg-white/40 border border-white/50 backdrop-blur-md px-5 py-3.5 font-bold text-slate-800 shadow-sm transition-all duration-300 hover:bg-white/60 hover:-translate-y-0.5">
+                      <div className="flex items-center gap-3 min-w-0">
+                        {faviconUrl ? (
+                          <img src={faviconUrl} alt="" className="w-5 h-5 object-contain shrink-0 rounded-sm" />
+                        ) : (
+                          <Globe className="w-5 h-5 text-slate-400 shrink-0" />
+                        )}
+                        <span className="truncate">{link.title}</span>
+                      </div>
+                      <ExternalLink className="h-4 w-4 text-slate-400 shrink-0" />
+                    </a>
+                  );
+                })}
               </div>
             </Section>
           )}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Phone, Mail, Globe, MapPin, Download, MessageSquare, Calendar, Share2, Send, Eye, MoreHorizontal, Sparkles } from "lucide-react";
+import { Phone, Mail, Globe, MapPin, Download, MessageSquare, Calendar, Share2, Send, Eye, MoreHorizontal, Sparkles, ExternalLink } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import BottomNav from "../BottomNav";
 
@@ -262,7 +262,7 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
             <button
               onClick={generateVcard}
               className="flex w-full items-center justify-center gap-3 rounded-[1.75rem] py-4 text-xs font-black uppercase tracking-[0.22em] text-white transition-all border-0 nm-flat"
-              style={{ background: `linear-gradient(135deg, ${primaryColor}, ${accentColor}dd)`, boxShadow: `6px 6px 15px rgba(165,177,198,0.3), -6px -6px 15px rgba(255,255,255,0.7)` }}
+              style={{ backgroundColor: primaryColor, color: '#ffffff', boxShadow: `6px 6px 15px rgba(165,177,198,0.3), -6px -6px 15px rgba(255,255,255,0.7)` }}
             >
               <Download className="h-4 w-4" />
               Save Contact
@@ -291,16 +291,22 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
             </section>
           )}
 
-          {pref.showServices !== false && data?.services?.length > 0 && (
+          {pref.showServices !== false && ((pref.servicesLayout === "paragraph" && data?.servicesText) || (pref.servicesLayout !== "paragraph" && data?.services?.length > 0)) && (
             <section className="p-6 rounded-[2rem] nm-flat">
               <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Specialities</h2>
-              <div className="flex flex-wrap gap-2.5">
-                {data.services.map((service, index) => (
-                  <span key={index} className="rounded-full px-4.5 py-2 text-xs font-bold text-slate-700 border-0 nm-inset">
-                    {service}
-                  </span>
-                ))}
-              </div>
+              {pref.servicesLayout === "paragraph" ? (
+                <p className="text-sm leading-7 text-slate-600 whitespace-pre-line text-left nm-inset p-4.5 rounded-2xl border-0 break-words">
+                  {data.servicesText}
+                </p>
+              ) : (
+                <div className="flex flex-wrap gap-2.5">
+                  {data.services.map((service, index) => (
+                    <span key={index} className="rounded-full px-4.5 py-2 text-xs font-bold text-slate-700 border-0 nm-inset">
+                      {service}
+                    </span>
+                  ))}
+                </div>
+              )}
             </section>
           )}
 
@@ -338,14 +344,36 @@ export default function NeumorphismTheme({ data, inPreview = false }) {
           {pref.showCustomLinks !== false && data?.customLinks?.length > 0 && (
             <section className="p-6 rounded-[2rem] nm-flat">
               <h2 className="mb-3 text-[10px] font-black uppercase tracking-[0.24em] text-slate-400">Featured Links</h2>
-              <div className="space-y-4">
-                {data.customLinks.map((link, index) => (
-                  <a key={index} href={link.url} target="_blank" rel="noreferrer" 
-                    className="flex items-center justify-between rounded-2xl px-5 py-4 font-bold text-slate-800 transition-all border-0 nm-flat nm-btn">
-                    <span className="text-xs uppercase tracking-wide" style={{ color: primaryColor }}>{link.title}</span>
-                    <Globe className="h-4 w-4 text-slate-450" />
-                  </a>
-                ))}
+              <div className="space-y-3">
+                {data.customLinks.map((link, index) => {
+                  let domain = "";
+                  try {
+                    const parsed = new URL(link.url.startsWith('http') ? link.url : `https://${link.url}`);
+                    domain = parsed.hostname;
+                  } catch (e) {
+                    domain = "";
+                  }
+                  const faviconUrl = domain ? `https://www.google.com/s2/favicons?sz=64&domain=${domain}` : null;
+
+                  return (
+                    <a key={index} href={link.url} target="_blank" rel="noreferrer" 
+                      className="flex items-center justify-between rounded-2xl px-5 py-3.5 font-bold text-slate-800 transition-all border-0 nm-flat nm-btn hover:-translate-y-0.5">
+                      <div className="flex items-center gap-3.5 min-w-0">
+                        {faviconUrl ? (
+                          <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border-0 nm-inset bg-slate-100/50">
+                            <img src={faviconUrl} alt="" className="w-4 h-4 object-contain" />
+                          </div>
+                        ) : (
+                          <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border-0 nm-inset bg-slate-100/50">
+                            <Globe className="w-4 h-4 text-slate-400" />
+                          </div>
+                        )}
+                        <span className="text-xs uppercase tracking-wide truncate" style={{ color: primaryColor }}>{link.title}</span>
+                      </div>
+                      <ExternalLink className="h-4 w-4 text-slate-450 shrink-0" />
+                    </a>
+                  );
+                })}
               </div>
             </section>
           )}

@@ -693,25 +693,67 @@ export default function Dashboard() {
 
               <div>
                 <div className="flex justify-between items-center border-b pb-4 mb-4">
-                  <h2 className="font-bold text-xl text-slate-800">Specialty Badges</h2>
-                  <button onClick={() => addArrayItem("services")} className="flex items-center gap-1 text-sm font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors">
-                    <Plus className="w-4 h-4" /> Add Badge
+                  <h2 className="font-bold text-xl text-slate-800 font-sans">Specialties / Services</h2>
+                  {(form.preferences?.servicesLayout || "list") === "list" && (
+                    <button onClick={() => addArrayItem("services")} className="flex items-center gap-1 text-sm font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors">
+                      <Plus className="w-4 h-4" /> Add Badge
+                    </button>
+                  )}
+                </div>
+
+                {/* Points vs Paragraph Layout Format Selector */}
+                <div className="flex items-center gap-2 mb-4 bg-slate-50 p-1.5 rounded-xl border border-slate-200/60 w-fit">
+                  <button
+                    type="button"
+                    onClick={() => handleNestedChange("preferences", "servicesLayout", "list")}
+                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      (form.preferences?.servicesLayout || "list") === "list"
+                        ? "bg-white text-indigo-600 shadow-sm border border-slate-200/40"
+                        : "text-slate-500 hover:text-slate-800"
+                    }`}
+                  >
+                    Badge Points
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleNestedChange("preferences", "servicesLayout", "paragraph")}
+                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      (form.preferences?.servicesLayout || "list") === "paragraph"
+                        ? "bg-white text-indigo-600 shadow-sm border border-slate-200/40"
+                        : "text-slate-500 hover:text-slate-800"
+                    }`}
+                  >
+                    Paragraph Text
                   </button>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {form.services.map((srv, i) => (
-                    <div key={i} className="flex items-center bg-indigo-50 border border-indigo-100 rounded-lg pr-1 pl-3 py-1 gap-2">
-                      <input 
-                        value={srv} 
-                        onChange={(e) => handleArrayChange("services", i, e.target.value)} 
-                        placeholder="Expertise" 
-                        className="bg-transparent text-indigo-800 text-sm font-semibold uppercase focus:outline-none w-28" 
-                      />
-                      <button onClick={() => removeArrayItem("services", i)} className="text-indigo-400 hover:text-red-500 p-1"><Trash2 className="w-3 h-3" /></button>
-                    </div>
-                  ))}
-                  {form.services.length === 0 && <p className="text-sm text-slate-500 w-full">No badges added.</p>}
-                </div>
+
+                {(form.preferences?.servicesLayout || "list") === "list" ? (
+                  <div className="flex flex-wrap gap-2">
+                    {form.services.map((srv, i) => (
+                      <div key={i} className="flex items-center bg-indigo-50 border border-indigo-100 rounded-lg pr-1 pl-3 py-1 gap-2">
+                        <input 
+                          value={srv} 
+                          onChange={(e) => handleArrayChange("services", i, e.target.value)} 
+                          placeholder="Expertise" 
+                          className="bg-transparent text-indigo-800 text-sm font-semibold uppercase focus:outline-none w-28" 
+                        />
+                        <button onClick={() => removeArrayItem("services", i)} className="text-indigo-400 hover:text-red-500 p-1"><Trash2 className="w-3 h-3" /></button>
+                      </div>
+                    ))}
+                    {form.services.length === 0 && <p className="text-sm text-slate-500 w-full">No badges added.</p>}
+                  </div>
+                ) : (
+                  <div className="w-full">
+                    <textarea
+                      name="servicesText"
+                      value={form.servicesText || ""}
+                      onChange={handleChange}
+                      placeholder="Describe your specialties, services, or biography points as a rich paragraph..."
+                      rows="4"
+                      className="w-full p-4 bg-slate-50 border border-slate-250 rounded-2xl focus:ring-2 focus:ring-indigo-500 text-sm focus:bg-white transition-all resize-none text-slate-800 outline-none"
+                    ></textarea>
+                  </div>
+                )}
               </div>
 
               <div>
@@ -1453,7 +1495,12 @@ export default function Dashboard() {
                   return (
                     <div 
                       key={idx}
-                      className={`rounded-2xl border-2 transition-all overflow-hidden flex flex-col ${isActive ? 'border-indigo-600 scale-[1.02] shadow-md ring-4 ring-indigo-50' : 'border-slate-200 hover:border-indigo-300'}`}
+                      onClick={() => setPreviewTheme({
+                        layout: preset.layout,
+                        primary: activeCombo.primary,
+                        background: activeCombo.background
+                      })}
+                      className={`rounded-2xl border-2 transition-all overflow-hidden flex flex-col cursor-pointer ${isActive ? 'border-indigo-600 scale-[1.02] shadow-md ring-4 ring-indigo-50' : 'border-slate-200 hover:border-indigo-300'}`}
                     >
                       <div className="h-28 w-full flex items-end p-4 relative" style={{ backgroundColor: activeCombo.background }}>
                         <div className="absolute top-0 left-0 w-full h-[60%]" style={{ background: `linear-gradient(145deg, ${activeCombo.primary} 0%, ${activeCombo.primary}dd 100%)`, clipPath: "ellipse(120% 100% at 50% 0%)" }}></div>
@@ -1478,6 +1525,12 @@ export default function Dashboard() {
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     setSelectedColorIndexes(prev => ({ ...prev, [preset.layout]: comboIdx }));
+                                    // Trigger preview with the selected color combination
+                                    setPreviewTheme({
+                                      layout: preset.layout,
+                                      primary: combo.primary,
+                                      background: combo.background
+                                    });
                                     // If this theme is currently active/applied, update it in real time
                                     if (isActive) {
                                       setForm(prev => ({ 
@@ -1507,17 +1560,21 @@ export default function Dashboard() {
 
                         <div className="flex gap-2 mt-1">
                           <button 
-                            onClick={() => setPreviewTheme({
-                              layout: preset.layout,
-                              primary: activeCombo.primary,
-                              background: activeCombo.background
-                            })}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPreviewTheme({
+                                layout: preset.layout,
+                                primary: activeCombo.primary,
+                                background: activeCombo.background
+                              });
+                            }}
                             className={`flex-1 py-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 ${previewTheme?.layout === preset.layout ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
                           >
                             <Eye className="w-3.5 h-3.5" /> {previewTheme?.layout === preset.layout ? "Previewing" : "Preview"}
                           </button>
                           <button 
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.stopPropagation();
                               setForm(prev => ({ ...prev, theme: { ...prev.theme, primary: activeCombo.primary, background: activeCombo.background, layout: preset.layout } }));
                               setPreviewTheme(null);
                             }}

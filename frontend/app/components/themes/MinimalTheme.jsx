@@ -171,8 +171,8 @@ export default function MinimalTheme({ data, inPreview = false }) {
               className="h-16 flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 group"
             >
               {act.id === "whatsapp"
-                ? act.icon("w-6 h-6 fill-black group-hover:fill-white transition-colors duration-300")
-                : act.icon("w-6 h-6 stroke-black group-hover:stroke-white transition-colors duration-300")
+                ? act.icon("w-6 h-6 fill-current transition-colors duration-300")
+                : act.icon("w-6 h-6 stroke-current transition-colors duration-300")
               }
             </a>
           ))}
@@ -182,7 +182,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
               onClick={() => setShowMore(!showMore)}
               className={`h-16 flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 group ${showMore ? 'bg-black text-white' : ''}`}
             >
-              <MoreHorizontal className={`w-6 h-6 ${showMore ? 'stroke-white' : 'stroke-black group-hover:stroke-white'}`} strokeWidth={2.5} />
+              <MoreHorizontal className="w-6 h-6 stroke-current" strokeWidth={2.5} />
             </button>
           ) : (
             actions.slice(3, 4).map((act) => (
@@ -194,8 +194,8 @@ export default function MinimalTheme({ data, inPreview = false }) {
                 className="h-16 flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 group"
               >
                 {act.id === "whatsapp"
-                  ? act.icon("w-6 h-6 fill-black group-hover:fill-white transition-colors duration-300")
-                  : act.icon("w-6 h-6 stroke-black group-hover:stroke-white transition-colors duration-300")
+                  ? act.icon("w-6 h-6 fill-current transition-colors duration-300")
+                  : act.icon("w-6 h-6 stroke-current transition-colors duration-300")
                 }
               </a>
             ))
@@ -217,8 +217,8 @@ export default function MinimalTheme({ data, inPreview = false }) {
                 className="h-16 flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 group"
               >
                 {act.id === "whatsapp"
-                  ? act.icon("w-6 h-6 fill-black group-hover:fill-white transition-colors duration-300")
-                  : act.icon("w-6 h-6 stroke-black group-hover:stroke-white transition-colors duration-300")
+                  ? act.icon("w-6 h-6 fill-current transition-colors duration-300")
+                  : act.icon("w-6 h-6 stroke-current transition-colors duration-300")
                 }
               </a>
             ))}
@@ -254,16 +254,22 @@ export default function MinimalTheme({ data, inPreview = false }) {
           </div>
 
           {/* SERVICES / EXPERTISE */}
-          {pref.showServices !== false && data?.services?.length > 0 && (
+          {pref.showServices !== false && ((pref.servicesLayout === "paragraph" && data?.servicesText) || (pref.servicesLayout !== "paragraph" && data?.services?.length > 0)) && (
             <div className="p-8 border-b-4 border-black bg-white">
               <span className="text-xs font-black uppercase tracking-widest text-black bg-cyan-300 px-2 py-1 inline-block mb-6 shadow-[4px_4px_0_0_#000] border-2 border-black">Specialities</span>
-              <div className="flex flex-col gap-0 divide-y-2 divide-black border-2 border-black">
-                {data.services.map((s, i) => (
-                  <div key={i} className="px-4 py-4 text-lg font-bold tracking-tight text-black hover:bg-black hover:text-white transition-colors duration-300">
-                    <span className="text-xs font-mono mr-4 opacity-50">{(i + 1).toString().padStart(2, '0')}</span> {s}
-                  </div>
-                ))}
-              </div>
+              {pref.servicesLayout === "paragraph" ? (
+                <p className="text-base leading-relaxed text-black font-medium whitespace-pre-line border-2 border-black p-5 shadow-[4px_4px_0_0_#000] bg-slate-50/50 break-words">
+                  {data.servicesText}
+                </p>
+              ) : (
+                <div className="flex flex-col gap-0 divide-y-2 divide-black border-2 border-black">
+                  {data.services.map((s, i) => (
+                    <div key={i} className="px-4 py-4 text-lg font-bold tracking-tight text-black hover:bg-black hover:text-white transition-colors duration-300">
+                      <span className="text-xs font-mono mr-4 opacity-50">{(i + 1).toString().padStart(2, '0')}</span> {s}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -280,6 +286,39 @@ export default function MinimalTheme({ data, inPreview = false }) {
                     </a>
                   ) : <div key={network} className="aspect-square bg-slate-100"></div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* CUSTOM LINKS */}
+          {pref.showCustomLinks !== false && data?.customLinks?.length > 0 && (
+            <div className="p-8 border-b-4 border-black bg-white">
+              <span className="text-xs font-black uppercase tracking-widest text-black bg-yellow-300 px-2 py-1 inline-block mb-6 shadow-[4px_4px_0_0_#000] border-2 border-black">Resources</span>
+              <div className="flex flex-col gap-3">
+                {data.customLinks.map((link, i) => {
+                  let domain = "";
+                  try {
+                    const parsed = new URL(link.url.startsWith('http') ? link.url : `https://${link.url}`);
+                    domain = parsed.hostname;
+                  } catch (e) {
+                    domain = "";
+                  }
+                  const faviconUrl = domain ? `https://www.google.com/s2/favicons?sz=64&domain=${domain}` : null;
+
+                  return (
+                    <a key={i} href={link.url} target="_blank" rel="noreferrer" className="flex items-center justify-between px-6 py-4 bg-white border-2 border-black hover:bg-black hover:text-white transition-all duration-300 text-black font-black uppercase tracking-wider group shadow-[3px_3px_0_0_#000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none">
+                      <div className="flex items-center gap-3 min-w-0">
+                        {faviconUrl ? (
+                          <img src={faviconUrl} alt="" className="w-5 h-5 object-contain shrink-0 rounded-sm filter grayscale group-hover:grayscale-0" />
+                        ) : (
+                          <Globe className="w-5 h-5 shrink-0" />
+                        )}
+                        <span className="truncate">{link.title}</span>
+                      </div>
+                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 shrink-0" />
+                    </a>
+                  );
+                })}
               </div>
             </div>
           )}

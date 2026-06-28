@@ -1,4 +1,4 @@
-'use client'
+'use client'; // force rebuild cache
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";

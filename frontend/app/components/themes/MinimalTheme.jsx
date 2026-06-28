@@ -152,6 +152,10 @@ export default function MinimalTheme({ data, inPreview = false }) {
         .minimal-theme-root .link-card {
           background-color: ${linkCardBg} !important;
         }
+        .minimal-theme-root .action-btn:hover {
+          background-color: ${actionBtnBg} !important;
+          color: #ffffff !important;
+        }
       `}} />
       <div
         className={inPreview
@@ -213,7 +217,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
               href={act.href}
               target={act.target}
               rel={act.rel}
-              className="h-16 flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 group"
+              className="h-16 flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 group action-btn"
             >
               {act.id === "whatsapp"
                 ? act.icon("w-6 h-6 fill-current transition-colors duration-300")
@@ -225,7 +229,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
           {hasMore ? (
             <button
               onClick={() => setShowMore(!showMore)}
-              className={`h-16 flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 group ${showMore ? 'bg-black text-white' : ''}`}
+              className={`h-16 flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 group action-btn ${showMore ? 'bg-black text-white' : ''}`}
             >
               <MoreHorizontal className="w-6 h-6 stroke-current" strokeWidth={2.5} />
             </button>
@@ -236,7 +240,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
                 href={act.href}
                 target={act.target}
                 rel={act.rel}
-                className="h-16 flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 group"
+                className="h-16 flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 group action-btn"
               >
                 {act.id === "whatsapp"
                   ? act.icon("w-6 h-6 fill-current transition-colors duration-300")
@@ -259,7 +263,7 @@ export default function MinimalTheme({ data, inPreview = false }) {
                 href={act.href}
                 target={act.target}
                 rel={act.rel}
-                className="h-16 flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 group"
+                className="h-16 flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 group action-btn"
               >
                 {act.id === "whatsapp"
                   ? act.icon("w-6 h-6 fill-current transition-colors duration-300")
@@ -488,7 +492,22 @@ export default function MinimalTheme({ data, inPreview = false }) {
             ) : (
               <>
                 <div className="border-8 border-black p-4 bg-white shadow-[12px_12px_0_0_#000] mb-10">
-                  <QRCodeSVG value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} size={140} level="H" fgColor="#000" />
+                  <QRCodeSVG 
+                    value={typeof window !== 'undefined' ? window.location.href : 'https://nexcard.app'} 
+                    size={140} 
+                    level="Q" 
+                    fgColor="#000"
+                    {...(qrLogo === 'avatar' && data?.image ? {
+                      imageSettings: {
+                        src: data.image,
+                        x: null,
+                        y: null,
+                        height: 32,
+                        width: 32,
+                        excavate: true,
+                      }
+                    } : {})}
+                  />
                 </div>
                 <button onClick={() => {
                   if (navigator.share) { navigator.share({ title: data?.name ? `${data.name}'s Digital Card` : 'Digital Card', url: window.location.href }).catch(console.error); } else { navigator.clipboard.writeText(window.location.href); alert("Link copied to clipboard!"); }
